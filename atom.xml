@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Evan的博客]]></title>
+  <link href="https://evanoyam.github.io/atom.xml" rel="self"/>
+  <link href="https://evanoyam.github.io/"/>
+  <updated>2020-10-09T02:17:27+08:00</updated>
+  <id>https://evanoyam.github.io/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[常见 Vue 面试题]]></title>
+    <link href="https://evanoyam.github.io/16021784313262.html"/>
+    <updated>2020-10-09T01:33:51+08:00</updated>
+    <id>https://evanoyam.github.io/16021784313262.html</id>
+    <content type="html"><![CDATA[
+<h4 id="toc_0">1. vue组件传值有哪些方式</h4>
+
+<ol>
+<li>最简单的 props 和 emit</li>
+<li>利用一个新的 vue 实例做监听<br/>
+```js<br/>
+// bus.js<br/>
+import Vue from &#39;vue&#39;<br/>
+export default new Vue()</li>
+</ol>
+
+<p>// 组件a<br/>
+import Bus from ./bus.js<br/>
+methods: {<br/>
+  emitSth() {<br/>
+    Bus.$emit(&#39;fromA&#39;)<br/>
+  }<br/>
+}</p>
+
+<p>// 组件b<br/>
+import Bus from ./bus.js<br/>
+mounted() {<br/>
+  Bus.$on(&#39;fromA&#39;, () =&gt; {<br/>
+    ...<br/>
+  })<br/>
+}</p>
+
+<pre><code class="language-text">3. 利用vuex
+
+#### 2. vue router 有哪些钩子，分别是什么作用
+1. 全局前置守卫：```router.beforeEach((to,from,next)=&gt;{})```
+&gt; - to是去哪个路由，from是来自哪个路由，next()交接钩子状态
+&gt; - 路由守卫是一个promise，一定要交接next()，不然不会触发resolve
+&gt; - 在next中可以传递一个路由，如next(&#39;/&#39;)去根路径
+&gt; - to和from中除了有path，name等基础信息之外，还有个matched数组，存储所有匹配到的路由，在这里可以查看更多的详细信息，包括meta中的自定义信息
+
+2. 全局后置钩子：```router.afterEach((to,from)=&gt;{})```
+&gt; - 后置钩子不存在next了，有to和from，与前置钩子类似
+
+3. 全局解析守卫：```roter.beforeResolve```
+&gt; - 全局守卫是自定义的一个守卫，在导航被确认之前，同时在所有组件内守卫和异步路由组件被解析之后，解析守卫就被调用。
+
+4. 独享路由前置守卫：```beforeEnter((to,from,next)=&gt;{})```
+&gt; - 独享路由守卫就是某个路由专有的守卫，用法与全局路由一致，只不过定义在具体路由内
+
+5. 组件前置路由守卫：```beforeRouteEnter((to,from,next)=&gt;{})```
+&gt; - 组件内路由指的是，当触发某个路由后，路由会依次加载路由页面内所需的组件，这些组件都可以在自身组件内定义前置路由。
+&gt; - 在路由被comfirm之前，每个组件都会依次调用组件内前置路由。在这个钩子中，是没办法用this（Vue实例）的，因为这个时候DOM还没初始化，还没挂载。
+&gt; - 可以在next中将实例传进去next(vm=&gt;{}），next之后已经初始化完成。
+
+6. 组件变更路由守卫：```beforeRouteUpdate((to,from,next)=&gt;{})```
+&gt; - 当路由改变，但是组件被复用的时候会调用beforeRouteUpdate，比如一个页面调用了三次相同的button组件，第一次是beforeRouteEnter，后面两次调用beforeRouteUpdate
+&gt; - 这个钩子中可以用this，因为DOM以及挂载好了，同时next中已经不能接受vue实例了（没意义）
+
+7. 组件离开路由守卫：```beforeRouteLeave((to,from,next)=&gt;{})```
+&gt; - 当导航（路由）离开的时候，路由内的组件开始注销，这个时候每个组件会执行这个路由守卫
+&gt; - 同样可以用this，也不能在next中接受vue实例
+
+#### 3. vuex 为什么要用单向数据流，单向数据流指的是什么
+单项数据流就是数据流动方向是固定的，不能倒流。在vue中，数据流动方向都是由vue实例发起开始，最后状态池state数据变更后通知vue实例重新渲染：
+
+</code></pre>
+
+<p>sequenceDiagram<br/>
+Vue Components-&gt;&gt;Actions: dispatch<br/>
+Actions-&gt;&gt;Mutations: commit<br/>
+Mutations-&gt;&gt;State: mutate<br/>
+State-&gt;&gt;Vue Components: Render</p>
+
+<pre><code class="language-text">
+单项数据流是数据驱动视图的一个核心。因为数据的变更会导致视图的重新渲染，所以数据的变更需要是可追踪的。单项数据流的好处是可以追踪所有的数据（在state中）的变更都是单向的，这样保证变更状态可追溯，每次数据的变更都是由Vue实例派发出来的。保证了每个组件都是无副作用的（纯函数，函数式编程）
+
+#### 4. 为什么要通过actions来触发mutations，直接用vue实例触发mutations不可以吗？
+首先一个概念就是，mutation必须是同步的，因为mutation会修改state数据，异步的mutation状态是无法追踪的。假如mutation是异步，那action或vue实例commit一个mutation之后（比如请求数据），那不知道什么时候回调会有响应，也就无法得知state啥时候被修改。
+
+因为mutation必须是同步的，所以如果涉及到异步的操作，那么需要一个东西能异步提交mutation，action就是这个东西。vue实例也可以发布commit触发mutation，只不过如果直接commit的mutation就必须是同步的了。
+
+既然commit一个mutation必须是同步的，那就异步操作（dispatch）action，然后让action去commit同步的mutation就好了。dispatch可以是异步的也没关系，啥时候回调回来也没关系，反正最终他会commit，只需要追踪commit一个mutation的时间点的快照就好了，这样数据流仍然是可追踪的。
+
+#### 5. vuex 中如何使用异步
+vuex中，actions都是可异步的。并且每一个action都是返回一个promise，配合promise.then或者await/async写异步还是很舒服
+```js
+// 异步action
+actions: {
+  incrementAsync ({ commit }) {
+    setTimeout(() =&gt; {
+      commit(&#39;increment&#39;)
+    }, 1000)
+  }
+}
+
+// await / async
+// 假设 getData() 和 getOtherData() 返回的是 Promise
+actions: {
+  async actionA ({ commit }) {
+    commit(&#39;gotData&#39;, await getData())
+  },
+  async actionB ({ dispatch, commit }) {
+    await dispatch(&#39;actionA&#39;) // 等待 actionA 完成
+    commit(&#39;gotOtherData&#39;, await getOtherData())
+  }
+}
+</code></pre>
+
+<h4 id="toc_1">6. vuex 中如何使用module</h4>
+
+<p>vuex支持模块化，模块化的时候，各个模块通过state访问自己的状态中心，通过rootState访问根状态中心</p>
+
+<pre><code class="language-javascript">// 定义vuex
+const moduleA = {
+  state: { ... },
+  mutations: { ... },
+  actions: { ... },
+  getters: { ... }
+}
+
+const moduleB = {
+  state: { ... },
+  mutations: { ... },
+  actions: { ... }
+}
+
+const store = new Vuex.Store({
+  modules: {
+    a: moduleA,
+    b: moduleB
+  }
+})
+store.state.a // -&gt; moduleA 的状态
+store.state.b // -&gt; moduleB 的状态
+
+// 使用时用map映射更方便
+computed: {
+  ...mapState(&#39;some/nested/module&#39;, {
+    a: state =&gt; state.a,
+    b: state =&gt; state.b
+  })
+},
+methods: {
+  ...mapActions(&#39;some/nested/module&#39;, [
+    &#39;foo&#39;, // -&gt; this.foo()
+    &#39;bar&#39; // -&gt; this.bar()
+  ])
+}
+</code></pre>
+
+<h4 id="toc_2">7. 如何监听第三方组件的声明周期</h4>
+
+<pre><code class="language-markup">&lt;Child @hook:mounted=&quot;childMounted&quot;&gt;&lt;/Child&gt;
+</code></pre>
+
+<h4 id="toc_3">8. watch / methods / computed 的区别</h4>
+
+<p><strong>watch：</strong></p>
+
+<ol>
+<li>watch 是监听某个数据的变化，是一个watcher，订阅一份数据，当数据改变的时候执行一个回调。如果要监听对象深层次的属性，可以用deep关键字，但是这样会深度遍历所有的属性。也可以用下面的方法针对某个深层次属性做监听</li>
+<li>watch和vue响应式的watcher是类似的，只不过响应式是vue实例帮我们收集响应式data中的依赖，而watch是用户手动绑定的响应式</li>
+<li>watch的初始化在data初始化之后会立马触发get获取value，此时如果有immediate属性那么立马执行watch对应的回调函数</li>
+<li>当data对应的key发生变化时，触发setter，watch感知到后执行回调函数</li>
+</ol>
+
+<pre><code class="language-javascript">// 针对某个属性
+watch: {
+  &#39;queryData.name&#39;: {
+    handler: function() {
+      // do something
+    }
+  }
+}
+
+// 或者结合computed
+computed: {
+  getName: function() {
+    return this.queryData.name;
+  }
+},
+watch: {
+  getName: {
+    handler: function() {
+      // do something
+    }
+  }
+}
+</code></pre>
+
+<p><strong>methods：</strong></p>
+
+<ol>
+<li>methods 是方法的集合，每次调用都会执行一次方法</li>
+</ol>
+
+<p><strong>computed：</strong></p>
+
+<ol>
+<li>computed 是计算属性，他会依赖其他属性计算并且 return 一个值。和methods最大的区别是，computed会缓存，如果参数条件不变，将把缓存结果return出去，如果条件变了再重新计算。当然，也可以利用闭包保证每次执行的独立作用域，这样缓存就失效了，和methods就没差别了</li>
+<li>假设 computed c 依赖 data a和b，当data初始化之后，开始初始化computed。这时候触发 c 的getter，c会去读取a和b，触发a和b的getter</li>
+<li>在触发c的getter的时候，就可以缓存a和b。当下次再触发c的getter，c的getter同样去读取a和b，比对后如果发现值没有变更，那么c不触发视图更新。如果发现依赖变更，则触发更新</li>
+</ol>
+
+<h4 id="toc_4">9. 什么是mvvm</h4>
+
+<p>mvvm是 Model-View-ViewModel 的缩写</p>
+
+<ol>
+<li>Model是模型，是数据</li>
+<li>View是视图</li>
+<li>ViewModel是Model和View的通信层，它不关心View如何处理数据如何渲染（但是他会帮View整理好需要的数据格式），也不关心Model变更，它只管告知双方彼此发生了变更（所谓的双向绑定）</li>
+</ol>
+
+<blockquote>
+<p>传统的mvc模式是 Model-View-Controller 的缩写，Controller是在View和Model中间并且只能单向连接View和Model。Controller需要去修改Model的状态，同时还要告知View状态变了，你要如何渲染。这就导致Controller过于臃肿和庞大</p>
+</blockquote>
+
+<p>一句话总结就是mvvm使得view 和 model之间是双向通信的，而mvc是单向通信的</p>
+
+<h4 id="toc_5">10. 什么是虚拟dom，优势是什么</h4>
+
+<p>虚拟dom就是用js模拟一颗dom树的结构。</p>
+
+<p>虚拟dom的优势:</p>
+
+<ol>
+<li>操作js比操作实际的dom性能好得多，避免大量的重绘回流</li>
+<li>在没有dom结构的地方（比如ssr）也能用js模拟dom的结构然后解析成html的结构，直接返回给前端</li>
+<li>利用diff算法（先序遍历深度优先）还能比对新旧dom树（js树）的不同，定向的修改dom节点</li>
+</ol>
+
+<blockquote>
+<p>在vue 3.x 中还多了一些静态虚拟dom，事件缓存，dom提升等性能相关的优化</p>
+</blockquote>
+
+<h4 id="toc_6">11. 什么是diff算法</h4>
+
+<p>diff是一个先序遍历，深度优先的算法，他主要是对比两个虚拟dom（obj树）的不同，然后只修改不同的树枝</p>
+
+<h4 id="toc_7">12. history和hash模式的异同</h4>
+
+<p>hash模式url后带有#号，通过哈希值的变更来确定路由的变更；history模式更像原生的url</p>
+
+<p>history模式依赖h5的一些新特性，pushState和replaceState等，在不刷新当前页面的基础上修改路由</p>
+
+<h4 id="toc_8">13. vue和react的区别</h4>
+
+<ol>
+<li>vue原生支持v-model的双向绑定，修改数据和变更视图都更容易，react有完善的state状态管理，使用jsx，可以完全用js控制整个页面，自由度更高</li>
+<li>vue相对来说更简单上手，对新手和小团队快速搭建更友好，react自由度更高，从脚手架到开发到构建都提供了充分的可配自由度</li>
+<li>diff和性能的选择有些差异，比如react把虚拟dom细化成一个个链表，在浏览器空闲的时候一个个慢慢diff，而vue则是利用一个Watcher做整体的发布订阅管控，包括3.x中一些静态dom提升等优化</li>
+</ol>
+
+<h4 id="toc_9">14. beforeCreated，created，mounted之间的区别</h4>
+
+<ol>
+<li>beforeCreated时vue实例还没初始化，this是不可用的，这里只能做一些和vue无关的东西</li>
+<li>created的时候vue实例已经初始化完毕了，但是dom还没挂载，这里可以操作this但是不能操作dom</li>
+<li>mounted的时候dom已经挂载了，可以用ref操作dom</li>
+</ol>
+
+<h4 id="toc_10">15. vue的生命周期有哪些</h4>
+
+<ol>
+<li>beforeCreate</li>
+<li>created</li>
+<li>beforeMount</li>
+<li>mounted</li>
+<li>beforeUpdate</li>
+<li>updated</li>
+<li>beforeActivate</li>
+<li>activated</li>
+<li>beforeDestroy</li>
+<li>destroyed</li>
+</ol>
+
+<h4 id="toc_11">16. extend的作用</h4>
+
+<p>extend生成一个构造器，能实例化一个vue。一般用来做组件（比如toast）每次实例化一个vue挂载到dom上</p>
+
+<h4 id="toc_12">17. provide/inject的作用</h4>
+
+<p>provide/inject 是为了提供一个全局的，父子组件通信的能力，这一般是常量且不是响应式的</p>
+
+<pre><code class="language-javascript">// 父级组件提供 &#39;foo&#39;
+var Provider = {
+  provide: {
+    foo: &#39;bar&#39;
+  },
+  // ...
+}
+
+// 子组件注入 &#39;foo&#39;
+var Child = {
+  inject: [&#39;foo&#39;],
+  created () {
+    console.log(this.foo) // =&gt; &quot;bar&quot;
+  }
+  // ...
+}
+</code></pre>
+
+<blockquote>
+<ul>
+<li>provide 和 inject 绑定并不是可响应的。这是刻意为之的。然而，如果你传入了一个可监听的对象，那么其对象的 property 还是可响应的。</li>
+<li>但是非常不建议用provide/inject去做响应式的监听变更，因为这样数据流就不是单向流动的，你不知道是哪个组件修改了这个全局状态。</li>
+</ul>
+</blockquote>
+
+<h4 id="toc_13">18. mixin和mixins的区别</h4>
+
+<p>mixin是全局的混入，每个组件都会受到影响。mixins是单一组件混入。</p>
+
+<p>当组件状态和混入状态冲突的时候，优先使用组件的状态</p>
+
+<h4 id="toc_14">19. watch的对象写法</h4>
+
+<p>watch 有对象写法，能深度监听，immediate立即执行等</p>
+
+<pre><code class="language-javascript">watch: {
+  initData: {
+    handler(newV) {
+      this.initSpuData(newV);
+    },
+    immediate: true,
+    deep: true
+  }
+}
+</code></pre>
+
+<h4 id="toc_15">20. v-show和v-if的区别，分别适用于什么场景</h4>
+
+<p>v-if是vue不渲染这个dom节点，在虚拟dom树中就不存在这个dom节点。</p>
+
+<p>v-show是<code>display: none</code>，dom中是有这个节点的，只是这个节点不渲染</p>
+
+<p>如果一个元素频繁切换状态，就用v-show，因为不需要vue做diff去判断节点是否要挂载到dom树上</p>
+
+<p>如果一个元素很大但不会频繁切换状态，那就用v-if，因为一开始不渲染还能减少diff的时间，而渲染过一次之后也不怎么变动</p>
+
+<h4 id="toc_16">21. 组件中的data为什么是函数，什么时候可以用对象？</h4>
+
+<p>如果一个组件是复用的，那如果data写成对象，那所有组件将共用这个对象的状态，毕竟是引用类型。</p>
+
+<p>所以写成函数，每次返回一个新的对象，就算组件复用，返回的对象也是独享的</p>
+
+<p>如果是 <code>new Vue()</code> 那就可以用对象了，因为new的都是一个Vue的实例，不存在共用data一说</p>
+
+<h4 id="toc_17">22. vue的响应式原理是什么，手写一个</h4>
+
+<p><a href="https://www.cnblogs.com/canfoo/p/6891868.html">双向绑定</a><br/>
+<a href="https://juejin.im/post/5adf0085518825673123da9a">双向绑定</a></p>
+
+<pre><code class="language-javascript">// vue 2.x
+const observe = obj =&gt; {
+  if (!obj || typeof obj !== &#39;object&#39;) return obj
+  Reflect.ownKeys(obj).forEach(key =&gt; {
+    reactiveFn(obj, key, obj[key])
+  })
+}
+
+const reactiveFn = (obj, key, val) =&gt; {
+  observe(val)
+  Object.defineProperty(obj, key, {
+    enumerable: true,
+    configurable: true,
+    get() {
+      console.log(&#39;get&#39;, val)
+      return val
+    },
+    set(newV) {
+      console.log(&#39;set&#39;, newV)
+      val = newV
+    }
+  })
+}
+
+let userInfo = {
+  name: &#39;Evan&#39;,
+  age: 24
+}
+
+observe(userInfo)
+
+const name = userInfo.name
+userInfo.age = 25
+</code></pre>
+
+<pre><code class="language-javascript">// vue 3.x
+const proxyGenerator = obj =&gt; {
+  if (!obj || typeof obj !== &#39;object&#39;) return obj
+  const handler = {
+    get(obj, key) {
+      console.log(&#39;get&#39;, obj[key])
+      return proxyGenerator(obj[key])
+    },
+    set(obj, key, newV) {
+      console.log(&#39;set&#39;, newV)
+      obj[key] = newV
+    }
+  }
+  return new Proxy(obj, handler)
+}
+
+let userInfo = {
+  name: &#39;Evan&#39;,
+  age: 24
+}
+
+let userInfoProxy = proxyGenerator(userInfo)
+
+const name = userInfoProxy.name
+userInfoProxy.age = 25
+</code></pre>
+
+<h4 id="toc_18">23. nexttick原理</h4>
+
+<p>看一段代码：</p>
+
+<pre><code class="language-javascript">export default {
+  data () {
+    return {
+      msg: 0
+    }
+  },
+  mounted () {
+    this.msg = 1
+    this.msg = 2
+    this.msg = 3
+  },
+  watch: {
+    msg () {
+      console.log(this.msg)
+    }
+  }
+}
+</code></pre>
+
+<p>对于上面的代码，watch只会执行一次。这是因为vue处理响应式是批量操作而不是每一次都操作的。</p>
+
+<p>vue双向绑定的watcher源码中有这么一句 <code>queueWatcher(this)</code>，而这玩意内又有这么一句 <code>nextTick(flushSchedulerQueue)</code>。这个 flushSchedulerQueue 其实就是更新视图的函数。<a href="https://juejin.im/post/5ae3f0956fb9a07ac90cf43e#heading-1">nextTick的源码参考这里</a></p>
+
+<p><strong>抽象概括一下nextTick的原理：</strong></p>
+
+<ol>
+<li><code>nextTick</code> 接收一个回调，返回一个闭包</li>
+<li>回调的执行时机 <code>nextTick</code> 闭包中的 <code>timerFunc</code> 控制</li>
+</ol>
+
+<blockquote>
+<p><code>timerFunc</code> 用以下优先级来处理出队时机。setImmediate -&gt; MessageChannel -&gt; Promise -&gt; setTimeout。优先使用宏任务，如果不支持就使用Promise的微任务，如果还不支持就用setTimeout兼容。虽然setTimeout是宏任务，但是在http声明中setTimeout有4ms的延时，所以只拿来做兼容处理，宏任务交给 <code>setImmediate</code> 和 <code>MessageChannel</code></p>
+</blockquote>
+
+<p>也就是说用于更新视图的 <code>nextTick(flushSchedulerQueue)</code> 其实以 <code>setImmediate -&gt; MessageChannel -&gt; Promise -&gt; setTimeout</code> 优先级塞入了 Event loop 中</p>
+
+<p>这样更新的好处是：</p>
+
+<p>假设有个值 <code>test</code> 被while循环执行1000次++操作。每次循环时，都会根据响应式触发 <code>compile -&gt; setter -&gt; Dep -&gt; Watcher -&gt; update -&gt; run</code> 如果没有异步更新，而是每次都更新DOM，那会十分消耗性能。所以Vue实现了一个queue队列，先把所有的watcher塞到队列里。在下一个Tick（或者是当前Tick的微任务阶段）的时候会统一执行queue中Watcher的run</p>
+
+<p><strong>整个过程如下：</strong></p>
+
+<p><strong>第一阶段：queueWatcher(this) 收集watcher队列</strong></p>
+
+<ol>
+<li>响应式触发update，把watcher塞到queue队列，并且根据watcher.id去重</li>
+</ol>
+
+<p><strong>第二阶段：nextTick(flushSchedulerQueue) 更新视图</strong></p>
+
+<ol>
+<li><code>nextTick</code> 会返回一个闭包，通过 <code>timerFunc</code> 执行 <code>flushSchedulerQueue</code> 回调</li>
+<li><code>flushSchedulerQueue</code> 执行watcher的run，更新视图</li>
+</ol>
+
+<p>回到第一段代码中，虽然修改了msg三次，但是因为vue更新视图的机制，首先把三次 <code>this.msg</code> 的变动塞到队列里，根据id去重只要了最后一次变更。之后异步执行视图更新，保证在下一个Tick（或者在当前Tick的微任务中）更新视图，也就直接把 msg 从 <code>0 -&gt; 3</code> 而不是 <code>0 -&gt; 1 -&gt; 2 -&gt; 3</code></p>
+
+<h4 id="toc_19">24. Vue 插件的原理是什么</h4>
+
+<p>Vue插件的的使用方法是 <code>Vue.use(xx)</code></p>
+
+<p>所有被 Vue.use 的对象，都必须包含一个 <code>install</code> 的方法，<code>Vue.use</code>的本质就是执行这个方法罢了</p>
+
+<blockquote>
+<ul>
+<li>如果use的是一个function而不是一个对象，那这个方法会被直接当成install方法来执行。</li>
+<li>Vue use必须在vue实例化之前执行</li>
+</ul>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Vue 响应式原理]]></title>
+    <link href="https://evanoyam.github.io/16021782785833.html"/>
+    <updated>2020-10-09T01:31:18+08:00</updated>
+    <id>https://evanoyam.github.io/16021782785833.html</id>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">基础概念</h2>
+
+<p>Vue的响应式也叫双向绑定，是MVVM中的核心，也就是视图View和模型Model的双向通信过程。Vue实现双向通信，依赖的基础是<strong>数据劫持 + 发布订阅</strong></p>
+
+<blockquote>
+<ul>
+<li>Model 的变更决定了 View 的渲染</li>
+<li>View 的用户交互反向作用于 Model 的变更</li>
+</ul>
+</blockquote>
+
+<p>很多人对Vue响应式的理解只停留在数据劫持的阶段。其实要实现一个完整的双向绑定框架，除了对数据的劫持之外，还需要一个可靠的发布订阅机制</p>
+
+<h4 id="toc_1">数据劫持</h4>
+
+<p>所谓数据劫持，就是在<strong>读取 / 写入数据的时候触发一个回调钩子</strong>，在这个钩子中注入自己的逻辑，以达到一些特定的目的</p>
+
+<blockquote>
+<ul>
+<li>Vue 2.x 用的是 <code>Object.definedProperty</code> 来劫持数据</li>
+<li>Vue 3.x 用的是 <code>Proxy</code> 来劫持数据</li>
+</ul>
+</blockquote>
+
+<pre><code class="language-javascript">// Object.definedProperty 数据劫持
+Object.defineProperty(obj, key, {
+  enumerable: true,
+  configurable: true,
+  get() {
+    console.log(&quot;getter&quot;) // 读取属性时劫持数据
+    return val
+  },
+  set(newV) {
+    console.log(&quot;setter&quot;) // 设置属性时劫持数据
+    val = newV
+  }
+})
+
+// Proxy 劫持数据
+new Proxy(obj, {
+  get(obj, key) {
+    console.log(&#39;getter&#39;)
+    return obj[key]
+  },
+  set(obj, key, newV) {
+    console.log(&#39;setter&#39;)
+    obj[key] = newV
+  }
+})
+</code></pre>
+
+<h4 id="toc_2">发布订阅</h4>
+
+<p>发布订阅是一种比较常见的设计模式。订阅者向发布者订阅某条消息，当消息发生变更时（或者满足某个条件 / 时机时），发布者向订阅者推送消息。</p>
+
+<pre><code class="language-javascript">class Dep {
+  constructor() {
+    this.eventQueueMap = new Map()
+  }
+  on(event, cb) {
+    this.eventQueueMap.has(event) ? this.eventQueueMap.get(event).push(cb) : this.eventQueueMap.set(event, [cb])
+  }
+  emit(event, ...args) {
+    const eventQueue = this.eventQueueMap.get(event)
+    if (!eventQueue) return false
+    eventQueue.forEach(cb =&gt; {
+      cb(args)
+    })
+  }
+  off(event) {
+    if (this.eventQueueMap.has(event)) this.eventQueueMap.delete(event)
+  }
+}
+
+const event = new Dep()
+
+// 订阅
+event.on(&#39;test&#39;, function(name) {
+  console.log(name)
+})
+
+// 发布
+event.emit(&#39;test&#39;, &#39;二哈&#39;, &#39;波斯猫&#39;)
+</code></pre>
+
+<h2 id="toc_3">实现一个响应式框架</h2>
+
+<h4 id="toc_4">先看一下Vue响应式的实现过程</h4>
+
+<p><img src="https://cn.vuejs.org/images/data.png" alt="image"/></p>
+
+<ol>
+<li>首先初始化data对象，劫持这堆东西，让他们变得可追踪</li>
+<li>初始化Watcher，订阅自己关注的数据</li>
+<li>读取数据时触发getter，实现 Model -&gt; View 的渲染</li>
+<li>设置数据时触发setter，实现 View -&gt; Model 的变更，同时 Model 变更后 Watcher 重新渲染视图</li>
+</ol>
+
+<blockquote>
+<p>在整个响应式的过程中其实还涉及到Dep依赖收集和Compile解析器等功能，后面会慢慢讲解</p>
+</blockquote>
+
+<h4 id="toc_5">自己做一个</h4>
+
+<p><a href="https://www.cnblogs.com/canfoo/p/6891868.html">要做一个响应式框架</a>，涉及到监听器Observer，依赖收集中心Dep，订阅者Watcher，解析器Compile。</p>
+
+<ol>
+<li>监听器Observer，负责劫持数据。</li>
+</ol>
+
+<blockquote>
+<p>需要递归把数据对象的所有属性都劫持成可追踪的</p>
+</blockquote>
+
+<ol>
+<li>依赖收集中心Dep，负责管理订阅者，发布消息，是发布订阅中的发布者。</li>
+</ol>
+
+<blockquote>
+<p>不是所有的数据都是View用得上的，只需要派发有人订阅的数据即可。Dep依赖收集中心就是来负责管理这些订阅者的。</p>
+</blockquote>
+
+<ol>
+<li>订阅者Watcher，负责订阅自身关注的数据，可以收到属性的变化通知并执行相应的函数，从而更新视图，是发布订阅中的订阅者</li>
+</ol>
+
+<blockquote>
+<p>在订阅者初始化的时候，触发劫持对象的getter，将自己注入到Dep中，表示需要订阅某个数据</p>
+</blockquote>
+
+<ol>
+<li>解析器Compile，负责扫描和解析每个节点的相关指令，来识别哪些数据需要订阅，需要双向绑定</li>
+</ol>
+
+<blockquote>
+<p>解析器就是发布 - 订阅的桥梁，让订阅者和发布者之间产生联系。比如识别到 <code>{{}}</code> 就初始化一个Watcher监听它，并且由Dep管理这个Watcher，篇幅有限，本文就不实现Compile了</p>
+</blockquote>
+
+<h4 id="toc_6">监听器Observer</h4>
+
+<pre><code class="language-javascript">class Observer {
+  constructor() {
+    this.dep = new Dep()
+  }
+  observe(obj) {
+    if (!obj || typeof obj !== &#39;object&#39;) return obj
+    Reflect.ownKeys(obj).forEach(key =&gt; {
+      // 劫持对象的所有属性
+      this.reactiveFn(obj, key, obj[key])
+    })
+  }
+  reactiveFn(obj, key, val) {
+    // 递归劫持所有属性的子属性
+    this.observe(val)
+    Object.defineProperty(obj, key, {
+      enumerable: true,
+      configurable: true,
+      get: () =&gt; {
+        // 只有初始化 Watcher 时触发的 getter，才需要订阅
+        if (Dep.target) {
+          this.dep.addSub(Dep.target) // 订阅数据
+        }
+        return val
+      },
+      set: newV =&gt; {
+        // 通知 Watcher
+        if (val !== newV) {
+          val = newV
+          this.dep.notify()
+        }
+      }
+    })
+  }
+}
+</code></pre>
+
+<h4 id="toc_7">依赖收集中心Dep</h4>
+
+<pre><code class="language-javascript">class Dep {
+  constructor() {
+    this.subs = []
+  }
+  // 把 watcher 塞入订阅者队列
+  addSub(sub) {
+    this.subs.push(sub)
+  }
+  // 通知所有的订阅者数据已变更
+  notify() {
+    this.subs.forEach(function(sub) {
+      sub.update()
+    })
+  }
+}
+</code></pre>
+
+<h4 id="toc_8">订阅者Watcher</h4>
+
+<pre><code class="language-javascript">class Watcher {
+  constructor(vm, exp, cb) {
+    this.vm = vm
+    this.exp = exp
+    this.cb = cb
+    this.value = this.watch() // 将自己添加到订阅器
+  }
+  update() {
+    var value = this.vm.data[this.exp]
+    var oldVal = this.value
+    if (value !== oldVal) {
+      this.value = value
+      this.cb.call(this.vm, value, oldVal)
+    }
+  }
+  watch() {
+    Dep.target = this // 缓存自己
+    var value = this.vm.data[this.exp] // 强制执行监听器里的get函数
+    Dep.target = null // 释放自己
+    return value
+  }
+}
+</code></pre>
+
+<h4 id="toc_9">测试用例</h4>
+
+<pre><code class="language-javascript">// 这里省去解析器Compile
+class MyVue {
+  constructor(options) {
+    this.data = options.data()
+    const observer = new Observer()
+    observer.observe(this.data)
+    for (let key in this.data) {
+      console.log(&#39;初始化模板的值为&#39;, this.data[key])
+      new Watcher(this, key, function(value) {
+        console.log(&#39;值被修改为&#39;, value)
+      })
+    }
+    return this
+  }
+}
+
+const vm = new MyVue({
+  data() {
+    return {
+      name: &#39;Evan&#39;,
+      age: 24
+    }
+  }
+})
+setTimeout(function() {
+  vm.data.name = &#39;Fiona&#39;
+  vm.data.age = 26
+}, 2000)
+</code></pre>
+
+]]></content>
+  </entry>
+  
+</feed>
