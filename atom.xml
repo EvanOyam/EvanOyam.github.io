@@ -4,7 +4,7 @@
   <title><![CDATA[Evan的博客]]></title>
   <link href="https://evanoyam.github.io/atom.xml" rel="self"/>
   <link href="https://evanoyam.github.io/"/>
-  <updated>2020-10-11T21:34:43+08:00</updated>
+  <updated>2020-10-11T21:57:18+08:00</updated>
   <id>https://evanoyam.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -5296,13 +5296,13 @@ function factorialB(n, x) {if (n === 1) return x
     <updated>2020-10-10T21:49:23+08:00</updated>
     <id>https://evanoyam.github.io/16023377632943.html</id>
     <content type="html"><![CDATA[
-<p>现在的前端生态都推崇组件式开发，无论是React，Vue还是Angular都是组建开发的形式。原生的HTML其实也支持组建开发，所有的框架组件化都是在这个基础上做的二次改进。</p>
+<p>现在的前端生态都推崇组件式开发，无论是 React，Vue 还是 Angular 都是组建开发的形式。原生的 HTML 其实也支持组建开发，所有的框架组件化都是在这个基础上做的二次改进。</p>
 
-<ol>
-<li>HTML template &amp; HTML slot</li>
-</ol>
+<p>Web Component 就是前端组件化的一种社区实践，由模板、<code>shadow DOM</code>、自定义标签三部分组成</p>
 
-<p>template组件和和Vue的template语法类似。</p>
+<h2 id="toc_0">HTML template &amp; HTML slot</h2>
+
+<p>template 组件和和 Vue 的 template 语法类似。</p>
 
 <pre><code class="language-markup">&lt;!-- html --&gt;
 &lt;template id=&quot;custom-template&gt;
@@ -5313,25 +5313,23 @@ function factorialB(n, x) {if (n === 1) return x
 <p>它允许开发者定义一个直到被复制使用时才会进行渲染的 HTML 标签块。而 slot 标签允许开发者通过特定接入点来动态替换模板中的 HTML 内容。它用 name 属性来作为唯一识别标志</p>
 
 <pre><code class="language-javascript">// js
-// 获取template
+// 获取 template
 const template = document.getElementById(&quot;custom-template&quot;);
 const templateContent = template.content;
 
 // 复制节点
 const templateInstance = templateContent.cloneNode(true);
 
-// 渲染到真实的DOM上
+// 渲染到真实的 DOM 上
 const container = document.getElementById(&quot;container&quot;);
 container.appendChild(templateInstance);
 </code></pre>
 
-<ol>
-<li>Shadow DOM</li>
-</ol>
+<h2 id="toc_1">Shadow DOM</h2>
 
-<p>我们用template封装之后，虽然节点是可以复用了，但是里面的样式和属性都是对外暴露的，换句话说如果有一样的class或者id或者其他属性，都是会对环境造成污染的</p>
+<p>我们用 template 封装之后，虽然节点是可以复用了，但是里面的样式和属性都是对外暴露的，换句话说如果有一样的 class 或者 id 或者其他属性，都是会对环境造成污染的</p>
 
-<p>Shadow DOM就是用来隐藏节点的。他的作用就是将某些节点隔离进一个沙箱，是一颗不对外开放的，隐藏的DOM树</p>
+<p>Shadow DOM 就是用来隐藏节点的。他的作用就是将某些节点隔离进一个沙箱，是一颗不对外开放的，隐藏的 DOM 树</p>
 
 <pre><code class="language-javascript">// 给 ele 节点添加一颗隐藏的 DOM 树，其内容是 template 的节点
 // 开启 Shadow DOM 之后，ele 内的元素将被隔离
@@ -5341,26 +5339,22 @@ const shadowRoot = element.attachShadow({mode: &#39;open&#39;});
 shadowRoot.appendChild(templateContent.cloneNode(true));
 </code></pre>
 
-<ol>
-<li>Custom Element</li>
-</ol>
+<h2 id="toc_2">Custom Element</h2>
 
 <p>有了 template 和 shadow DOM，其实就已经能安全复用组件了。但是总不能每次都引入一大坨东西进去，Custom Element 就是把组件内容封装成一个标签，如 <code>&lt;my-div&gt;&lt;/my-div&gt;</code> 这样可以方便引用</p>
 
-<p>Custom Element 需要继承自 HTMLElement类，并且需要通过 <code>window.customElements.define</code> 来声明标签名</p>
+<p>Custom Element 需要继承自 HTMLElement 类，并且需要通过 <code>window.customElements.define</code> 来声明标签名</p>
 
-<pre><code class="language-javascript">class UserCard extends HTMLElement {
-  constructor() {
-    super();
+<pre><code class="language-javascript">class UserCard extends HTMLElement {constructor() {super();
     
-    // 开启shadow DOM
-    var shadow = this.attachShadow( { mode: &#39;closed&#39; } );
+    // 开启 shadow DOM
+    var shadow = this.attachShadow({ mode: &#39;closed&#39;} );
     
     // 获取模版内容
     var templateElem = document.getElementById(&#39;userCardTemplate&#39;);
     var content = templateElem.content.cloneNode(true);
     
-    // 设置模板中的DOM节点
+    // 设置模板中的 DOM 节点
     content.querySelector(&#39;img&#39;).setAttribute(&#39;src&#39;, this.getAttribute(&#39;image&#39;));
     content.querySelector(&#39;.container&gt;.name&#39;).innerText = this.getAttribute(&#39;name&#39;);
     content.querySelector(&#39;.container&gt;.email&#39;).innerText = this.getAttribute(&#39;email&#39;);

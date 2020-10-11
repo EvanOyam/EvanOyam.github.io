@@ -108,131 +108,7 @@
                       
                       <div class="a-content-text">
                         
-                        	<p>适配方案、可配置主题、纵向瀑布流、h5拍照、沉浸式导航栏</p>
-
-<h2 id="toc_0"><a href="mweblib://16022232163615">适配方案</a></h2>
-
-<h2 id="toc_1">可配置主题</h2>
-
-<ol>
-<li>提供一个方法用于判断色系是暗色系还是亮色系</li>
-</ol>
-
-<pre><code class="language-javascript">/**
- * 16进制颜色转rgb
- * @param {String} color 16进制颜色
- */
-color2rgb(color) {
-  let sColor = color.toLowerCase()
-  // 十六进制颜色值的正则表达式
-  const reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
-  // 如果是16进制颜色
-  if (sColor &amp;&amp; reg.test(sColor)) {
-    if (sColor.length === 4) {
-      let sColorNew = &#39;#&#39;
-      for (let i = 1; i &lt; 4; i += 1) {
-        sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1))
-      }
-      sColor = sColorNew
-    }
-    // 处理六位的颜色值
-    let sColorChange = []
-    for (let i = 1; i &lt; 7; i += 2) {
-      sColorChange.push(parseInt(&#39;0x&#39; + sColor.slice(i, i + 2)))
-    }
-    return &#39;RGB(&#39; + sColorChange.join(&#39;,&#39;) + &#39;)&#39;
-  }
-  return sColor
-},
-
-/**
- * 判断颜色是暗色系还是亮色系
- * @param {String} color 16进制颜色
- */
-colorStyle(color) {
-  let rgb = this.color2rgb(color)
-  let rgbSum = rgb
-    .replace(&#39;RGB(&#39;, &#39;&#39;)
-    .replace(&#39;)&#39;, &#39;&#39;)
-    .split(&#39;,&#39;)
-    .reduce((pre, cur) =&gt; pre + Number(cur), 0)
-  return rgbSum / 3 &gt; 128 ? &#39;white&#39; : &#39;black&#39;
-},
-</code></pre>
-
-<ol>
-<li>从接口获取主题数据，根据主题色系来控制字体，icon颜色</li>
-<li>优先获取本地主题数据<br/>
-&gt; - 如果本地有数据，优先使用本地数据，并且发起请求同步远端数据<br/>
-&gt; - 如果本地没有数据，则等待远端数据2s。等待成功则使用远端数据并且保存到本地；等待超时则使用默认数据</li>
-</ol>
-
-<h2 id="toc_2">纵向瀑布流</h2>
-
-<p>纵向瀑布流的几个特点：</p>
-
-<ol>
-<li>每个 item 的宽度一致，高度不一致</li>
-<li>item id 的顺序是横着排，1 -&gt; 2 换行 3 -&gt; 4 ...</li>
-</ol>
-
-<p>根据这个特点，可以用一个容器装载两列的方式去排列，用flex布局。</p>
-
-<blockquote>
-<p>id 1347... 是第一列的数据，id 2468 是第二列的数据</p>
-</blockquote>
-
-<h2 id="toc_3"><a href="mweblib://16022231410004">h5拍照</a></h2>
-
-<h2 id="toc_4">沉浸式导航栏</h2>
-
-<pre><code class="language-javascript">/**
- * 沉浸式通知栏
- */
-const onscrollBar = () =&gt; {
-  let scrollTop = document.body.scrollTop || document.documentElement.scrollTop
-  let flag = scrollTop / 60
-  let opacity = flag &gt; 1 ? 1 : flag.toFixed(1)
-  let color = util.rgba2hex(`rgba(255, 255, 255, ${opacity})`)
-  // title效果
-  if (scrollTop &gt;= 30 &amp;&amp; !this.titleIsShow__) {
-    jsBridge.setActionBarTitleColor(config.titleStyle.color, title)
-    jsBridge.setActionBarBackIcon(&#39;&#39;, config.goBackIcon.color)
-    this.titleIsShow__ = true
-  }
-  if (scrollTop &lt; 30 &amp;&amp; this.titleIsShow__) {
-    jsBridge.setActionBarTitleColor(&#39;#00000000&#39;, &#39;&#39;)
-    jsBridge.setActionBarBackIcon(&#39;&#39;, config.goBackIcon.initColor)
-    this.titleIsShow__ = false
-  }
-  // bg效果
-  // 1. 触顶立即执行透明状态栏
-  // 2. max立即执行白色状态栏
-  // 3. 其他情况节流渐变
-  if (scrollTop &lt;= 0) {
-    jsBridge.newChangeAppNavigationColor(&#39;#00ffffff&#39;)
-  }
-  if (scrollTop == 60) {
-    jsBridge.newChangeAppNavigationColor(&#39;#ffffffff&#39;, true)
-  }
-  if (scrollTop &gt; 0 &amp;&amp; scrollTop &lt; 60) {
-    // 节流
-    // 若两次间隔时间大于指定时间，则执行函数
-    let now = +new Date()
-    if (now - this.navigationBarPrevious__ &gt; 50) {
-      this.navigationColor__ = color
-      jsBridge.newChangeAppNavigationColor(color)
-      this.navigationBarPrevious__ = now
-    }
-  }
-  // bug兼容
-  if (scrollTop &gt; 60 &amp;&amp; this.navigationColor__ !== &#39;#ffffffff&#39;) {
-    this.navigationColor__ = color
-    jsBridge.newChangeAppNavigationColor(color, true)
-  }
-}
-</code></pre>
-
+                        	记录了一些工作中用到的 UI 交互和功能方案，包括适配方案、可配置主题、纵向瀑布流、h5拍照、沉浸式导航栏等
                         
                       </div>
                   </div>
@@ -266,126 +142,7 @@ const onscrollBar = () =&gt; {
                       
                       <div class="a-content-text">
                         
-                        	<p>docker交付，多环境，自动化与团队协作</p>
-
-<h2 id="toc_0">docker交付</h2>
-
-<p>docker有很多优势，启动快，资源利用率高，容灾和扩容方便等。这里不谈运维相关的优势，仅仅针对前端而言。</p>
-
-<p><strong>对前端来说，docker交付有几个显著优势：</strong></p>
-
-<ol>
-<li>提供一致的运行环境。docker交付能保证运行环境的统一，包括node版本，包括依赖包，ng版本和配置文件等等。这样的好处是不需担心开发和生产环境的配置有问题，无论是部署到什么机器，如何扩容都没问题。</li>
-<li>持续交付和回滚方便。从开发到生产会经历多个环境，docker的镜像交付就能很轻松根据不同的环境提供不同的镜像。而当线上出现问题需要回滚的时候，也能直接把备用镜像部署上去，而不是像传统回滚需要重新拉tag打包。打包的过程又是不可控的。</li>
-</ol>
-
-<p><strong><a href="https://files.eiona.ink/files/code/test.Dockerfile">前端部署Docker：</a></strong></p>
-
-<ol>
-<li>根目录写好ci/cd以及dockerfile，直接往仓库推。</li>
-<li>构建平台打包，自动找dockerfile并且构建镜像。</li>
-<li>构建完毕ci/cd触发，推到服务器，接下来交给运维k8s编排和扩容，容灾等</li>
-</ol>
-
-<blockquote>
-<p>自己测试可以这么做：</p>
-
-<ul>
-<li>创建好dockerfile然后构建一个docker image</li>
-<li><code>docker images</code> 命令查看镜像名称</li>
-<li>将镜像跑起来即可，如 <code>docker run --name test -p 9876:80 myapp:latest</code></li>
-</ul>
-</blockquote>
-
-<pre><code class="language-docker"># 简单的dockerfile
-#第一阶段 
-#FROM构建镜像
-FROM node:14
-
-#构建时的目录
-WORKDIR /app/firstapp
-
-#将package.json从当前目录copy至构建镜像的构建目录中
-ADD package*.json /app/firstapp
-
-#根据package.json下载依赖包
-RUN npm install
-
-#将源码从当前目录copy至构建镜像的该目录中
-ADD . /app/firstapp
-
-#编译
-RUN npm run build
-
-#第二阶段
-#FROM nginx专用镜像
-FROM nginx:lastest
-
-#从第一阶段构建好的镜像镜像容器中COPY编译后的代码文件夹至nginx镜像
-COPY --from=0 /app/firstapp/dist /usr/share/nginx/html
-
-#将源码中的nginx配置文件copy至nginx镜像的固定目录
-ADD nginx.conf /etc/nginx
-
-#运行nginx，暴露80端口
-EXPOSE 80
-</code></pre>
-
-<pre><code class="language-text"># nginx
-events {
-    worker_connections  1024;
-}
-http{
-    server {
-        listen       80;
-        server_name  localhost;
-        location / {
-            root   /usr/share/nginx/html;
-            index  index.html index.htm;
-        }   
-        error_page   500 502 503 504  /50x.html;
-        location = /50x.html {
-            root   /usr/share/nginx/html;
-        }
-    }
-}
-</code></pre>
-
-<h2 id="toc_1">多环境区分</h2>
-
-<p>实际开发过程中需要根据情况区分构建环境，比如不同环境调用不同的api地址，比如dev环境允许调试，mock环境允许访问mock数据等等</p>
-
-<p>多环境区分有两种常见方案：</p>
-
-<ol>
-<li><p>cross-env</p>
-<blockquote>
-<ul>
-<li>安装cross-env的包</li>
-<li>npm script注入环境如 <code>&quot;build:test&quot;: &quot;cross-env NODE_ENV=test vue-cli-service build&quot;</code></li>
-<li>在项目内通过 <code>process.env.NODE_ENV</code> 来读取环境配置</li>
-</ul>
-</blockquote></li>
-<li><p><a href="https://cli.vuejs.org/zh/guide/mode-and-env.html">vue官方提供的模式设定</a></p>
-<blockquote>
-<ul>
-<li>项目根目录下创建 <code>.env</code> 文件，如 <code>.env.test</code></li>
-<li>通过npm script注入环境 <code>&quot;build:test&quot;: &quot;vue-cli-service build --mode test&quot;</code></li>
-<li>项目中通过 <code>process.env.VUE_APP_TITLE</code> 来获取环境配置中的设置的属性</li>
-</ul>
-</blockquote></li>
-</ol>
-
-<p>这两种方式各有优劣：</p>
-
-<p>第一种只是改变当前环境标识，可以根据环境标识来引入不同的conf文件。但是需要根据环境手动载入需要用的其他变量。比如main.js判断到不同env后载入不同的conf文件，从而读取conf文件中的设置</p>
-
-<p>第二种方式是vue官方提供的，他根据需求自动读取根目录下的某个配置文件。好处是vue自动载入了这个conf文件，不好的是如果环境很多，项目结构就会变得很乱，根目录会有一堆conf文件</p>
-
-<h2 id="toc_2">自动化与团队协作</h2>
-
-<p>eslint，gitlab-ci，i18n，prettier，githook和哈士奇等</p>
-
+                        	docker有很多优势，启动快，资源利用率高，容灾和扩容方便等。这里不谈运维相关的优势，仅仅针对前端而言。
                         
                       </div>
                   </div>
@@ -455,8 +212,8 @@ http{
                       
                       <div class="a-content-text">
                         
-                        	`Vue use()` 用于使用 Vue 插件，本质是调用 Vue 插件中的 install 方法。Vue 插件本身是一个对象，这个对象中必须包含 install 方法，install 是一个函数。  
-本质上 `Vue.use()` 就是调用插件中定义的 install 方法，需要在 `new Vue()` 之前调用。
+                        	Vue use() 用于使用 Vue 插件，本质是调用 Vue 插件中的 install 方法。Vue 插件本身是一个对象，这个对象中必须包含 install 方法，install 是一个函数。  
+本质上 Vue.use() 就是调用插件中定义的 install 方法，需要在 new Vue() 之前调用。
                         
                       </div>
                   </div>
@@ -490,7 +247,7 @@ http{
                       
                       <div class="a-content-text">
                         
-                        	插槽就是在组件内预留一个 `<slot>` 标签，用来容纳组件起始标签和结束标签之间的内容。如果没有 `<slot>` 标签，那么组件起始和结束标签件的内容将会被抛弃
+                        	插槽就是在组件内预留一个 slot 标签，用来容纳组件起始标签和结束标签之间的内容。如果没有 slot 标签，那么组件起始和结束标签件的内容将会被抛弃
                         
                       </div>
                   </div>
@@ -748,7 +505,7 @@ http{
                 <div class="site-a-logo"><img src="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" /></div>
             
                 <h1>Evan的博客</h1>
-                <div class="site-des">Evan 的博客 - 代码，摄影，音乐</div>
+                <div class="site-des">Evan 的博客 - 非典型码农，bug永动机</div>
                 <div class="social">
 
 
