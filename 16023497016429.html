@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> 前端面经复盘 - Evan的博客 </title>
+    
+    <meta name="keywords" content="前端面试" />
+     
+    <meta name="description" content="前端面试" />
+    
+    <link href="atom.xml" rel="alternate" title="Evan的博客" type="application/atom+xml" />
+    
+    <link rel="shortcut icon" href="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" type="image/png" />
+    
+
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+
+    <script type="text/javascript">
+      function before_search() {
+        var searchVal = 'site:evanoyam.github.io ' + document.getElementById('search_input').value
+        document.getElementById('search_q').value = searchVal
+        return true
+      }
+    </script>
+  </head>
+  <body class="antialiased hide-extras">
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+        <nav class="top-bar docs-bar hide-for-small" data-topbar>
+          <section class="top-bar-section">
+            <div class="row">
+              <div style="position: relative; width: 100%">
+                <div style="position: absolute; width: 100%">
+                  <ul id="main-menu" class="left">
+                    
+                    <li id=""><a target="self" href="index.html">Home</a></li>
+                    
+                    <li id=""><a target="_self" href="archives.html">Archives</a></li>
+                    
+                  </ul>
+
+                  <ul class="right" id="search-wrap">
+                    <li>
+                      <form
+                        target="_blank"
+                        onsubmit="return before_search();"
+                        action="https://google.com/search"
+                        method="get"
+                      >
+                        <input type="hidden" id="search_q" name="q" value="" />
+                        <input tabindex="1" type="search" id="search_input" placeholder="Search" />
+                      </form>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </nav>
+
+        <nav class="tab-bar show-for-small">
+          <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+            <span> &nbsp; Evan的博客</span>
+          </a>
+        </nav>
+
+        <aside class="left-off-canvas-menu">
+          <ul class="off-canvas-list">
+            
+            <li><a target="self" href="index.html">Home</a></li>
+            
+            <li><a target="_self" href="archives.html">Archives</a></li>
+            
+
+            <li><label>Categories</label></li>
+
+            
+            <li><a href="Interface.html">面试</a></li>
+            
+            <li><a href="%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html">开发笔记</a></li>
+            
+            <li><a href="%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html">工程实践</a></li>
+            
+          </ul>
+        </aside>
+
+        <a class="exit-off-canvas" href="#"></a>
+
+        <section id="main-content" role="main" class="scroll-container"></section>
+      </div>
+    </div>
+  </body>
+</html>
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>前端面经复盘</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2020/10/11</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='Interface.html'>面试</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <h2 id="toc_0">前言</h2>
+
+<p>这次面试总共花了约一个月，8 月中旬开始，到 9 月中旬</p>
+
+<p>期间共面试 5 家公司：<strong>腾讯，字节跳动，百度，富途，转转</strong></p>
+
+<p>面试完之后打算抽空简单写写总结，复盘。这篇面经主要会针对以下几个方面去总结：</p>
+
+<ol>
+<li><p>每个厂面试过程的感受</p></li>
+<li><p>每个厂的面试风格和难度</p></li>
+<li><p>印象深刻或者觉得有价值的真题</p>
+<blockquote>
+<p>不会写很详细的解答，会提及相关知识点，想了解的还是需要自己查一查资料。要是全部详细写完剖析完，怕是能写一小本子了...</p>
+</blockquote></li>
+<li><p>最后会聊聊复习策略，选厂看法和未来的路等</p></li>
+</ol>
+
+<p><strong>题目较多，建议先把所有面经风格看完，再回过头看感兴趣的真题</strong></p>
+
+<h2 id="toc_1">腾讯面经</h2>
+
+<h4 id="toc_2">面试进度：offer</h4>
+
+<h4 id="toc_3">面试难度：⭐️⭐️⭐️⭐️</h4>
+
+<h4 id="toc_4">面试风格：深挖原理 + 适量算法</h4>
+
+<h4 id="toc_5">过程介绍：</h4>
+
+<p>我面的是 PCG 的部门。腾讯的面试流程很长，前前后后需要大概一个月。一个部门大概是<strong>4 轮技术面，1 轮 hr 面</strong>。可以换部门车轮战，但是真的要等很久很久...</p>
+
+<p>整个面试过程感觉是比较 nice 的，每一轮面试官都很尊重人，hr 谈薪资 offer 之类的也是很和蔼（其实声音很年轻 2333）整体下来感觉面的很舒服，至少我面的部门给人感觉很舒服。</p>
+
+<p><strong>面试风格这一块腾讯比较喜欢深挖原理</strong>，只要写在简历上的，都会把你问个底朝天。建议没有十足把握的（我指的是有自己见解或者看过源码）项目或者技术不要写上，千万不要觉得看过一点甚至只是听过某个框架，就写上去...否则会死的很惨...算法问的不算多，谈不上难，刷过一定题量的同学应该问题不大。</p>
+
+<h4 id="toc_6">面试题：</h4>
+
+<ol>
+<li><p>Vue 双向绑定</p>
+<blockquote>
+<p>常规操作，但是会一直往深处问，除了对象劫持，Proxy 这些常规回答，还需要了解一下整个发布订阅的流程，Watcher，Dep，Observer，Compile 等几个类的源码建议读一下</p>
+</blockquote></li>
+<li><p>有多少种不同类型的 Watcher</p>
+<blockquote>
+<p>data，props，computed，watch，以及 vuex 中 state 也是 Watcher</p>
+</blockquote></li>
+<li><p>Vue 什么时候收集 Watcher 的依赖</p>
+<blockquote>
+<p>所谓收集依赖意思就是问什么时候注入 Watcher，即绑定观察者和被观察者之间的关系。最好先介绍一下有哪几种 Watcher，再分类讨论不同 Watcher 的注入特性。我面的时候面试官是循序渐进的，看得出是源码大牛，一个个问题环环相扣。</p>
+<p>简单介绍一下 Vue 实例化的过程：首先劫持 <code>VNode.prototype</code> 变成可响应，然后有个执行 <code>_init</code> 操作。感兴趣的童鞋可以查一下 <code>initMixin</code> 这个方法。这个过程中会初始化生命周期，事件，渲染方法，然后在处理完 <code>beforeCreated</code> 的钩子之后，会执行 <code>initState</code>，就是在这玩意里面收集 data，props 以及 computed 相关的 Watcher 依赖。<strong>总之就是，在 created 之前，beforeCreated 之后，要处理完所有 vm 实例的依赖收集并且初始化，这也是为什么 created 就能用 this.xx 的原因</strong>。具体细节还是要自己看看源码，当然还有包括 watch 其实也是 Watcher，但是这时候就是开发者主动声明的观察者，而不是 Vue 初始化的时候帮我们分析依赖了。</p>
+</blockquote></li>
+<li><p>父子组件嵌套的时候，Vue 第一次注入 Watcher 的时候是什么时候，为什么</p>
+<blockquote>
+<p>这个其实问的是组件初始化的顺序。父 created，子 created，子 mounted，父 mounted。类似 Koa 的洋葱模型，从外到里再到外。原因也比较简单，子组件未确认状态且未渲染的时候，父组件要是抢先确定了自己状态并且渲染，那不就裂开了，它怎么知道它的子组件长啥样。</p>
+</blockquote></li>
+<li><p>computed 的 Watcher 和 data 的 Watcher 有啥区别</p>
+<blockquote>
+<p>核心就是缓存，至于如何缓存的这里就不过多赘述了，一搜一大把。还是那句话，记得看源码。</p>
+</blockquote></li>
+<li><p>Vuex 的设计模式</p>
+<blockquote>
+<p>单例模式，单项数据流，状态追踪</p>
+</blockquote></li>
+<li><p>为什么异步操作要写到 actions 里面，而不能异步 mutation</p>
+<blockquote>
+<p>mutation 会修改 state 数据，异步的 mutation 状态是无法追踪的。假如 mutation 是异步，比如请求数据，那不知道什么时候回调会有响应，也就无法得知 state 啥时候被修改。</p>
+<p>既然 commit 一个 mutation 必须是同步的，那就异步 dispatch action 好了，然后让 action 去 commit 同步的 mutation。dispatch 可以是异步的也没关系，啥时候回调回来也没关系，反正最终他会 commit，<strong>只需要追踪 commit 一个 mutation 的时间点的快照就好了</strong>，这样数据流仍然是可追踪的。</p>
+</blockquote></li>
+<li><p>Vuex 是什么时候注入 Vue 的，怎么注入</p>
+<blockquote>
+<p>一样的道理，既然能 this.xx 调用，那肯定要在 created 之前注入。其实 Vuex 本质只是一种数据流状态的管理方式，就算脱离了 Vue 也是能使用的。这和 Redux 类似。至于注入的过程，其实就是 mixin。当然这个过程涉及到 Vuex moudle 的组合和构建，Vuex 的源码我没看的很仔细，有时间补一补。</p>
+</blockquote></li>
+<li><p>Vue 作为 viewModel 层，它是怎么感知 model 层中状态的变更的</p>
+<blockquote>
+<p>这里我也是猜测。既然要响应式那还是离不开 getter 和 setter 两兄弟。Vuex 初始化完会在 Vue 实例（这里称它为 vmA）上挂载一个 <code>$store</code>，其实里面的数据就是利用一个 new Vue （这里称它为 vmB）来做发布订阅和双向绑定的。也就是说当读取（或设置）某个 state 的属性的时候，其实就是触发 vmB 的 getter setter 两兄弟，再通知 vmA 罢了。类似于自己利用 Vue 写个 <code>$Bus</code> 吧。（大部分自己理解，可能有点出入，不过后来稍微查了下资料大致是这个思路）</p>
+</blockquote></li>
+<li><p>介绍一下 service worker</p>
+<blockquote>
+<p>web worker 的是一种，是独立的线程。介绍一下 sw 的生命周期，还有常见应用场景（pwa 和缓存，跨页面通信等。注意这里其实也会深挖，比如如何缓存 response 的，然后怎么控制缓存池的缓存策略，如何更新 sw 版本，兜底方案之类的）</p>
+</blockquote></li>
+<li><p>service worker 如何做到跨线程通信</p>
+<blockquote>
+<p><code>messageChannel</code> 或者 <code>postMessage</code> 之类的。除了正常通讯，其实也能做心跳保活，一般用来侦测页面是否崩溃。（页面崩溃的时候，当前页面的 js 线程压根就不会工作，一切通信都无济于事。但是 sw 的独立的线程，他不受影响）比如 tabA 和 tabB 两个客户端，都接入 sw，然后做 <code>messageChannel</code> 或者 <code>postMessage</code> 心跳保活。一旦收不到某一端的心跳消息，就意味着这个 tab 挂了</p>
+</blockquote></li>
+<li><p>既然是独立线程，那必然不是同步的，怎么保证消息传递的同步性，如何设计</p>
+<blockquote>
+<p>回调。关于设计，我也是即兴发挥，个人感觉可以参考 promise 状态机的设计理念，resolve 保证同步并且遵循 A+ 规范状态不可逆</p>
+</blockquote></li>
+<li><p>webpack plugin 有哪些生命周期钩子，可以用来做什么</p>
+<blockquote>
+<p>记一个大概流程即可：即将开始编译，开始编译，编译完成，准备生成文件，结束并释放资源</p>
+<ol>
+<li><code>Compile</code> 开始进入编译环境，开始编译</li>
+<li><code>Compilation</code> 即将产生第一个版本</li>
+<li><code>make</code> 任务开始</li>
+<li><code>optimize</code> 作为 <code>Compilation</code> 的回调方法，优化编译，在 <code>Compilation</code> 回调函数中可以为每一个新的编译绑定回调。</li>
+<li><code>after-compile</code>编译完成</li>
+<li><code>emit</code>准备生成文件，开始释放生成的资源，最后一次添加资源到资源集合的机会</li>
+<li><code>after-emit</code>文件生成之后，编译器释放资源</li>
+</ol>
+<p>可以利用一些钩子扩充 webpack 的能力，比如构建前清空 output 目录，比如移动文件，编译完成后修改某些文件 Buffer 等</p>
+</blockquote></li>
+<li><p>发布订阅和观察者模式的区别</p>
+<blockquote>
+<p>观察者没有中间商赚差价...</p>
+<p>实现方式，差异，优劣势等谷歌搜一下吧，这里不赘述了</p>
+</blockquote></li>
+<li><p>WebSocket</p>
+<blockquote>
+<p>双工通信，不受同源策略限制，二进制传输，由 http upgrade 等</p>
+<p>主要介绍一下和长链接有什么不同：</p>
+<p>长连接是 http 1.1 的规范。客户端发起一个 http 请求后，服务端保持请求状态而不响应，直到需要推送的时候再响应。因为 http 是一个 req 和 res 相对应的连接，所以每次服务端响应之后，http 断开，这时候客户端再发一个 http 过来，服务端保持请求状态。换句话说如果客户端不发 http 过来，就算是 tcp 连着，服务端推送消息客户端也收不到，因为不知道是客户端是谁</p>
+</blockquote></li>
+<li><p>http2</p>
+<blockquote>
+<ol>
+<li>传输数据由明文传输改成二进制流传输</li>
+<li>数据传输采用多路复用，请求合并在同一 TCP 连接内，解决队头阻塞的问题</li>
+<li>支持服务端推送</li>
+<li>使用 HPACK 算法来压缩首部内容</li>
+</ol>
+</blockquote></li>
+<li><p>quic</p>
+<blockquote>
+<p>改用 udp ，彻底干掉队头阻塞的问题。http2 归根结底还是 tcp 的，某个包丢了还是要等待重连。强依赖唯一一个 tcp 的策略，甚至在某些情况还不如 http1.1。比如这个 tcp 就是挂了，好歹 http1.1 还有其他的 tcp 连接数不至于全崩</p>
+<p>quic 注意他是通过 Stream Offset 来控制可靠性的，感兴趣的童鞋可以查一下相关资料，这里不多说了</p>
+</blockquote></li>
+<li><p>手写 call 方法</p>
+<blockquote>
+<p>手写是一方面，感觉面试官更想了解函数设计思路。比如他提问，你会选择哪种调用方法来执行函数（挂载原型链还是声明独立函数）还有执行过程中一些细节，比如 delete 掉绑定在上下文上的方法再 return；比如上下文中会不会已经有了这个方法名，如何兼容等</p>
+</blockquote></li>
+<li><p>算法</p></li>
+</ol>
+
+<pre><code class="language-javascript">// 题一
+// 类似 leetcode 673题
+// 给一个字符串，找出最长递增子序列
+// 如果有相同长度，返回字典集最小的
+//
+// 例：
+// 输入 &quot;23648179&quot; 返回 &quot;23489&quot;
+
+// 题二
+// leetcode 206题
+// 翻转链表
+
+// 题三
+// leetcode 94题
+// 中序遍历一棵树，除了递归还能用什么方法
+</code></pre>
+
+<ol>
+<li>其他都是和项目相关的，或者个人感觉参考价值不大的，就不过多介绍了</li>
+</ol>
+
+<blockquote>
+<p>和项目相关的就不说了</p>
+
+<p>然后以下面试题和项目无关，但是感觉参考价值不大，感兴趣可以了解</p>
+
+<p>WebRTC，生成和注入骨架屏，性能优化，Mutation Observer 加权计算首屏时间，NAT 穿越，docker 相关，serverless 相关，JavaScript Bridge 原理，flutter，rn，hybrid 三者原理和性能差距，线程和进程的区别，链表和树的区别</p>
+</blockquote>
+
+<h2 id="toc_7">字节面经</h2>
+
+<h4 id="toc_8">面试进度：offer</h4>
+
+<h4 id="toc_9">面试难度：⭐️⭐️⭐️⭐️</h4>
+
+<h4 id="toc_10">面试风格：大量算法</h4>
+
+<h4 id="toc_11">过程介绍：</h4>
+
+<p>字节面的是小程序相关的部门。字节面试效率挺高，基本上 10 天左右能面完。<strong>3 轮技术面，1 轮 hr 面</strong>。面试感觉是雷厉风行的，很尊重面试者，但是也很干练，不会扯无关的东西。很注重效率。字节给的薪资是这次面试中所有厂里给的最高的，甚至超过了我预期不少...</p>
+
+<p><strong>面试风格这一块字节是名副其实的算法大户</strong>，每一轮都有 2-3 题算法，3 轮下来大概 8-9 题这样。难度比例大概是 15% 简单的题，70% 中等难度的题，15% 比较难的题。第三轮是压力面，会不断给你压力做一些比较难（或者边界条件比较多）的应用类算法，而且必须可执行通过提供的几个测试用例，加上时间限制，容易把心态搞崩...</p>
+
+<p>除了刷题之外，<strong>要有意识去锻炼思维</strong>，比如什么时候用动态规划，什么时候尾递归，什么时候回溯剪枝，什么时候用栈等等。字节的算法面试和其他厂不一样，其他厂来来去去就那几十题常见的，字节可能就是从 leetcode 几千号题库里随便抽一道出来...任你刷题刷爆肝，想背题在字节这里是行不通的。</p>
+
+<h4 id="toc_12">面试题：</h4>
+
+<ol>
+<li><p>写出输出结果</p>
+<pre><code class="language-javascript">var a = function () {
+ this.b = 3<br/>
+}<br/>
+var c = new a()<br/>
+a.prototype.b = 9<br/>
+var b = 7<br/>
+a()<br/>
+console.log(b) // 7<br/>
+console.log(c.b) // 3
+</code></pre></li>
+<li><p>实现批量请求函数</p>
+<pre><code class="language-javascript">// 实现一个可以批量 fetch 的函数，接收 urls 数组，max 最大并发量，cb 回调三个参数
+// 当所有请求结束之后，需要执行cb<br/>
+// 始终保持最大并发量执行，即一个 fetch 结束，另一个 fetch 立即补上，直到请求完所有的 url<br/>
+/**<br/>
+* 批量请求函数，每个人写法不同，这里就不写了<br/>
+* @param {Array} urls api数组<br/>
+* @param {Number} max 最大并发量<br/>
+* @param {Function} callback 回调函数<br/>
+*/<br/>
+const sendRequest = (urls, max, callback) =&gt; {<br/>
+ // ...<br/>
+}
+</code></pre></li>
+<li><p>实现函数连续调用</p>
+<pre><code class="language-javascript">// 实现一个求和方法，支持以下调用方式
+// 1. sum(1)(2)(3)<br/>
+// 2. sum(1, 2)(3)<br/>
+// 3. sum(1, 2, 3)<br/>
+/**<br/>
+* 思路是柯里化函数<br/>
+*/<br/>
+function sum() {<br/>
+ let args = [].slice.call(arguments)<br/>
+ let fn = function () {<br/>
+   let fn_args = [].slice.call(arguments)<br/>
+   return sum.apply(null, args.concat(fn_args))<br/>
+ }<br/>
+ fn.toString = function () {<br/>
+   return args.reduce((a, b) =&gt; a + b)<br/>
+ }<br/>
+ return fn<br/>
+}<br/>
+const t1 = sum(1)(2)(3)<br/>
+const t2 = sum(1, 2)(3)<br/>
+const t3 = sum(1, 2, 3)<br/>
+console.log(t1.toString()) // 6<br/>
+console.log(t2.toString()) // 6<br/>
+console.log(t3.toString()) // 6
+</code></pre></li>
+<li><p>用尾递归实现一个阶乘方法</p>
+<pre><code class="language-javascript">// 简单粗暴的阶乘其实很简单，但是要考虑性能就涉尾递归
+// 然后面试官还问了尾递归是为了解决什么问题<br/>
+// 然后为什么 node 里现在反而又取消了尾递归的支持<br/>
+//<br/>
+// 尾递归是防止爆栈，原理是 js 运行时函数执行栈追踪环境相关的问题<br/>
+// 尾递归虽然防爆栈，但是函数执行环境的追踪也丢失了<br/>
+// 感兴趣可以查一下相关资料，这里要说又能说半天...<br/>
+/**<br/>
+* 暴力版阶乘<br/>
+* @param {Number} n 阶乘数<br/>
+*/<br/>
+function fn(n) {<br/>
+ if (n === 1) return 1<br/>
+ return n * fn(n - 1)<br/>
+}<br/>
+/**<br/>
+* 尾递归阶乘<br/>
+* @param {Number} n 阶乘数<br/>
+* @param {Number} x 上一轮执行结果，初始值 1<br/>
+*/<br/>
+function fn(n, x = 1) {<br/>
+ if (n === 1) return x<br/>
+ return fn(n - 1, n * x)<br/>
+}
+</code></pre></li>
+<li><p>二叉树路径求和</p>
+<pre><code class="language-javascript">// 给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径
+// 这条路径上所有节点值相加等于目标和。<br/>
+// leetcode 112题<br/>
+/**<br/>
+* 二叉树路径求和<br/>
+* @param {Node} root 根节点<br/>
+* @param {Number} sum 和<br/>
+*/<br/>
+const hasPathSum = function (root, sum) {<br/>
+ if (!root) return false<br/>
+ if (root.left === null &amp;&amp; root.right === null) return root.val === sum<br/>
+ sum = sum - root.val<br/>
+ return hasPathSum(root.left, sum) || hasPathSum(root.right, sum)<br/>
+}
+</code></pre></li>
+<li><p>大数相加</p>
+<pre><code class="language-javascript">// 相加还是相乘我忘了，面试过程中还有些题不太记得
+// 反正相加也好相乘也好，都是模拟小学学运算的时候逐位运算<br/>
+//<br/>
+// 这题我觉得比较有应用意义，一些大数的运算用 Number 型会溢出，需要用字符串模拟运算<br/>
+// 再加上网上搜到的结果五花八门，这里代码就详细写一下<br/>
+/**<br/>
+* 大数相加<br/>
+* @param {String} a 数字字符<br/>
+* @param {String} b 数字字符<br/>
+*/<br/>
+function plus(a, b) {<br/>
+ let maxLength = Math.max(a.length, b.length)<br/>
+ a = a.padStart(maxLength, 0) // 补0<br/>
+ b = b.padStart(maxLength, 0) // 补0<br/>
+ let x = 0 // 位数相加的结果<br/>
+ let y = 0 // 进位<br/>
+ let sum = &#39;&#39; // 最终字符串<br/>
+ for (let i = maxLength - 1; i &gt;= 0; i--) {<br/>
+   x = Number(a[i]) + Number(b[i]) + y // 位数相加，并且加上进位<br/>
+   y = Math.floor(x / 10) // 进位<br/>
+   sum = `${x % 10}${sum}` // 位数相加结果取余，拼接上已有结果<br/>
+ }<br/>
+ return y === 1 ? `1${sum}` : sum // 有多余的进位记得加上<br/>
+}
+</code></pre></li>
+<li><p>三数之和</p>
+<pre><code class="language-javascript">// leetcode 15题
+// 判断数组 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0<br/>
+/**<br/>
+* 三数求和<br/>
+* @param {Array} nums 数组<br/>
+*/<br/>
+const threeSum = function (nums) {<br/>
+ nums.sort((a, b) =&gt; a - b)<br/>
+ let res = []<br/>
+ for (let i = 0; i &lt; nums.length; i++) {<br/>
+   if (nums[i] * nums[nums.length - 1] &gt; 0) return res<br/>
+   if (i &gt; 0 &amp;&amp; nums[i] === nums[i - 1]) continue<br/>
+   let lp = i + 1<br/>
+   let rp = nums.length - 1<br/>
+   while (lp &lt; rp) {<br/>
+     const sum = nums[i] + nums[lp] + nums[rp]<br/>
+     if (sum === 0) {<br/>
+       res.push([nums[i], nums[lp], nums[rp]])<br/>
+       lp++<br/>
+       rp--<br/>
+       while (lp &lt; rp &amp;&amp; nums[lp] === nums[lp - 1]) lp++<br/>
+       while (lp &lt; rp &amp;&amp; nums[rp] === nums[rp + 1]) rp--<br/>
+     }<br/>
+     if (sum &gt; 0) rp--<br/>
+     if (sum &lt; 0) lp++<br/>
+   }<br/>
+ }<br/>
+ return res<br/>
+}
+</code></pre></li>
+<li><p>实现一个计算器</p>
+<pre><code class="language-javascript">// leetcode 772题（224题 + 227题的结合体）
+// 这题真要搞起来是无敌蛋疼<br/>
+// 因为要考虑的元素很多，比如：<br/>
+// 输入的字符串是不是有效的运算式，多层级括号用栈处理优先级，4则运算的优先级等等<br/>
+// 这里我是懒得写了...网上也有答案
+</code></pre></li>
+<li><p>Vue 和 React 你觉得哪个好，你做项目如何选型</p>
+<blockquote>
+<p>Vue 集成度更高，上手快且方便</p>
+<p>React 灵活性更强，方便根据团队和业务特性深度定制，比如 react 定制脚手架和 webpack 更方便，对整个 vm 层控制权更大，all in js。其他就 diff 上有些差异。选择的话优先考虑团队技术栈，二是对 build 包轻重量的考虑，三是考虑更偏向于通用形还是需要深度定制</p>
+</blockquote></li>
+<li><p>介绍一下箭头函数的，以及它 this 的指向</p>
+<blockquote>
+<p>箭头函数没有上下文，<code>this</code> 继承于定义时的外层词法环境，如果没有则跟着作用域链一路查找直到最外层（浏览器是 <code>window</code> 对象，<code>node</code> 环境是 <code>exports</code> 对象）</p>
+<p>注意在 node 环境执行箭头函数 <code>this</code> 会指向 <code>exports</code> 对象而不是 <code>global</code>，因为 node 是模块化的，node 执行每个文件会给一个单独的作用域（模块），这是一个闭包环境。在一个模块（文件）中，声明的变量都是在这个闭包环境内的，不会污染 <code>global</code> ，而 <code>this</code> 指向的是 <code>module.exports</code> ，而不是 <code>global</code></p>
+<p>如果直接调用一个正常定义的函数，那么这个就是由 <code>global</code> 对象调用的，<code>this</code> 会绑定在 <code>global</code> 上。如果调用一个箭头函数，this 是向上级词法环境查找的，如果上级没有作用域，就跟着作用域链一路找到定义时的最外层对象上（exports）</p>
+</blockquote></li>
+<li><p>简单请求和复杂请求有什么区别，怎样算是复杂请求</p>
+<blockquote>
+<p>简单请求和复杂请求都是对于跨域而言的。满足以下条件是简单请求，其他都是复杂请求</p>
+<ol>
+<li>是 <code>get/post/head</code> 其中一种请求</li>
+<li>请求头只包含 <code>accept</code>，<code>accept-language</code>，<code>content-language</code>，<code>content-type</code></li>
+<li>并且 <code>content-type</code> 是表单，<code>formdata</code> 或者文本中的一种</li>
+</ol>
+<p>对于简单请求，浏览器会在请求头加一个 origin 字段，用来告诉服务端是否可以跨域。对于复杂请求，浏览器会发起一个 options 的预检信息，预检通过之后才会发正式请求，也是用 origin 判断</p>
+</blockquote></li>
+<li><p>有哪些跨域的方法</p>
+<blockquote>
+<ol>
+<li>jsonp</li>
+<li>ng 配置 <code>Access-Control-Allow-Origin</code>， <code>Access-Control-Allow-Methods</code>， <code>Access-Control-Allow-Headers</code> 相关属性</li>
+<li>后端服务器也可以设置允许跨域，自己设也行，或者用一些第三方封装好的包。比如 node 可以用 koa-cors 之类的包</li>
+</ol>
+</blockquote></li>
+<li><p>如何检测内存泄漏</p>
+<blockquote>
+<p>内存快照</p>
+</blockquote></li>
+<li><p>V8 垃圾回收策略是怎样的</p>
+<blockquote>
+<p>新生代算法和老生代算法。大多都可查，这里讲讲新生代的 to 和 from 为啥要这么设计。</p>
+<p>新生代管理短时间占用内存空间的引用，默认情况下，32 位系统新生代内存大小为 16MB，64 位系统下，新生代内存大小为 32MB。</p>
+<p>因为新生代管理的是不稳定的引用，大部分是很快就销毁的引用（只用几次的变量或者阅后即焚类型的）也就是说<strong>新生代只需要复制还活着的内存引用，其余的三下五除二全部清空掉</strong>。这样的好处就是对于新生代管理的内存而言，大部分都是不稳定的，只有少部分稳定。它只需要关心少部分稳定的即可，其他大部分的一股脑全干了，效率会比较高。</p>
+</blockquote></li>
+<li><p>监控性能数据你是如何选定指标的</p>
+<blockquote>
+<p>从 performance API 去分析，针对不同阶段大致分成网络阶段，资源下载阶段，DOM 解析阶段三部分。具体细节可以参考 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance">MDN 的文档</a></p>
+<p>对于路由按需加载的 SPA 应用来说，这样分析也是不准确的。当路由切换的时候再去请求的时候，实际上请求的不是 html 而是 js 文件。这样会让 <code>domContentLoadedEventEnd</code> 监测不到了相关的数据。<a href="https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics?hl=zh-cn">可以参考谷歌用户体验追踪的文档</a>，有个 FSP 的概念</p>
+<p>除了 FSP 还有更硬核的解决方案，就是利用 <code>Mutation Observer</code> 来监控整个 DOM 树的变化，并且每个节点会给他赋权，比如图片感觉比较重要，那就图片权重为 10，文字权重 5，title 权重 15 等。最后再计算一个值，来得出当前屏幕主要元素绘制完毕时候的时间节点</p>
+</blockquote></li>
+<li><p>其他很多不记得了，字节面完有一段时间了，大概记得的是这些</p>
+<blockquote>
+<p>有些和鹅厂重复，可以参考鹅厂攻略</p>
+<p>Vue 双向绑定原理，实现简单版的 Vue 包括 Watcher 发布订阅等，service worker 介绍，http2 等</p>
+</blockquote></li>
+</ol>
+
+<h2 id="toc_13">百度面经</h2>
+
+<h4 id="toc_14">面试进度：offer</h4>
+
+<h4 id="toc_15">面试难度：⭐️⭐️</h4>
+
+<h4 id="toc_16">面试风格：常规问题 + 简单算法</h4>
+
+<h4 id="toc_17">过程介绍：</h4>
+
+<p>百度是我把简历挂出去之后，hr 联系我，问我要不要面的。是一个 QA 部门。<strong>3 轮技术面，1 轮产品面，1 轮 hr 面</strong>。面试官都很年轻，有个好像是和我同届（19 年毕业）的。面试过程感觉还不错，就是约面的 hr 感觉有点怪怪的，可能也是实习生或者工作不久，沟通和执行效率都比  较低。但是最后 hr 面试时那个 hrbp 给人感觉就很舒服，和鹅厂的 hr 给人感觉差不多</p>
+
+<p><strong>这次面试百度说实话感觉偏简单，但是会有一轮产品面试</strong>。也可能是面试官经验不怎么丰富。一二面的面试题都实在太浅，三面应该是 leader，但是是后端的，会问一些简单的算法。</p>
+
+<h4 id="toc_18">面试题：</h4>
+
+<ol>
+<li><p>Vue 生命周期介绍</p></li>
+<li><p>Vue computed 和 methods 有什么区别</p></li>
+<li><p>Vue $router 和 $route 的区别</p></li>
+<li><p>Vue 2.x 和 3.x 怎么劫持对象</p>
+<blockquote>
+<p><code>Object.defineProperty()</code>，<code>Proxy</code></p>
+</blockquote></li>
+<li><p>SPA 想做 SEO 有什么解决方案</p>
+<blockquote>
+<p>除了 SSR 和预渲染等方案，面试官还提到 noscript 标签也可以做 SEO</p>
+</blockquote></li>
+<li><p>301 状态码和 302 状态码对 SEO 有什么影响</p>
+<blockquote>
+<p>301 是永久重定向，搜索引擎会把旧资源的 SEO 权重全部重新分配。302 是临时重定向，只是暂时修改了资源地址，权重还是在之前的资源上</p>
+</blockquote></li>
+<li><p>常见 http 状态码</p>
+<blockquote>
+<p>说完后追问了下 401 和 403 的区别。区别就是一个还没鉴权，一个是鉴权完没权限</p>
+</blockquote></li>
+<li><p>介绍了解的排序</p></li>
+<li><p>说说快排如何实现</p>
+<pre><code class="language-javascript">Array.prototype.quickSort = function () {
+ if (!this.length) return []<br/>
+ let leftArr = []<br/>
+ let rightArr = []<br/>
+ for (let i = 1; i &lt; this.length; i++) {<br/>
+   if (this[i] &gt;= this[0]) rightArr.push(this[i])<br/>
+   if (this[i] &lt; this[0]) leftArr.push(this[i])<br/>
+ }<br/>
+ return [...leftArr.quickSort(), this[0], ...rightArr.quickSort()]<br/>
+}
+</code></pre></li>
+<li><p>描述一下多层级的分类目录，如何组装数据结构</p></li>
+<li><p>描述一下大数相乘</p>
+<pre><code class="language-javascript">// 没有让写，电话面试的让我描述一下
+// 大数相加相乘还是比较有意义的，这里我写一下吧<br/>
+/**<br/>
+ * 大数相乘<br/>
+ * @param {String} a 数字字符<br/>
+ * @param {String} b 数字字符<br/>
+ */<br/>
+const pow = (a, b) =&gt; {<br/>
+  if (a === &#39;0&#39; || b === &#39;0&#39;) return &#39;0&#39;<br/>
+  // a和b相乘的结果c，c的位数 &lt;= a和b位数的和<br/>
+  // 初始化一个数组能装下最大的 a * b 的结果<br/>
+  let res = new Array(a.length + b.length).fill(0)<br/>
+  // 模拟末尾开始相乘<br/>
+  for (let i = a.length - 1; i &gt;= 0; i--) {<br/>
+    for (let j = b.length - 1; j &gt;= 0; j--) {<br/>
+      const sum = parseInt(a[i]) * parseInt(b[j]) + res[i + j + 1]<br/>
+      res[i + j + 1] = sum % 10<br/>
+      res[i + j] += Math.floor(sum / 10)<br/>
+    }<br/>
+  }<br/>
+  // 注意初始化的数组，第一位有可能是用不上的<br/>
+  return res[0] === 0 ? res.slice(1, res.length).join(&#39;&#39;) : res.join(&#39;&#39;)<br/>
+}
+</code></pre></li>
+<li><p>其他不太记得了，总体来说比较基础</p>
+<blockquote>
+<p>没有问原理和源码相关的东西，算法也不难，不需要手写，讲思路即可</p>
+</blockquote></li>
+</ol>
+
+<h2 id="toc_19">富途面经</h2>
+
+<h4 id="toc_20">面试进度：3 面，不太喜欢就拒了后面的邀约</h4>
+
+<h4 id="toc_21">面试难度：⭐️⭐️⭐️</h4>
+
+<h4 id="toc_22">面试风格：少量项目 + 部分算法 + 部分逻辑题</h4>
+
+<h4 id="toc_23">过程介绍：</h4>
+
+<p>富途是猎头还是什么平台帮我自动投递的，是一个做内部支撑的部门。<strong>3 轮技术面，1 轮 hr 面</strong>。我不知道是不是因为猎头推的原因，约面非常敷衍，联系方式也不留，也就一个座机号，没接到电话打回去也找不到人。然后隔了一周多，才第二次联系。而且必须是现场面试，必须是工作日，必须是白天。一面面试官还是挺友好的，但二面面试官有点高冷和不耐烦。</p>
+
+<p><strong>面试风格比较独特，喜欢考逻辑题和智力题</strong>，也会问一些应用题和场景设计。一面前要做个笔试，网上的题目，原题一摸一样那种。如果某题有多种解法，面试官会不断问新的解题思路以及一直引导你，直到答到他自己想听的那个答案。整个过程很慢，基本上一个半小时以上。</p>
+
+<h4 id="toc_24">面试题：</h4>
+
+<ol>
+<li><p>CSS 实现左右布局，左边定宽，右边自适应</p>
+<blockquote>
+<p><code>flexbox</code></p>
+</blockquote></li>
+<li><p>斐波那契数列求第 n 个数，要做优化版的</p>
+<pre><code class="language-javascript">// 动态规划，对象缓存，闭包缓存都行，这里写个动态规划吧
+/**<br/>
+* 动态规划斐波那契，其实和 leetcode 70题爬楼梯是一样的<br/>
+* @param {Number} n 要求的数<br/>
+*/<br/>
+const fib = function (n) {<br/>
+ let dp = [1, 1]<br/>
+ for (let i = 2; i &lt; n + 1; i++) {<br/>
+   dp[i] = dp[i - 1] + dp[i - 2]<br/>
+ }<br/>
+ return dp[n]<br/>
+}
+</code></pre></li>
+<li><p>括号匹配</p>
+<pre><code class="language-javascript">// leetcode 20题，用栈，比较简单
+/**<br/>
+* 括号匹配<br/>
+* @param {String} s 输入的字符串<br/>
+*/<br/>
+const isValid = (s) =&gt; {<br/>
+ let map = {<br/>
+   &#39;(&#39;: 1,<br/>
+   &#39;)&#39;: -1,<br/>
+   &#39;{&#39;: 2,<br/>
+   &#39;}&#39;: -2,<br/>
+   &#39;[&#39;: 3,<br/>
+   &#39;]&#39;: -3,<br/>
+ }<br/>
+ let stack = []<br/>
+ for (let i in s) {<br/>
+   if (map[s[i]] &gt; 0) {<br/>
+     stack.push(s[i])<br/>
+   } else {<br/>
+     const target = stack.pop()<br/>
+     if (map[target] + map[s[i]] !== 0) return false<br/>
+   }<br/>
+ }<br/>
+ if (stack.length &gt; 0) return false<br/>
+ return true<br/>
+}
+</code></pre></li>
+<li><p>加载页面有哪些性能优化的方案</p>
+<blockquote>
+<p>这问题和 “输入 url 发生了什么” 这问题类似，简单介绍 5 分钟能讲完，要扯皮的讲半天也可以讲...</p>
+<p>常规的：图片懒加载，预加载，雪碧图，路由按需加载，gzip ......</p>
+<p>网络的：http2，强缓存，协商缓存，合并请求资源（http2 就不用合了）......</p>
+<p>其他：service worker ......</p>
+</blockquote></li>
+<li><p>一个无序数组，找出比他左边都大，比他右边都小的元素，要求时间复杂度 On</p>
+<blockquote>
+<p>没让我写，让我说说思路</p>
+<p>时间复杂度 On 的话，不嵌套循环就好了</p>
+<ol>
+<li>第一遍遍历从头开始，用一个新数组 max 存每一个遍历元素它左边的最大值</li>
+<li>第二遍遍历从尾开始，用一个新数组 min 存每一个遍历元素它右边的最小值</li>
+<li>第三遍遍历，当前元素和 max，min 两个数组对应下标的值比较，找到满足条件的</li>
+</ol>
+<p>例：当前元素下标 3，值是 5。<code>max[3]</code> 是 4，<code>min[3]</code>是 8，那当前元素就符合条件（ <code>5 &gt; 4 &amp;&amp; 5 &lt; 8</code> ）</p>
+<p>这样时间复杂度是 3 * On，舍弃常数也就是 On</p>
+</blockquote></li>
+<li><p>逻辑题，称重</p>
+<blockquote>
+<p>10 瓶药，每瓶 100 片，其中 9 瓶是 10g/片，1 瓶 9g/片，问只称重一次，怎么找出轻的那瓶药</p>
+<p>讲道理这题我想了好一会...最不喜欢面试做这类题</p>
+<p>第一瓶拿 1 片，第二瓶拿 2 片，以此类推</p>
+<p>如果都是 10g，那么一共是 <code>(1 + ... + 10) * 10 = 55</code> 克。但是实际上会少几克，因为有一瓶每片药是 9g 的。如果称的是 53g，那么意味着有 2 片药是 9g 的，那就是第二瓶药是有问题的（因为第二瓶药我们拿出了两片）同理如果 52g，那就是 3 片药有问题，那瓶药是第三瓶药</p>
+<p>面试官后面还追加了一问，如果是两瓶有问题的，又该如何称重，上面的方法可行吗？答案是不可行，原因留给大家想吧，tips 就是上面是等差取药片，需要改成等比取</p>
+</blockquote></li>
+<li><p>设计一个抽奖程序</p>
+<blockquote>
+<p>开放题没啥好说的，就问了一下接口如何设计，然后有什么注意的事项。还有描述抽奖函数的实现</p>
+</blockquote></li>
+<li><p>其他</p>
+<blockquote>
+<p>这两题网上是有原题的，面完还搜了一下。然后还有些不记得了</p>
+<ol>
+<li><p>读 C++ 代码写结果，计算个人所得税的函数</p></li>
+<li><p>Room 和 User 两个类，现在有个关门的方法，放到哪个类中</p></li>
+</ol>
+</blockquote></li>
+</ol>
+
+<h2 id="toc_25">转转面经</h2>
+
+<h4 id="toc_26">面试进度：offer</h4>
+
+<h4 id="toc_27">面试难度：⭐️⭐️</h4>
+
+<h4 id="toc_28">面试风格：常规问题 + 一点算法</h4>
+
+<h4 id="toc_29">过程介绍：</h4>
+
+<p>转转面的深圳这边的团队，<strong>3 轮技术面，1 轮 hr 面</strong>。面试效率很高，基本上一天一面，一周完事。</p>
+
+<p><strong>问的大多是常规问题，问的不深，但是涉及的基础面比较广</strong>。面试是北京那边的前端团队远程视频面。会涉及到一些计算机网络，数据结构等计算机基础，但是问的都比较浅。印象比较深刻的是 3 面的前端 leader，思维很广，看问题的角度明显就不太一样。后来了解到之前好像是百度文库的负责人。整个转转很多是百度出来的人。</p>
+
+<h4 id="toc_30">面试题：</h4>
+
+<ol>
+<li><p>Vue 双向绑定原理</p>
+<blockquote>
+<p>基本是必问的，Vue 相关问题参考鹅厂面经吧，鹅厂挖的很深了</p>
+</blockquote></li>
+<li><p>Vue 生命周期</p></li>
+<li><p>Vue nexttick 原理</p>
+<blockquote>
+<p>Vue 双向绑定的 Watcher 源码中有这么一句 <code>queueWatcher(this)</code>，而这玩意内又有这么一句 <code>nextTick(flushSchedulerQueue)</code>。这个 flushSchedulerQueue 其实就是更新视图的函数。</p>
+<p>抽象概括一下 nextTick 的原理：</p>
+<ol>
+<li><p><code>nextTick</code> 接收一个回调，返回一个闭包</p></li>
+<li><p>回调的执行时机 <code>nextTick</code> 闭包中的 <code>timerFunc</code> 控制</p>
+<pre><code class="language-text">timerFunc 用以下优先级来处理出队时机
+setImmediate -&gt; MessageChannel -&gt; Promise -&gt; setTimeout<br/>
+优先使用宏任务，如果不支持就使用 Promise 的微任务，如果还不支持就用 setTimeout 兼容。虽然setTimeout 是宏任务，但是在 http 声明中 setTimeout 有 4ms 的延时，所以只拿来做兼容处理，宏任务交给 setImmediate 和 MessageChannel
+</code></pre></li>
+</ol>
+<p>也就是说用于更新视图的 <code>nextTick(flushSchedulerQueue)</code> 其实以 <code>setImmediate -&gt; MessageChannel -&gt; Promise -&gt; setTimeout</code> 优先级塞入了 Event loop 中</p>
+<p>这样更新的好处是：</p>
+<p>假设有个值 <code>test</code> 被 while 循环执行 1000 次++操作。每次循环时，都会根据响应式触发 <code>compile -&gt; setter -&gt; Dep -&gt; Watcher -&gt; update -&gt; run</code> 如果没有异步更新，而是每次都更新 DOM，那会十分消耗性能。所以 Vue 实现了一个 <code>queue</code> 队列，先把所有的 <code>Watcher</code> 塞到队列里。在下一个 tick（或者是当前 tick 的微任务阶段）的时候会统一执行 <code>queue</code> 中 Watcher 的 <code>run()</code>，<strong>也就是这 1000 次++操作，其实 Vue 只处理了 0 -&gt; 1000 这一次操作</strong></p>
+<p>总结：</p>
+<p><strong>第一阶段：queueWatcher(this) 收集 watcher 队列</strong></p>
+<ol>
+<li>响应式触发 update，把 watcher 塞到 queue 队列，并且根据 watcher.id 去重</li>
+</ol>
+<p><strong>第二阶段：nextTick(flushSchedulerQueue) 更新视图</strong></p>
+<ol>
+<li><code>nextTick</code> 会返回一个闭包，通过 <code>timerFunc</code> 执行 <code>flushSchedulerQueue</code> 回调</li>
+<li><code>flushSchedulerQueue</code> 执行 watcher 的 run，更新视图</li>
+</ol>
+</blockquote></li>
+<li><p>基础数据类型和引用数据类型差别</p></li>
+<li><p>堆和栈的差别</p></li>
+<li><p>深拷贝和浅拷贝有什么不同，怎么实现深拷贝</p>
+<blockquote>
+<p>深拷贝就是递归的浅拷贝</p>
+</blockquote></li>
+<li><p>什么是 options 请求</p>
+<blockquote>
+<p>参考字节面经 No.11</p>
+</blockquote></li>
+<li><p>H5 适配原理，px2rem 是怎么适配的</p>
+<blockquote>
+<p>rem 就是 html 标签上 <code>font-zise</code> 的值，只要让这个值跟随屏幕自适应就好了。那自然是和 vw 挂钩啦。然后还有配置 <code>meta</code> 标签，还有换算系数和几个视窗概念等，感兴趣的可以查一下，这里不废话了</p>
+</blockquote></li>
+<li><p>什么是 BFC</p>
+<blockquote>
+<p>MDN 走起</p>
+</blockquote></li>
+<li><p>commonjs 和 esmodule 有什么区别</p>
+<blockquote>
+<ol>
+<li>CommonJS 是被加载的时候运行，ES6 模块化是编译的时候确定依赖，也就是说重复引入同一个模块，也只会执行一次代码。<code>tree sharking</code> 原理就是 ES6 模块依赖是编译时确定的。</li>
+<li>CommonJS 输出的是值的浅拷贝，并且写到内存中。ES6 模块化输出值的引用</li>
+<li>CommonJS 支持动态导入，也就是 require(${path}/xx.js)</li>
+<li>CommonJS 是同步导入，因为用于服务端，文件都在本地，同步导入即使卡住主线程影响也不大。而后者是异步导入，因为用于浏览器，需要下载文件，如果也采用同步导入会对渲染有很大影响</li>
+</ol>
+</blockquote></li>
+<li><p>webpack 构建后的输出，是基于什么模块协议的</p>
+<blockquote>
+<p>目前浏览器端 js 模块化大概两类，一类是 CMD 就近依赖，一类是 AMD 提前依赖</p>
+<p>所谓就近依赖就是，用到的时候再声明加载依赖。提前依赖就是事先声明好依赖关系</p>
+<pre><code class="language-javascript">/** AMD写法 **/
+define([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;], function (a, b, c, d, e, f) {<br/>
+  // 等于在最前面声明并初始化了要用到的所有模块<br/>
+  a.doSomething()<br/>
+  if (false) {<br/>
+    // 即便没用到某个模块 b，但 b 还是提前执行了<br/>
+    b.doSomething()<br/>
+  }<br/>
+})<br/>
+/** CMD写法 **/<br/>
+define(function (require, exports, module) {<br/>
+  var a = require(&#39;./a&#39;) //在需要时申明<br/>
+  a.doSomething()<br/>
+  if (false) {<br/>
+    var b = require(&#39;./b&#39;)<br/>
+    b.doSomething()<br/>
+  }<br/>
+})
+</code></pre>
+<p>而 webpack 打包后会变成 key，value 的形式的键值对，key 是路径，value 是模块的闭包函数。没仔细看构建源码，猜测是基于 CMD 协议的，也就是就近依赖。因为这才比较符合按需加载的逻辑</p>
+</blockquote></li>
+<li><p>介绍浏览器事件循环和 node 事件循环</p>
+<blockquote>
+<p>关于事件循环，作为前端开发者肯定都了解过。但是真的往深了去问又会发现很多人其实理解的模模糊糊，不太确定的样子。我简单说说我的理解。</p>
+<p>浏览器端：</p>
+<p><strong>浏览器端事件循环两个关键就是宏任务和微任务两个老哥</strong>。每一轮事件循环只会在宏任务队列里出队一个宏任务并且执行，然后清空整个微任务队列。都完事后就结束这轮的事件循环，再搞一个宏任务出来并且清空微任务队列，循环往复。</p>
+<pre><code class="language-text">常见的宏任务有，同步的代码，setTimeout，setInterval，requestAnimationFrame，以及 node 中的 setImmediate 等
+常见的微任务有，promise，await async 等。node 中有个 process.nextTick 比较特殊，后面说
+</code></pre>
+<p>node 端：</p>
+<p><strong>node 端每一轮循环都有下面几个阶段</strong></p>
+<ol>
+<li><p><code>timers</code> ，首先是执行定时器，如果在当前循环种存在 setTimeout / setInterval 之类的定时器，将在这时候处理</p></li>
+<li><p><code>pending callbacks</code>，这个阶段也称为 I/O callbacks 阶段，主要是执行一些从上个循环延迟过来的 I/O 回调</p></li>
+<li><p><code>idle</code>，<code>prepare</code>，node 内部机制</p></li>
+<li><p><code>poll</code>，轮询，在这里检索新的 I/O 事件;执行与 I/O 相关的回调，其余情况 node 将在适当的时候在此阻塞，直到达到最快的一个计时器阈值为止（比如 setTimeout 100ms，那如果这时候没事做，那他就等这个 setTimeout 100ms）</p></li>
+<li><p><code>check</code>，执行 setImmediate 的回调</p></li>
+<li><p><code>close callbacks</code>，关闭当前循环</p></li>
+</ol>
+<p>另外还有个 <code>process.nextTick</code> 这玩意，它并不属于宏任务也不属于微任务，他是进入当前循环阶段的时候，最优先执行的那个。并且 node 循环的每个阶段这老哥都能执行。建议网上找些实际的例子看看，光看描述其实理解起来比较抽象</p>
+<p>最后补充：</p>
+<p><strong>其实 js 的异步并不是它自己玩的</strong>。拿浏览器来说，一个 tab 渲染进程包含了好几个线程：</p>
+<ol>
+<li>渲染线程，与 js 线程互斥</li>
+<li>js 线程，与渲染线程互斥</li>
+<li>事件处理线程，收集异步回调，触发时塞到 js 线程的处理队列</li>
+<li>定时器线程，类似事件处理线程，触发时将定时器塞到 js 线程的处理队列</li>
+<li>异步 http 线程，当 ajax 状态发生改变时，就把回调塞到 js 线程的处理队列</li>
+</ol>
+<p>也就是说所谓异步事件，<code>setTImeout</code> 也好 <code>promise</code> 也好，其实不是 js 的主线程自己搞的，他只是遇到这些操作的时候交给对应的异步处理线程，他们搞定了再回过头推进宏任务 / 微任务队列。<strong>而 js 线程的主要工作只是不断事件循环，检查任务队列</strong>，有东西执行他就执行。node 中也是类似的，只不过服务端可调度的线程资源池就交给了 C++ 大哥的 libuv 库。有时间我再写一篇关于 js 主线相关的东西，讲讲浏览器那几个线程以及异步怎么处理，还有 node 关于线程池的分配等。了解一些底层的原理，被问到 js 单线程之类的就不虚了</p>
+</blockquote></li>
+<li><p>什么是强缓存，什么是协商缓存</p>
+<blockquote>
+<p>缓存也是被问到烂的问题了，所谓强缓存就是本地缓存，状态码是 200。协商缓存就是到服务器协商过后看要不要用缓存结果，状态码是 304。</p>
+<pre><code class="language-text">强缓存有 exprie 和 cache-control 两种缓存形式
+前者是绝对时间缓存，受客户端时间影响；后者是相对时间<br/>
+协商缓存有 If-None-Match 和 If-Modified-Since 两种形式<br/>
+前者是 Etag 判断资源 hash 是否变更，后者是时间维度的对比<br/>
+细节可以查查资料，这里不过多介绍
+</code></pre>
+<p>顺便补充一下常见缓存的优先级</p>
+<ol>
+<li>强缓存</li>
+<li>sw 缓存的 App Cache</li>
+<li>协商缓存</li>
+<li>http2 的 server push</li>
+</ol>
+</blockquote></li>
+<li><p>async / await 和 promise 有什么区别</p>
+<blockquote>
+<p>是不是想答 <code>async / await 是同步的写法实现异步的能力，代码更简洁易读</code></p>
+<p>那要是面试官追问实现方式甚至问性能优势呢？</p>
+<p>关于 async / await 我再补充点吧</p>
+<p>首先是总所周知系列：</p>
+<ol>
+<li><p>async / await 是同步的写法</p></li>
+<li><p>try...catch... 捕获异常</p></li>
+<li><p>是 <code>generator</code> 的语法糖</p></li>
+</ol>
+<p>关于性能，我主要想说说第三点。</p>
+<p>关于 <code>generator</code> 和 <code>iterator</code> 的关系我就不多说了，我主要说说这玩意是怎么实现<strong>暂停代码</strong>的效果的。首先要明确一点就是 <code>generator</code> 本质上也是一个函数，当他执行的时候，一样会被 js 引擎推到函数执行栈中。但是他和正常函数有一个不同：</p>
+<p><strong>正常函数执行完，就从栈顶弹出然后就销毁。但是 <code>generator</code> 不一样，这玩意执行完之后返回了一个 <code>iterator</code> 迭代器，这个迭代器保存着 <code>generator</code> 的引用</strong></p>
+<p>这是关键，大家想想闭包和内存泄漏，不就是因为某个地方还保存着变量的引用么？是的，这迭代器的存在导致这个生成器函数并不会被销毁，哪怕它被执行栈弹出了。<strong>当再执行迭代器 <code>iterator</code> 的时候，又回通过指针找到这个生成器 <code>generator</code>，把它推进栈顶并且执行直到遇到 <code>yield</code>，然后再弹出生成器，并且返回一个包含 <code>value</code> 和 <code>next</code> 指针的对象。</strong></p>
+<p>言归正传，async / await 既然是语法糖，那它背后原理就如上所述。那和性能有毛线关系呢？大家再想想 <code>promise</code>，<code>promise</code> 是需要在 <code>then</code> 的时候收集依赖并且 <code>push</code> 到 <code>_resolveQueue</code> 和 <code>_rejectQueue</code> 两个队列中存起来的，然后当 <code>resolve</code> 或者 <code>reject</code> 的时候去遍历对应的执行队列，执行回调。<strong>也就是说 <code>promise</code> 是需要保存和维护函数执行依赖的</strong>，对于 <code>promise</code> 链式调用来说，所有的 <code>then</code> 依赖关系都要保存。而基于迭代器的 async / await 就不需要保存一堆依赖</p>
+</blockquote></li>
+<li><p>for in 和 for of 有什么区别，可以 for of 对象吗</p>
+<blockquote>
+<ol>
+<li><p>foreach 是遍历数组的，但是它不可中断，return 不了</p></li>
+<li><p>for in 是遍历对象的，但是也可以遍历数组（毕竟也是 object）。但是 for in 遍历数组的时候 index 会当成 key 来处理，此时 index 是 string 类型而不是 number 类型。另外会把数组的属性给遍历出来。比如 <code>arr.name</code></p></li>
+<li><p>for of 是遍历可迭代对象的，比如数组，迭代器等。它没有下标，数组的话直接把元素遍历出来，但是不包括数组上的方法。</p></li>
+<li><p>一般对象并没有可迭代的属性 <code>iterator</code>，正常情况下是不能 for of 对象的。不过可以手动给对象绑上迭代属性，就可以 for of 对象了</p></li>
+</ol>
+<pre><code class="language-javascript">const iteratorObj = (obj) =&gt; {
+  obj[Symbol.iterator] = function* () {<br/>
+    // 关键在于需要返回一个迭代器，就是 yield 返回的那个中间对象 { done, value }<br/>
+    // generator 就是拿来生成迭代器的，所以直接用 genFn<br/>
+    let keys = Object.keys(this)<br/>
+    for (let i = 0; i &lt; keys.length; i++) {<br/>
+      yield this[keys[i]]<br/>
+    }<br/>
+  }<br/>
+}
+</code></pre>
+</blockquote></li>
+<li><p>webpack 的 loader 和 plugin 有什么区别</p>
+<blockquote>
+<p>loader 可以理解成翻译器，遇到不同类型的文件，翻译成 js 能理解的语言。比如遇到 css 就用 <code>css-loader</code> 翻译器，比如遇到图片就用 <code>file-loader</code> 翻译器等。</p>
+<p>plugin 是在 webpack 不同生命周期中做一些特定的事情，来扩充 webpack 能力的。比如构建之前清空 output 目录，比如构建完成后移动文件等。</p>
+</blockquote></li>
+<li><p>无重复最长子串</p>
+<pre><code class="language-javascript">// leetcode 3题
+// 思路是用 map 做移动窗口的匹配<br/>
+/**<br/>
+ * 找出无重复字符的最长子串<br/>
+ * @param {string} s 字符串<br/>
+ */<br/>
+const lengthOfLongestSubstring = (s) =&gt; {<br/>
+  let map = new Map()<br/>
+  let startIndex = -1<br/>
+  let max = 0<br/>
+  for (let i in s) {<br/>
+    if (map.has(s[i])) startIndex = Math.max(map.get(s[i]), startIndex)<br/>
+    max = Math.max(max, i - startIndex)<br/>
+    map.set(s[i], i)<br/>
+  }<br/>
+  return max<br/>
+}
+</code></pre></li>
+<li><p>括号匹配</p>
+<blockquote>
+<p>参考富途面经 No.3</p>
+</blockquote></li>
+</ol>
+
+<h2 id="toc_31">总结</h2>
+
+<h4 id="toc_32">复习策略：</h4>
+
+<ol>
+<li><p><strong>系统复习前端基础。</strong>如果你的方向不侧重于样式重构，<code>html</code> 和 <code>css</code> 大致了解有个概念即可。至于 <code>js</code> 则需要重点复习。另外平时也建议找一本权威的书好好啃一下，比如红皮书，js 精粹，js 忍者秘籍，函数式编程等等，有空读读书也是挺好的。</p>
+<blockquote>
+<p>事实上工作过程中 html 和 css 的积累已经足够应付面试了。而 js 因为是整个前端编译语言的基础，加之这玩意诞生之初到发展到今天，作为一个弱类型的语言其实有很多性能上或者奇奇怪怪的问题，这些问题如果不深入系统复习，其实是很难去理解和解释它的。比如 this 是啥，箭头函数是啥，数组又有哪些高阶用法，异步又是什么原理，闭包又是个啥玩意等等...</p>
+</blockquote></li>
+<li><p><strong>深入了解某一个前端框架的源码。</strong>现在前端面试者这么多，在业务层和应用层多多少少都会用一些框架。那大厂要筛更好的人怎么筛？那就只能深挖一些原理去考核。所以大厂面试源码基本是必问的。但是这些东西一般是触类旁通，无非是要熟知框架的设计理念，核心方法，表层 API 背后的原理等。</p>
+<blockquote>
+<p>如果觉得啃源码太累，也能找找别人整理好的资料，甚至买些源码解读的视频也可以</p>
+</blockquote></li>
+<li><p><strong>算法</strong>。如果你看完了这些面经，我想你也发现了基本所有厂都有问算法。这次面试下来各种各样的面试风格都遇到过，但无论哪一种风格的面试都好，算法可以说是必考的。算法的复习是急不来的，肯定是日积月累的。我的建议是每天有空刷一下题，给自己定一个目标。</p>
+<blockquote>
+<p>如果要学习算法。最好是积累性质的复习，可以找找大牛总结的常见的算法类型或者买本书，先归类再系统学习。比如针对数据结构的算法，或者针对递归的，针对动态规划的等等。但是如果是要突击复习的话，<strong>最有效的方法还是刷 leetcode</strong>，因为基本上所有算法面试题都是上面找的。</p>
+</blockquote></li>
+<li><p><strong>牢记计算机基础</strong>。计算机网络，数据结构的基础知识我个人认为是必须熟练掌握的。其中重中之重我认为是计算机网络。作为一个前端，前后端交互是绝对少不了的。那怎么交互？大部分情况还是网络上的交互。所以整个网络模型，从应用层的 <code>http1,2,3</code>，<code>websocket</code> 开始，到传输和应用夹层的 <code>TLS</code> 安全，到传输层的 <code>TCP</code> 和 <code>UDP</code>，都是很重要的知识点。数据结构的数组，队列，栈，链表，树，字典，图等也是必须掌握。</p>
+<blockquote>
+<p>操作系统看个人方向，前端涉及到的不多，如果想做底层架构或者 IOT 之类路线的可以重视一下</p>
+</blockquote></li>
+<li><p><strong>找面经和真题</strong>。针对面试而言，临时抱佛脚其实还是很有用的。因为在同一时间段内大部分公司其实面试题都八九不离十。遇到原题或者同类型题的概率还是很大的。但是大厂就不一定了，大厂部门多，面试官多，题库资源雄厚，想靠背真题去通关几乎是不现实的。</p></li>
+</ol>
+
+<h4 id="toc_33">个人规划：</h4>
+
+<p>职业规划其实因人而异了，但是在个人能力提升上我是这么看的：<strong>无论做什么事情，没有目标，没有合理的规划，其实是很难成长的。</strong>有目标才能督促自己去做点什么。那从技术规划上，可以考虑全栈的发展，或者专注前端领域跨平台的发展，亦或者对 SDK 或框架设计能力的提升等等。</p>
+
+<blockquote>
+<p><strong>需要有扩展性视野</strong>。也就是多了解上下游的技术栈以及前沿技术信息。平时多看多关注优质社区文章和开源项目，去慢慢积累与巩固自己的知识面。</p>
+
+<p>技术深度上比如大前端，node，v8，ts，或者某个感兴趣的领域的深入研究。</p>
+
+<p>技术广度上比如 CI / CD，Docker，Flutter / Electron 等混合开发，微前端，serverless 的应用场景等。</p>
+</blockquote>
+
+<p>从软实力上更多是培养自己的一些好习惯，比如习惯性的读书，周期性的发表文章，甚至极客一点的搞搞乱七八糟的服务器部署些有实质意义的应用，或者开源一些个人框架等等。</p>
+
+<p><strong>最后就是一定要保持学习的态度。</strong></p>
+
+<p>By <a href="">@Evan</a><br/>
+2020.09.18</p>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="16023387735398.html" 
+          title="Next Post: 大前端相关面试题">大前端相关面试题 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" /></div>
+            
+                <h1>Evan的博客</h1>
+                <div class="site-des">Evan 的博客 - 代码，摄影，音乐</div>
+                <div class="social">
+
+
+
+
+
+
+<a target="_blank" class="instagram" href="https://www.instagram.com/a953328679/" title="Instagram">Instagram</a>
+<a target="_blank" class="weibo" href="https://weibo.com/wbxiaocong/" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/EvanOyam/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:o953328679@gmail.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="Interface.html"><strong>面试</strong></a>
+        
+            <a href="%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html"><strong>开发笔记</strong></a>
+        
+            <a href="%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html"><strong>工程实践</strong></a>
+         
+        
+            <a href="tag_JS.html"><strong>JS</strong></a>
+            
+            <a href="tag_Vue.html"><strong>Vue</strong></a>
+            
+            <a href="tag_%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.html"><strong>性能优化</strong></a>
+            
+            <a href="tag_%E7%AE%97%E6%B3%95.html"><strong>算法</strong></a>
+            
+            <a href="tag_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.html"><strong>计算机网络</strong></a>
+            
+        </p>
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="16023497016429.html">前端面经复盘</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023387735398.html">大前端相关面试题</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023387379097.html">常见 HTML 面试题</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023386965383.html">手撕 Promise</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023385653734.html">常用设计模式</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+
+<style type="text/css">
+figure{margin: 0;padding: 0;}
+figcaption{text-align:center;}
+
+/* PrismJS 1.14.0
+ http://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript */
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+    color: black;
+    background: none;
+    text-shadow: 0 1px white;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+    
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+    text-shadow: none;
+    background:#b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+    text-shadow: none;
+    background: #b3d4fc;
+}
+
+@media print {
+    code[class*="language-"],
+    pre[class*="language-"] {
+        text-shadow: none;
+    }
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+    padding: 1em;
+    margin: .5em 0;
+    overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+    background: #F7F7F7;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+    padding: .1em;
+    border-radius: .3em;
+    white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: slategray;
+}
+
+.token.punctuation {
+    color: #999;
+}
+
+.namespace {
+    opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    color: #9a6e3a;
+    background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: #07a;
+}
+
+.token.function,
+.token.class-name {
+    color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+    color: #e90;
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+.token.italic {
+    font-style: italic;
+}
+
+.token.entity {
+    cursor: help;
+}
+
+
+pre[class*="language-"].line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+}
+
+pre[class*="language-"].line-numbers > code {
+    position: relative;
+    white-space: inherit;
+}
+
+.line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    font-size: 100%;
+    left: -3.8em;
+    width: 3em; /* works for line-numbers below 1000 lines */
+    letter-spacing: -1px;
+    border-right: 1px solid #999;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+    .line-numbers-rows > span {
+        pointer-events: none;
+        display: block;
+        counter-increment: linenumber;
+    }
+
+        .line-numbers-rows > span:before {
+            content: counter(linenumber);
+            color: #999;
+            display: block;
+            padding-right: 0.8em;
+            text-align: right;
+        }
+
+</style>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+
+
+  </body>
+</html>

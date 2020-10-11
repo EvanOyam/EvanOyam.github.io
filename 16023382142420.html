@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> 数据结构之树 - Evan的博客 </title>
+    
+    <meta name="keywords" content="数据结构 树" />
+     
+    <meta name="description" content="树" />
+    
+    <link href="atom.xml" rel="alternate" title="Evan的博客" type="application/atom+xml" />
+    
+    <link rel="shortcut icon" href="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" type="image/png" />
+    
+
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+
+    <script type="text/javascript">
+      function before_search() {
+        var searchVal = 'site:evanoyam.github.io ' + document.getElementById('search_input').value
+        document.getElementById('search_q').value = searchVal
+        return true
+      }
+    </script>
+  </head>
+  <body class="antialiased hide-extras">
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+        <nav class="top-bar docs-bar hide-for-small" data-topbar>
+          <section class="top-bar-section">
+            <div class="row">
+              <div style="position: relative; width: 100%">
+                <div style="position: absolute; width: 100%">
+                  <ul id="main-menu" class="left">
+                    
+                    <li id=""><a target="self" href="index.html">Home</a></li>
+                    
+                    <li id=""><a target="_self" href="archives.html">Archives</a></li>
+                    
+                  </ul>
+
+                  <ul class="right" id="search-wrap">
+                    <li>
+                      <form
+                        target="_blank"
+                        onsubmit="return before_search();"
+                        action="https://google.com/search"
+                        method="get"
+                      >
+                        <input type="hidden" id="search_q" name="q" value="" />
+                        <input tabindex="1" type="search" id="search_input" placeholder="Search" />
+                      </form>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </nav>
+
+        <nav class="tab-bar show-for-small">
+          <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+            <span> &nbsp; Evan的博客</span>
+          </a>
+        </nav>
+
+        <aside class="left-off-canvas-menu">
+          <ul class="off-canvas-list">
+            
+            <li><a target="self" href="index.html">Home</a></li>
+            
+            <li><a target="_self" href="archives.html">Archives</a></li>
+            
+
+            <li><label>Categories</label></li>
+
+            
+            <li><a href="Interface.html">面试</a></li>
+            
+            <li><a href="%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html">开发笔记</a></li>
+            
+            <li><a href="%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html">工程实践</a></li>
+            
+          </ul>
+        </aside>
+
+        <a class="exit-off-canvas" href="#"></a>
+
+        <section id="main-content" role="main" class="scroll-container"></section>
+      </div>
+    </div>
+  </body>
+</html>
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>数据结构之树</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2020/10/10</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='Interface.html'>面试</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <ul>
+<li><a href="16023382883992.html">数据结构之数组</a></li>
+<li><a href="16023382325000.html">数据结构之队列</a></li>
+<li><a href="16023382564461.html">数据结构之栈</a></li>
+<li><a href="16023381818411.html">数据结构之链表</a></li>
+<li><a href="16023382142420.html">数据结构之树</a></li>
+<li><a href="16023383038322.html">数据结构之图</a></li>
+</ul>
+
+<h2 id="toc_0">基础概念</h2>
+
+<ol>
+<li>树是一种非顺序数据结构</li>
+<li>根节点是没有父节点的节点</li>
+<li>一个节点允许有祖先和后代</li>
+<li>节点的深度 = 祖先节点的个数 = 自身层数-1</li>
+</ol>
+
+<blockquote>
+<p>通常我们指的树是二叉搜索树，这种树的特性是每个节点都只有两个子节点，且左子节点比父节点小，右子节点比父节点大。这种特性有助于我们在树中插入、删除和查找元素</p>
+</blockquote>
+
+<h2 id="toc_1">JavaScript 构建一颗树</h2>
+
+<p><strong>树的类有以下实例方法:</strong></p>
+
+<ol>
+<li>insert 插入节点</li>
+<li>preOrderTraverse 先序遍历</li>
+<li>inOrderTraverse 中序遍历</li>
+<li>postOrderTraverse 后序遍历</li>
+<li>min 查找并返回最小节点</li>
+<li>max 查找并返回最大节点</li>
+<li>has 查找树是否有某个节点</li>
+<li>delete 移除节点</li>
+</ol>
+
+<p><strong>树的类有以下静态方法:</strong></p>
+
+<ol>
+<li>createNode 创建一个节点</li>
+<li>traverse 遍历一棵树</li>
+<li>minNode 查找一颗树的最小节点</li>
+<li>maxNode 查找一颗树的最大节点</li>
+</ol>
+
+<blockquote>
+<p>后面会补充各个方法</p>
+</blockquote>
+
+<pre><code class="language-javascript">class BinarySearchTree {
+  /**
+   * 初始化有一个根节点
+   */
+  constructor(key) {
+    this.root = BinarySearchTree.createNode(key)
+  }
+
+  /**
+   * 插入节点
+   * @param {Number} key 需要插入的节点的值
+   */
+  insert(key) {}
+
+  /**
+   * 先序遍历
+   * @param {Function} callback 回调函数
+   */
+  preOrderTraverse(callback) {}
+
+  /**
+   * 中序遍历
+   * @param {Function} callback 回调函数
+   */
+  inOrderTraverse(callback) {}
+
+  /**
+   * 后序遍历
+   * @param {Function} callback 回调函数
+   */
+  postOrderTraverse(callback) {}
+
+  /**
+   * 查找并返回最小节点
+   */
+  mix() {}
+
+  /**
+   * 查找并返回最大节点
+   */
+  max() {}
+
+  /**
+   * 查找树是否有某个节点
+   * @param {Number} key 需要查找的节点的值
+   */
+  has(key) {}
+
+  /**
+   * 移除节点
+   * @param {Number} key 需要移除的节点的值
+   */
+  delete(key) {}
+
+  /**
+   * 创建一个节点
+   * @param {Number} key 节点的值
+   */
+  static createNode(key) {}
+
+  /**
+   * 静态方法，遍历一棵树
+   * @param {Node} root 树的根节点
+   * @param {Number} type 遍历类型，1先序遍历，2中序遍历，3后序遍历
+   * @param {Function} callback 回调函数，回调函数接受 key，leftKey，rightKey，node四个参数
+   */
+  static traverse(root, type, callback) {}
+
+  /**
+   * 查找一棵树的最小节点
+   * @param {Node} root 树的根节点
+   */
+  static minNode(root) {}
+
+  /**
+   * 查找一棵树的最大节点
+   * @param {Node} root 树的根节点
+   */
+  static maxNode(root) {}
+}
+</code></pre>
+
+<h3 id="toc_2">插入节点</h3>
+
+<p>树的大部分方法的核心都是递归思想，插入节点比较简单，具体看代码注释。</p>
+
+<pre><code class="language-javascript">class BinarySearchTree {
+  // ...
+
+  /**
+   * 插入节点
+   * @param {Number} key 需要插入的节点的值
+   */
+  insert(key) {
+    // 初始化一个节点
+    const newNode = BinarySearchTree.createNode(key)
+
+    /**
+     * 插入函数
+     * @param {Node} curNode 当前节点
+     * @param {Node} newNode 需要被插入的节点
+     */
+    const insertNode = function(curNode, newNode) {
+      // 1. 如果要插入的节点比当前节点的值小，插入到当前节点的左边
+      // 2. 如果要插入的节点比当前节点的值大，插入到当前节点的右边
+      if (newNode.key &lt; curNode.key) {
+        // 1. 如果当前节点的左子节点不存在，则新节点就做为左子节点
+        // 2. 否则就继续递归下去
+        curNode.left === null ? (curNode.left = newNode) : insertNode(curNode.left, newNode)
+      } else {
+        // 1. 如果当前节点的右子节点不存在，则新节点就做为右子节点
+        // 2. 否则就继续递归下去
+        curNode.right === null ? (curNode.right = newNode) : insertNode(curNode.right, newNode)
+      }
+    }
+
+    // 插入
+    // 1. 如果插入的是根节点，则根节点为新插入的节点
+    // 2. 如果插入的不是根节点，那么就执行插入函数
+    this.root.key === null ? (this.root = newNode) : insertNode(this.root, newNode)
+  }
+
+  /**
+   * 生成一个树节点
+   * @param {Number} key 节点的值
+   */
+  static createNode(key) {
+    key = key || null
+    function Node(key) {
+      this.key = key
+      this.left = null
+      this.right = null
+    }
+    return new Node(key)
+  }
+
+  // ...
+}
+</code></pre>
+
+<h3 id="toc_3">树的遍历</h3>
+
+<p>树有三种遍历方式，分别是<strong>先序遍历</strong>，<strong>中序遍历</strong>，和<strong>后序遍历</strong>，无论是哪种遍历，思路都是递归。树的递归都是分左子树和右子树一直递归下去，跳出条件都是直到空为止。</p>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>特点</th>
+<th>应用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>先序遍历</td>
+<td>祖先到后代遍历，遍历过程是根 -&gt; 左 -&gt; 右</td>
+<td>打印文档的结构</td>
+</tr>
+<tr>
+<td>中序遍历</td>
+<td>由小到大遍历，遍历过程是左 -&gt; 根 -&gt; 右</td>
+<td>树排序</td>
+</tr>
+<tr>
+<td>后序遍历</td>
+<td>后代到祖先遍历，遍历过程是左 -&gt; 右 -&gt; 根</td>
+<td>计算目录及其子目录大小</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="toc_4">先序遍历:</h4>
+
+<p>我们先写一个简单的先序遍历，甚至整个函数只需要一行代码即可。</p>
+
+<p>我们的目标是输入一个根节点，输出一个遍历后的数组。我们先来分析一下：</p>
+
+<ol>
+<li>整个过程是一个递归，也就是说左右子树如果有值，就递归下去；没有值，则跳出。</li>
+<li>如果子树没有值则跳出，而最终输出结果又是数组，即 <code>if(!root) return []</code></li>
+<li>如果左右子树有值，那就递归下去，即 <code>preOrderTraverse(root.left)</code> 和 <code>preOrderTraverse(root.right)</code></li>
+<li>因为先序遍历是 <code>根 -&gt; 左 -&gt; 右</code> 的遍历顺序，所以递归的每个子树的返回值应该是 <code>[root, left, right]</code> 的顺序</li>
+</ol>
+
+<p>组合一下代码:</p>
+
+<pre><code class="language-javascript">const preOrderTraverse = root =&gt; {
+  if (root) {
+    return [root.key, ...preOrderTraverse(root.left), ...preOrderTraverse(root.right)]
+  } else {
+    return []
+  }
+}
+</code></pre>
+
+<p>精简成一行:</p>
+
+<pre><code class="language-javascript">/**
+ * 简单版先序遍历
+ * @param {Node} root 树的根节点
+ */
+const preOrderTraverse = root =&gt; {
+  return root ? [root.key, ...preOrderTraverse(root.left), ...preOrderTraverse(root.right)] : []
+}
+</code></pre>
+
+<h4 id="toc_5">中序遍历:</h4>
+
+<p>与先序遍历类似，只是返回的顺序不同，中序遍历的顺序是 <code>左 -&gt; 根 -&gt; 右</code></p>
+
+<pre><code class="language-javascript">/**
+ * 简单版中序遍历
+ * @param {Node} root 树的根节点
+ */
+const inOrderTraverse = root =&gt; {
+  return root ? [...inOrderTraverse(root.left), root.key, ...inOrderTraverse(root.right)] : []
+}
+</code></pre>
+
+<h4 id="toc_6">后序遍历:</h4>
+
+<p>与先序遍历类似，只是返回的顺序不同，中序遍历的顺序是 <code>左 -&gt; 右 -&gt; 根</code></p>
+
+<pre><code class="language-javascript">/**
+ * 简单版中序遍历
+ * @param {Node} root 树的根节点
+ */
+const postOrderTraverse = root =&gt; {
+  return root ? [...postOrderTraverse(root.left), ...postOrderTraverse(root.right), root.key] : []
+}
+</code></pre>
+
+<h4 id="toc_7">带回调的遍历:</h4>
+
+<p>上面的方法已经能满足对一颗树进行遍历并且返回遍历后的值了，但是我们还希望在遍历的过程中对每一个节点都执行一个回调函数。</p>
+
+<blockquote>
+<p>正如 <code>[].forEach(item =&gt; {})</code> 一样，遍历到每一项都能执行一个回调。我们希望在树的回调函数中，能拿到当前遍历的值 key，左子树的值 leftKey，右子树的值 rightKey 以及当前节点 node 的相关信息</p>
+</blockquote>
+
+<p><strong>注意：</strong> 回调即遍历到当前节点的时候就执行，所以要注意回调和递归之间的执行顺序</p>
+
+<ol>
+<li>先序列遍历是 <code>根 -&gt; 左 -&gt; 右</code> 的遍历顺序，也就是说在递归之前就已经遍历到当前节点了，所以回调需要在递归前执行。</li>
+<li>中序遍历是 <code>左 -&gt; 根 -&gt; 右</code> 的遍历顺序，也就是说递归了左子树后就遍历到了当前节点，所以回调需要在左子树递归后，右子树递归前执行。</li>
+<li>后序遍历是 <code>左 -&gt; 右 -&gt; 根</code> 的遍历顺序，也就是说在左右子树都递归完了才遍历到当前节点，所以回调需要在左右子树递归完之后执行。</li>
+</ol>
+
+<p>具体解释请看代码中的注释</p>
+
+<pre><code class="language-javascript">/**
+ * 带回调的先序遍历
+ * @param {Node} root 树的根节点
+ * @param {Function} callback 回调函数，回调函数接受 key，leftKey，rightKey，node四个参数
+ */
+const preOrderTraverse = (root, callback) =&gt; {
+  // 跳出条件与简单版一样，没有值则跳出
+  if (!root) return []
+
+  // 定义回调需要的几个值
+  // 当前节点 node 即 root，无需定义
+  const key = root.key
+  const leftKey = root.left ? root.left.key : null
+  const rightKey = root.right ? root.right.key : null
+
+  // 因为是先序遍历，回调需要在递归前执行
+  callback(key, leftKey, rightKey, root) // *1
+  // 左子树递归
+  const preLeft = BinarySearchTree.traverse(root.left, type, callback) // *2
+  // 右子树递归
+  const preRight = BinarySearchTree.traverse(root.right, type, callback) // *3
+  // 和简单版一样，返回 根 -&gt; 左 -&gt; 右 的遍历顺序
+  return [root.key, ...preLeft, ...preRight] // *4
+}
+</code></pre>
+
+<blockquote>
+<p>带回调的中序遍历，带回调的后序遍历与上面的代码类似，只是 <code>*1，*2，*3</code> 三行代码的顺序不同罢了。此外 <code>*4</code> 返回的顺序也不同</p>
+</blockquote>
+
+<h4 id="toc_8">整合后的遍历:</h4>
+
+<p>我们把上述的遍历整合一下，写到树的类中。</p>
+
+<ol>
+<li>我们希望树的类有先序遍历，中序遍历，后序遍历的实例方法，可以通过 <code>tree.preOrderTraverse(callback)</code> 来遍历一棵树，并且支持回调函数。</li>
+<li>树的类还能提供一个静态的遍历方法，可以通过 <code>BinarySearchTree.traverse(root, type, callback)</code> 的方式来遍历一棵树，接收三个参数，root 是树的根节点，type 是遍历方法，callback 是回调函数</li>
+</ol>
+
+<pre><code class="language-javascript">class BinarySearchTree {
+  // ...
+  // 实例的方法都很简单，其实就是执行静态遍历方法 traverse
+
+  /**
+   * 先序遍历
+   * @param {Function} callback 回调函数
+   */
+  preOrderTraverse(callback) {
+    return BinarySearchTree.traverse(this.root, 1, callback)
+  }
+
+  /**
+   * 中序遍历
+   * @param {Function} callback 回调函数
+   */
+  inOrderTraverse(callback) {
+    return BinarySearchTree.traverse(this.root, 2, callback)
+  }
+
+  /**
+   * 后序遍历
+   * @param {Function} callback 回调函数
+   */
+  postOrderTraverse(callback) {
+    return BinarySearchTree.traverse(this.root, 3, callback)
+  }
+
+  /**
+   * 静态遍历方法
+   * @param {Node} root 树的根节点
+   * @param {Number} type 遍历类型，1先序遍历，2中序遍历，3后序遍历
+   * @param {Function} callback 回调函数，回调函数接受 key，leftKey，rightKey，node四个参数
+   */
+  static traverse(root, type, callback) {
+    // 这里与上文中 “带回调的遍历” 是一样的
+    if (!root) return []
+    const key = root.key
+    const leftKey = root.left ? root.left.key : null
+    const rightKey = root.right ? root.right.key : null
+
+    // 根据不同的遍历类型，进行不同的遍历，注意回调与递归之间的执行顺序，以及不同遍历返回的排序也不同
+    switch (type) {
+      // 先序遍历
+      case 1:
+        callback(key, leftKey, rightKey, root)
+        const preLeft = BinarySearchTree.traverse(root.left, type, callback)
+        const preRight = BinarySearchTree.traverse(root.right, type, callback)
+        return [root.key, ...preLeft, ...preRight]
+      // 中序遍历
+      case 2:
+        const inLeft = BinarySearchTree.traverse(root.left, type, callback)
+        callback(key, leftKey, rightKey, root)
+        const inRight = BinarySearchTree.traverse(root.right, type, callback)
+        return [...inLeft, root.key, ...inRight]
+      // 后序遍历
+      case 3:
+        const postLeft = BinarySearchTree.traverse(root.left, type, callback)
+        const postRight = BinarySearchTree.traverse(root.right, type, callback)
+        callback(key, leftKey, rightKey, root)
+        return [...postLeft, ...postRight, root.key]
+      default:
+        break
+    }
+  }
+
+  // ...
+}
+</code></pre>
+
+<h3 id="toc_9">树的查询</h3>
+
+<p>二叉树有个特点，那就是最左边的节点肯定是最小值，最右边的节点肯定是最大值。根据这个特性我们可以很轻松找出树的最大值和最小值。</p>
+
+<h4 id="toc_10">树的最小值</h4>
+
+<ol>
+<li>我们希望树的类提供一个静态的查找最小值的方法，如 <code>BinarySearchTree.minNode(root)</code></li>
+<li>提供一个查找当前树实例最小值的方法，如 <code>tree.min()</code></li>
+</ol>
+
+<blockquote>
+<p>其实查找实例最小值就是把实例的根扔到 <code>BinarySearchTree.minNode()</code> 中执行一次</p>
+</blockquote>
+
+<pre><code class="language-javascript">/**
+ * 查找一棵树的最小值
+ * @param {Node} root 树的根节点
+ */
+const minNode = root =&gt; {
+  if (!root) return null
+  // 一直找到最左节点
+  while (root &amp;&amp; root.left !== null) root = root.left
+  return root
+}
+
+/**
+ * 查找并返回最小节点
+ */
+const min = () =&gt; {
+  return BinarySearchTree.minNode(this.root).key
+}
+</code></pre>
+
+<h4 id="toc_11">树的最大值</h4>
+
+<p>与树的最小值类似</p>
+
+<pre><code class="language-javascript">/**
+ * 查找一棵树的最大值
+ * @param {Node} root 树的根节点
+ */
+const maxNode = root =&gt; {
+  if (!root) return null
+  // 一直找到最右节点
+  while (root &amp;&amp; root.right !== null) root = root.right
+  return root
+}
+
+/**
+ * 查找并返回最小节点
+ */
+const max = () =&gt; {
+  return BinarySearchTree.maxNode(this.root).key
+}
+</code></pre>
+
+<h4 id="toc_12">查找树的特定节点</h4>
+
+<pre><code class="language-javascript">/**
+ * 查找树是否有某个节点
+ * @param {Number} key 需要查找的节点的值
+ */
+const has = key =&gt; {
+  const searchNode = (root, key) =&gt; {
+    // 如果找不到，返回 false
+    if (root === null) return false
+    // 如果找到了，返回 true
+    if (key === root.key) return true
+    // 递归左右子树
+    return key &lt; root.key ? searchNode(root.left, key) : searchNode(root.right, key)
+  }
+  return searchNode(this.root, key)
+}
+</code></pre>
+
+<h4 id="toc_13">整合代码</h4>
+
+<pre><code class="language-javascript">class BinarySearchTree {
+  // ...
+
+  /**
+   * 查找并返回最小节点
+   */
+  min() {
+    return BinarySearchTree.minNode(this.root).key
+  }
+
+  /**
+   * 查找并返回最大节点
+   */
+  max() {
+    return BinarySearchTree.maxNode(this.root).key
+  }
+
+  /**
+   * 查找树是否有某个节点
+   * @param {Number} key 需要查找的节点的值
+   */
+  has(key) {
+    const searchNode = (root, key) =&gt; {
+      if (root === null) return false
+      if (key === root.key) return true
+      return key &lt; root.key ? searchNode(root.left, key) : searchNode(root.right, key)
+    }
+    return searchNode(this.root, key)
+  }
+
+  /**
+   * 查找一棵树的最小值
+   * @param {Node} root 树的根节点
+   */
+  static minNode(root) {
+    if (!root) return null
+    while (root &amp;&amp; root.left !== null) root = root.left
+    return root
+  }
+
+  /**
+   * 查找一棵树的最大值
+   * @param {Node} root 树的根节点
+   */
+  static maxNode(root) {
+    if (!root) return null
+    while (root &amp;&amp; root.right !== null) root = root.right
+    return root
+  }
+
+  // ...
+}
+</code></pre>
+
+<h3 id="toc_14">移除节点</h3>
+
+<p>这是树类中最复杂的方法。我们先分类讨论，整理一下思路。假设我们要从树 Tree 中删除节点 X</p>
+
+<p><strong>首先有个大前提: BST 树的特性是根节点比左节点大，比右节点小。</strong></p>
+
+<p>第一步: 找出要删掉的 X</p>
+
+<ol>
+<li>X 比 Tree 的根节点小，那我们就从 Tree 的左子树中找 X，并且这个过程是递归的</li>
+<li>X 比 Tree 的根节点大，那我们就从 Tree 的右子树中找 X，这个过程也是递归的</li>
+<li>如果整棵树都找不到 X，那删除失败，返回 false</li>
+<li>如果找到了 X，删除并返回 true</li>
+</ol>
+
+<p>第二部: 删掉 X</p>
+
+<ol>
+<li> X 没有子节点，令 X 为 null 即可</li>
+<li> X 只有一个子节点，那么这个子节点代替 X（删掉 X 意味着他的唯一子节点就要代替自己的位置）</li>
+<li> X 有两个子节点，我们需要从左右子节点（子树）中找到一个值代替 X<br/>
+&gt; 1. 我们要从右边子树中找到用于替换 X 的值，因为 <strong>根据大前提</strong> ，左子树任意节点的值肯定比 X 的值小，他们不能代替 X<br/>
+&gt; 2. 找到右边子树的最小节点，因为 <strong>根据大前提</strong> ，当它替换掉 X 的时候，能保证比 X 左子树所有值都大，比 X 右子树所有值都小</li>
+</ol>
+
+<pre><code class="language-javascript">class BinarySearchTree {
+  // ...
+
+  /**
+   * 移除节点
+   * @param {Number} key 需要移除的节点的值
+   */
+  delete(key) {
+    let result = false // 是否删除成功
+
+    /**
+     * 用于递归的删除方法
+     * @param {Node} node 当前树的根节点
+     * @param {Number} key 删除的值
+     */
+    const _delete = (node, key) =&gt; {
+      // 如果当前节点是空的，返回空
+      if (node === null) return null
+
+      // 目标删除节点的值比当前节点的值小，继续从左子树中找
+      if (key &lt; node.key) {
+        node.left = _delete(node.left, key)
+        return node
+      }
+
+      // 目标删除节点的值比当前节点的值大，继续从右子树中找
+      if (key &gt; node.key) {
+        node.right = _delete(node.right, key)
+        return node
+      }
+
+      // 找到要删除的目标节点
+      if (key === node.key) {
+        result = true
+        // 第一种情况: 这个节点没有子节点，删掉当前节点
+        if (node.left === null &amp;&amp; node.right === null) {
+          node = null
+          return node
+        }
+
+        // 第二种情况: 这个节点只有一个子节点，子节点代替当前节点
+        if (node.left === null &amp;&amp; node.right !== null) {
+          node = node.right
+          return node
+        }
+        if (node.right === null &amp;&amp; node.left !== null) {
+          node = node.left
+          return node
+        }
+
+        // 第三种情况: 这个节点有两个子节点，从左右子节点（子树）中找到一个值代替当前节点
+        const rightSubTreeMinNode = BinarySearchTree.minNode(node.right) // 找到右子树的最小节点
+        node.key = rightSubTreeMinNode.key // 右子树的最小节点的值赋给当前节点
+        node.right = _delete(node.right, rightSubTreeMinNode.key) // 找到右子树最小节点，删掉
+        return node
+      }
+    }
+    this.root = _delete(this.root, key)
+    return result
+  }
+
+  // ...
+}
+</code></pre>
+
+<h3 id="toc_15">总结</h3>
+
+<p>至此，JavaScript 版的搜索二叉树的类已经完成了，完整代码如下</p>
+
+<pre><code class="language-javascript">class BinarySearchTree {
+  /**
+   * 初始化有一个根节点
+   */
+  constructor(key) {
+    this.root = BinarySearchTree.createNode(key)
+  }
+
+  /**
+   * 插入节点
+   * @param {Number} key 需要插入的节点的值
+   */
+  insert(key) {
+    const newNode = BinarySearchTree.createNode(key)
+    const insertNode = function(curNode, newNode) {
+      if (newNode.key &lt; curNode.key) {
+        curNode.left === null ? (curNode.left = newNode) : insertNode(curNode.left, newNode)
+      } else {
+        curNode.right === null ? (curNode.right = newNode) : insertNode(curNode.right, newNode)
+      }
+    }
+    this.root.key === null ? (this.root = newNode) : insertNode(this.root, newNode)
+  }
+
+  /**
+   * 先序遍历
+   * @param {Function} callback 回调函数
+   */
+  preOrderTraverse(callback) {
+    return BinarySearchTree.traverse(this.root, 1, callback)
+  }
+
+  /**
+   * 中序遍历
+   * @param {Function} callback 回调函数
+   */
+  inOrderTraverse(callback) {
+    return BinarySearchTree.traverse(this.root, 2, callback)
+  }
+
+  /**
+   * 后序遍历
+   * @param {Function} callback 回调函数
+   */
+  postOrderTraverse(callback) {
+    return BinarySearchTree.traverse(this.root, 3, callback)
+  }
+
+  /**
+   * 查找并返回最小节点
+   */
+  min() {
+    return BinarySearchTree.minNode(this.root).key
+  }
+
+  /**
+   * 查找并返回最大节点
+   */
+  max() {
+    return BinarySearchTree.maxNode(this.root).key
+  }
+
+  /**
+   * 查找树是否有某个节点
+   * @param {Number} key 需要查找的节点的值
+   */
+  has(key) {
+    const searchNode = (root, key) =&gt; {
+      if (root === null) return false
+      if (key === root.key) return true
+      return key &lt; root.key ? searchNode(root.left, key) : searchNode(root.right, key)
+    }
+    return searchNode(this.root, key)
+  }
+
+  /**
+   * 移除节点
+   * @param {Number} key 需要移除的节点的值
+   */
+  delete(key) {
+    let result = false
+    const _delete = (node, key) =&gt; {
+      if (node === null) return null
+      if (key &lt; node.key) {
+        node.left = _delete(node.left, key)
+        return node
+      }
+      if (key &gt; node.key) {
+        node.right = _delete(node.right, key)
+        return node
+      }
+      if (key === node.key) {
+        result = true
+        if (node.left === null &amp;&amp; node.right === null) {
+          node = null
+          return node
+        }
+        if (node.left === null &amp;&amp; node.right !== null) {
+          node = node.right
+          return node
+        }
+        if (node.right === null &amp;&amp; node.left !== null) {
+          node = node.left
+          return node
+        }
+        const rightSubTreeMinNode = BinarySearchTree.minNode(node.right)
+        node.key = rightSubTreeMinNode.key
+        node.right = _delete(node.right, rightSubTreeMinNode.key)
+        return node
+      }
+    }
+    this.root = _delete(this.root, key)
+    return result
+  }
+
+  /**
+   * 生成一个树节点
+   * @param {Number} key 节点的值
+   */
+  static createNode(key) {
+    key = key || null
+    function Node(key) {
+      this.key = key
+      this.left = null
+      this.right = null
+    }
+    return new Node(key)
+  }
+
+  /**
+   * 静态遍历方法
+   * @param {Node} root 树的根节点
+   * @param {Number} type 遍历类型，1先序遍历，2中序遍历，3后序遍历
+   * @param {Function} callback 回调函数，回调函数接受 key，leftKey，rightKey，node四个参数
+   */
+  static traverse(root, type, callback) {
+    if (!root) return []
+    const key = root.key
+    const leftKey = root.left ? root.left.key : null
+    const rightKey = root.right ? root.right.key : null
+    switch (type) {
+      case 1:
+        callback(key, leftKey, rightKey, root)
+        const preLeft = BinarySearchTree.traverse(root.left, type, callback)
+        const preRight = BinarySearchTree.traverse(root.right, type, callback)
+        return [root.key, ...preLeft, ...preRight]
+      case 2:
+        const inLeft = BinarySearchTree.traverse(root.left, type, callback)
+        callback(key, leftKey, rightKey, root)
+        const inRight = BinarySearchTree.traverse(root.right, type, callback)
+        return [...inLeft, root.key, ...inRight]
+      case 3:
+        const postLeft = BinarySearchTree.traverse(root.left, type, callback)
+        const postRight = BinarySearchTree.traverse(root.right, type, callback)
+        callback(key, leftKey, rightKey, root)
+        return [...postLeft, ...postRight, root.key]
+      default:
+        break
+    }
+  }
+
+  /**
+   * 查找一棵树的最小节点
+   * @param {Node} root 树的根节点
+   */
+  static minNode(root) {
+    if (!root) return null
+    while (root &amp;&amp; root.left !== null) root = root.left
+    return root
+  }
+
+  /**
+   * 查找一棵树的最大节点
+   * @param {Node} root 树的根节点
+   */
+  static maxNode(root) {
+    if (!root) return null
+    while (root &amp;&amp; root.right !== null) root = root.right
+    return root
+  }
+}
+</code></pre>
+
+<p>测试用例:</p>
+
+<pre><code class="language-javascript">// 初始化测试
+const tree = new BinarySearchTree(11)
+console.log(&#39;初始化测试&#39;, tree)
+
+// 插入测试
+tree.insert(9)
+tree.insert(15)
+tree.insert(3)
+console.log(&#39;插入测试&#39;, tree)
+
+// 先序遍历测试
+const preList = tree.preOrderTraverse((key, leftKey, rightKey, node) =&gt; {
+  console.log(&#39;先序遍历回调&#39;, key, leftKey, rightKey, node)
+})
+console.log(&#39;先序遍历测试&#39;, preList)
+
+// 中序遍历测试
+const inList = tree.inOrderTraverse((key, leftKey, rightKey, node) =&gt; {
+  console.log(&#39;中序遍历回调&#39;, key, leftKey, rightKey, node)
+})
+console.log(&#39;中序遍历测试&#39;, inList)
+
+// 后序遍历测试
+const postList = tree.postOrderTraverse((key, leftKey, rightKey, node) =&gt; {
+  console.log(&#39;后序遍历回调&#39;, key, leftKey, rightKey, node)
+})
+console.log(&#39;后序遍历测试&#39;, postList)
+
+// 查找最小值测试
+const min = tree.min()
+console.log(&#39;查找最小值测试&#39;, min)
+
+// 查找最大值测试
+const max = tree.max()
+console.log(&#39;查找最大值测试&#39;, max)
+
+// 查找特定值测试
+const has9 = tree.has(9)
+const has100 = tree.has(100)
+console.log(&#39;查找特定值9&#39;, has9)
+console.log(&#39;查找特定值100&#39;, has100)
+
+// 删除测试
+const delete9 = tree.delete(9)
+const delete100 = tree.delete(100)
+console.log(&#39;删除9&#39;, delete9)
+console.log(&#39;删除100&#39;, delete100)
+console.log(&#39;删除9后查找9&#39;, tree.has(9))
+</code></pre>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="16023382325000.html" 
+          title="Previous Post: 数据结构之队列">&laquo; 数据结构之队列</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="16023381818411.html" 
+          title="Next Post: 数据结构之链表">数据结构之链表 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" /></div>
+            
+                <h1>Evan的博客</h1>
+                <div class="site-des">Evan 的博客 - 代码，摄影，音乐</div>
+                <div class="social">
+
+
+
+
+
+
+<a target="_blank" class="instagram" href="https://www.instagram.com/a953328679/" title="Instagram">Instagram</a>
+<a target="_blank" class="weibo" href="https://weibo.com/wbxiaocong/" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/EvanOyam/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:o953328679@gmail.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="Interface.html"><strong>面试</strong></a>
+        
+            <a href="%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html"><strong>开发笔记</strong></a>
+        
+            <a href="%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html"><strong>工程实践</strong></a>
+         
+        
+            <a href="tag_JS.html"><strong>JS</strong></a>
+            
+            <a href="tag_Vue.html"><strong>Vue</strong></a>
+            
+            <a href="tag_%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.html"><strong>性能优化</strong></a>
+            
+            <a href="tag_%E7%AE%97%E6%B3%95.html"><strong>算法</strong></a>
+            
+            <a href="tag_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.html"><strong>计算机网络</strong></a>
+            
+        </p>
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="16023497016429.html">前端面经复盘</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023387735398.html">大前端相关面试题</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023387379097.html">常见 HTML 面试题</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023386965383.html">手撕 Promise</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023385653734.html">常用设计模式</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+
+<style type="text/css">
+figure{margin: 0;padding: 0;}
+figcaption{text-align:center;}
+
+/* PrismJS 1.14.0
+ http://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript */
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+    color: black;
+    background: none;
+    text-shadow: 0 1px white;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+    
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+    text-shadow: none;
+    background:#b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+    text-shadow: none;
+    background: #b3d4fc;
+}
+
+@media print {
+    code[class*="language-"],
+    pre[class*="language-"] {
+        text-shadow: none;
+    }
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+    padding: 1em;
+    margin: .5em 0;
+    overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+    background: #F7F7F7;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+    padding: .1em;
+    border-radius: .3em;
+    white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: slategray;
+}
+
+.token.punctuation {
+    color: #999;
+}
+
+.namespace {
+    opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    color: #9a6e3a;
+    background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: #07a;
+}
+
+.token.function,
+.token.class-name {
+    color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+    color: #e90;
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+.token.italic {
+    font-style: italic;
+}
+
+.token.entity {
+    cursor: help;
+}
+
+
+pre[class*="language-"].line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+}
+
+pre[class*="language-"].line-numbers > code {
+    position: relative;
+    white-space: inherit;
+}
+
+.line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    font-size: 100%;
+    left: -3.8em;
+    width: 3em; /* works for line-numbers below 1000 lines */
+    letter-spacing: -1px;
+    border-right: 1px solid #999;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+    .line-numbers-rows > span {
+        pointer-events: none;
+        display: block;
+        counter-increment: linenumber;
+    }
+
+        .line-numbers-rows > span:before {
+            content: counter(linenumber);
+            color: #999;
+            display: block;
+            padding-right: 0.8em;
+            text-align: right;
+        }
+
+</style>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+
+
+  </body>
+</html>

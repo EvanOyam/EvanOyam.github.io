@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> leetcode 刷题之旅 - Evan的博客 </title>
+    
+    <meta name="keywords" content="JavaScript 算法 leetcode" />
+     
+    <meta name="description" content="leetcode刷题" />
+    
+    <link href="atom.xml" rel="alternate" title="Evan的博客" type="application/atom+xml" />
+    
+    <link rel="shortcut icon" href="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" type="image/png" />
+    
+
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+
+    <script type="text/javascript">
+      function before_search() {
+        var searchVal = 'site:evanoyam.github.io ' + document.getElementById('search_input').value
+        document.getElementById('search_q').value = searchVal
+        return true
+      }
+    </script>
+  </head>
+  <body class="antialiased hide-extras">
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+        <nav class="top-bar docs-bar hide-for-small" data-topbar>
+          <section class="top-bar-section">
+            <div class="row">
+              <div style="position: relative; width: 100%">
+                <div style="position: absolute; width: 100%">
+                  <ul id="main-menu" class="left">
+                    
+                    <li id=""><a target="self" href="index.html">Home</a></li>
+                    
+                    <li id=""><a target="_self" href="archives.html">Archives</a></li>
+                    
+                  </ul>
+
+                  <ul class="right" id="search-wrap">
+                    <li>
+                      <form
+                        target="_blank"
+                        onsubmit="return before_search();"
+                        action="https://google.com/search"
+                        method="get"
+                      >
+                        <input type="hidden" id="search_q" name="q" value="" />
+                        <input tabindex="1" type="search" id="search_input" placeholder="Search" />
+                      </form>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </nav>
+
+        <nav class="tab-bar show-for-small">
+          <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+            <span> &nbsp; Evan的博客</span>
+          </a>
+        </nav>
+
+        <aside class="left-off-canvas-menu">
+          <ul class="off-canvas-list">
+            
+            <li><a target="self" href="index.html">Home</a></li>
+            
+            <li><a target="_self" href="archives.html">Archives</a></li>
+            
+
+            <li><label>Categories</label></li>
+
+            
+            <li><a href="Interface.html">面试</a></li>
+            
+            <li><a href="%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html">开发笔记</a></li>
+            
+            <li><a href="%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html">工程实践</a></li>
+            
+          </ul>
+        </aside>
+
+        <a class="exit-off-canvas" href="#"></a>
+
+        <section id="main-content" role="main" class="scroll-container"></section>
+      </div>
+    </div>
+  </body>
+</html>
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>leetcode 刷题之旅</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2020/10/10</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='Interface.html'>面试</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>整理了一些平时看到的算法题，以及部分真题。平时积累提升自己的思维能力，面试前也方便自己复习。</p>
+
+<ul>
+<li><a href="16023497016429.html">这里还有一篇面经</a></li>
+<li><a href="16023381126025.html">leetcode 刷题之旅</a></li>
+</ul>
+
+<h2 id="toc_0">1. 两数之和</h2>
+
+<p>给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那两个整数，并返回他们的数组下标。</p>
+
+<p>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。</p>
+
+<p><strong>示例:</strong></p>
+
+<blockquote>
+<ul>
+<li>给定 nums = [2, 7, 11, 15], target = 9</li>
+<li>因为 nums[0] + nums[1] = 2 + 7 = 9</li>
+<li>所以返回 [0, 1]</li>
+</ul>
+</blockquote>
+
+<pre><code class="language-javascript">// 解法1
+const twoSum = (nums, target) =&gt; {
+  let nextIdx
+  const idx = nums.findIndex((item, index) =&gt; {
+    nextIdx = nums.indexOf(target - item)
+    return nextIdx !== -1 &amp;&amp; index !== nextIdx
+  })
+  return idx == -1 ? [] : [idx, nextIdx]
+}
+
+// 解法2
+const twoSum = (nums, target) =&gt; {
+  let map = new Map()
+  for (let i = 0; i &lt; nums.length; i++) {
+    let x = target - nums[i]
+    if (map.has(x)) return [map.get(x), i]
+    map.set(nums[i], i)
+  }
+  return []
+}
+
+// 解法3
+const twoSum = (nums, target) =&gt; {
+  let map = {}
+  for (let i = 0; i &lt; nums.length; i++) {
+    let x = target - nums[i]
+    if (map[x] !== undefined) return [map[x], i]
+    map[nums[i]] = i
+  }
+  return []
+}
+
+// 测试用例: twoSum([12, 8, 1, 11], 9) =&gt; [1, 2]
+</code></pre>
+
+<h4 id="toc_1">3. 无重复字符的最长子串</h4>
+
+<p>给定一个字符串，请你找出其中不含有重复字符的最长子串的长度。</p>
+
+<p>示例1:</p>
+
+<p>输入: &quot;abcabcbb&quot;<br/>
+输出: 3 <br/>
+解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。<br/>
+示例 2:</p>
+
+<p>输入: &quot;bbbbb&quot;<br/>
+输出: 1<br/>
+解释: 因为无重复字符的最长子串是 &quot;b&quot;，所以其长度为 1。<br/>
+示例 3:</p>
+
+<p>输入: &quot;pwwkew&quot;<br/>
+输出: 3<br/>
+解释: 因为无重复字符的最长子串是&quot;wke&quot;，所以其长度为 3。<br/>
+请注意，你的答案必须是 子串 的长度，&quot;pwke&quot;是一个子序列，不是子串。</p>
+
+<pre><code class="language-javascript">/**
+ * @param {string} s
+ * @return {number}
+ */
+const lengthOfLongestSubstring = s =&gt; {
+  let map = new Map() // 记录每个字符的下标，key是字符，val是下标
+  let startIndex = -1 // 记录最长字符串的开始下标
+  let max = 0 // 最长字符串个数
+  for (let i in s) {
+    if (map.has(s[i])) {
+      startIndex = Math.max(map.get(s[i]), startIndex)
+    }
+    max = Math.max(max, i - startIndex)
+    map.set(s[i], i)
+  }
+  return max
+}
+
+</code></pre>
+
+<h4 id="toc_2">14. 最长公共前缀</h4>
+
+<p>示例1:</p>
+
+<p>输入: [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;]<br/>
+输出: &quot;fl&quot;</p>
+
+<p>示例2:</p>
+
+<p>输入: [&quot;dog&quot;,&quot;racecar&quot;,&quot;car&quot;]<br/>
+输出: &quot;&quot;<br/>
+解释: 输入不存在公共前缀。</p>
+
+<pre><code class="language-javascript">const longestCommonPrefix = strs =&gt; {
+  if (strs.length == 0) return &#39;&#39;
+  let maxCommonStr = strs[0]
+  for (let i = 1; i &lt; strs.length; i++) {
+    let j = 0
+    for (j; j &lt; strs[i].length; j++) {
+      if (strs[i][j] !== maxCommonStr[j]) break
+    }
+    maxCommonStr = maxCommonStr.substr(0, j)
+  }
+  return maxCommonStr
+}
+</code></pre>
+
+<h4 id="toc_3">15. 三数之和</h4>
+
+<p>给你一个包含 n 个整数的数组nums，判断nums中是否存在三个元素 a，b，c ，使得a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。</p>
+
+<p>注意：答案中不可以包含重复的三元组。</p>
+
+<p>示例：</p>
+
+<p>给定数组 nums = [-1, 0, 1, 2, -1, -4]，</p>
+
+<p>满足要求的三元组集合为：<br/>
+[[-1, 0, 1], [-1, -1, 2]]</p>
+
+<pre><code class="language-javascript">/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+const threeSum = nums =&gt; {
+  nums.sort((a, b) =&gt; a - b) // 递增排序
+  let res = []
+  // 因为排序完了，如果全部正数或者负数，则不存在结果，返回
+  if (nums[0] * nums[nums.length - 1] &gt; 0) return res
+  for (let i = 0; i &lt; nums.length; i++) {
+    // 因为排序完了，所以如果出现连续两个相同的数，就跳过
+    if (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1]) continue
+    let lp = i + 1 // 初始化左指针
+    let rp = nums.length - 1 // 初始化右指针
+    while (lp &lt; rp) {
+      // 找到目标，插入结果队列
+      if (nums[i] + nums[lp] + nums[rp] == 0) {
+        res.push([nums[i], nums[lp], nums[rp]])
+        lp++ // 左指针递增
+        rp-- // 右指针递减
+        // 如果递增/递减后的指针元素和刚刚的一样，那么跳过
+        while (lp &lt; rp &amp;&amp; nums[lp] == nums[lp - 1]) lp++
+        while (lp &lt; rp &amp;&amp; nums[rp] == nums[rp + 1]) rp--
+      }
+      // 找不到目标，如果相加大于0，表示需要小一点的结果，右指针递减
+      // 如果结果小于0，表示需要大一点的结果，左指针递增
+      if (nums[i] + nums[lp] + nums[rp] &gt; 0) rp--
+      if (nums[i] + nums[lp] + nums[rp] &lt; 0) lp++
+    }
+  }
+  return res
+}
+</code></pre>
+
+<h4 id="toc_4">19. 删除链表的倒数第N个节点</h4>
+
+<p>给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。</p>
+
+<p>示例：</p>
+
+<p>给定一个链表: 1-&gt;2-&gt;3-&gt;4-&gt;5, 和 n = 2.</p>
+
+<p>当删除了倒数第二个节点后，链表变为 1-&gt;2-&gt;3-&gt;5.<br/>
+说明：</p>
+
+<p>给定的 n 保证是有效的。</p>
+
+<p>进阶：</p>
+
+<p>你能尝试使用一趟扫描实现吗？</p>
+
+<pre><code class="language-javascript">const removeNthFromEnd = (head, n) =&gt; {
+  // 假设输入的链表为 1-2-3-4-5
+  let preHead = new ListNode(0) // 初始化一个只有一个节点的链表，作为目标链表的虚拟头部
+  preHead.next = head // 将输入的链表和新链表连起来 0-1-2-3-4-5
+  let slow = preHead // 慢指针
+  let fast = preHead // 快指针
+  // 让快指针 j 先走 n 步
+  // 0-1-2-3-4-5
+  // |   |
+  // s   f
+  while (n) {
+    fast = fast.next
+    n--
+  }
+  // 快慢指针同时走，直到快指针到尽头，即 fast.next 不存在
+  // 0-1-2-3-4-5
+  //       |   |
+  //       s   f
+  while (fast.next) {
+    slow = slow.next
+    fast = fast.next
+  }
+  // 此时 fast 走到了最后一个节点，slow 是需要删除节点的前一节点
+  // 删除节点，返回剩余节点
+  slow.next = slow.next.next // 0-1-2-3-5
+  return preHead.next // 1-2-3-5
+}
+</code></pre>
+
+<h4 id="toc_5">20. 有效的括号</h4>
+
+<p>给定一个只包括 &#39;(&#39;，&#39;)&#39;，&#39;{&#39;，&#39;}&#39;，&#39;[&#39;，&#39;]&#39; 的字符串，判断字符串是否有效。</p>
+
+<p>有效字符串需满足：</p>
+
+<p>左括号必须用相同类型的右括号闭合。<br/>
+左括号必须以正确的顺序闭合。<br/>
+注意空字符串可被认为是有效字符串。</p>
+
+<pre><code class="language-javascript">/**
+ * @param {string} s
+ * @return {boolean}
+ */
+const isValid = s =&gt; {
+  // 思路就是用栈，匹配的左右括号相加为 0
+  // 遇到左括号入栈，遇到右括号就弹出栈顶
+  // 如果两者相加不为0，return false
+  // 如果遍历完栈长度大于0，意味着左右括号不对称，return false
+  // 其他情况return true
+  let map = {
+    &#39;(&#39;: 1,
+    &#39;)&#39;: -1,
+    &#39;{&#39;: 2,
+    &#39;}&#39;: -2,
+    &#39;[&#39;: 3,
+    &#39;]&#39;: -3
+  }
+  let stack = []
+  for (let i in s) {
+    if (map[s[i]] &gt; 0) {
+      stack.push(s[i])
+    } else {
+      const target = stack.pop()
+      if (map[target] + map[s[i]] !== 0) return false
+    }
+  }
+  if (stack.length &gt; 0) return false
+  return true
+}
+</code></pre>
+
+<h4 id="toc_6">94. 二叉树的中序遍历</h4>
+
+<p>给定一个二叉树，返回它的中序遍历。</p>
+
+<p>示例:</p>
+
+<pre><code class="language-text">输入: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
+
+输出: [1,3,2]
+</code></pre>
+
+<pre><code class="language-javascript">/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+const inorderTraversal = function(root) {
+  return root ? [...inorderTraversal(root.left), root.val, ...inorderTraversal(root.right)] : []
+}
+
+</code></pre>
+
+<h4 id="toc_7">104. 二叉树的最大深度</h4>
+
+<pre><code class="language-javascript">/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+const maxDepth = root =&gt; {
+  if (!root) {
+    return 0
+  } else {
+    const left = maxDepth(root.left)
+    const right = maxDepth(root.right)
+    return Math.max(left, right) + 1
+  }
+}
+
+</code></pre>
+
+<h4 id="toc_8">107. 二叉树的层次遍历</h4>
+
+<p>给定一个二叉树，返回其节点值自底向上的层次遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）</p>
+
+<p>例如：<br/>
+给定二叉树 [3,9,20,null,null,15,7],</p>
+
+<pre><code class="language-text">     3  
+    / \  
+   9  20  
+     /  \  
+    15   7  
+</code></pre>
+
+<p>返回其自底向上的层次遍历为：</p>
+
+<pre><code class="language-text">[
+  [15,7],
+  [9,20],
+  [3]
+]
+</code></pre>
+
+<pre><code class="language-javascript">const levelOrderBottom = root =&gt; {
+  let res = []
+  const dfs = (node, depth) =&gt; {
+    if (!node) return
+    res[depth] ? res[depth].push(node.val) : (res[depth] = [node.val])
+    dfs(node.left, depth + 1)
+    dfs(node.right, depth + 1)
+  }
+  dfs(root, 0)
+  return res.reverse()
+}
+</code></pre>
+
+<h4 id="toc_9">112. 路径总和</h4>
+
+<p>给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。</p>
+
+<p>说明: 叶子节点是指没有子节点的节点。</p>
+
+<p>示例: <br/>
+给定如下二叉树，以及目标和 sum = 22，</p>
+
+<pre><code class="language-text">              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \      \
+        7    2      1
+</code></pre>
+
+<p>返回 true, 因为存在目标和为 22 的根节点到叶子节点的路径 5-&gt;4-&gt;11-&gt;2。</p>
+
+<pre><code class="language-javascript">const hasPathSum = (root, sum) =&gt; {
+  if (!root) return false
+  if (root.left === null &amp;&amp; root.right === null) return root.val === sum
+  sum = sum - root.val
+  return hasPathSum(root.left, sum) || hasPathSum(root.right, sum)
+}
+
+</code></pre>
+
+<h4 id="toc_10">144. 二叉树的先序遍历</h4>
+
+<p>给定一个二叉树，返回它的先序遍历。</p>
+
+<p>示例:</p>
+
+<pre><code class="language-text">输入: [1,null,2,3]  
+   1
+    \
+     2
+    /
+   3 
+
+输出: [1,2,3]
+</code></pre>
+
+<pre><code class="language-javascript">const preorderTraversal = root =&gt; {
+  return root ? [root.val, ...preorderTraversal(root.left), ...preorderTraversal(root.right)] : []
+}
+</code></pre>
+
+<h4 id="toc_11">145. 二叉树的后序遍历</h4>
+
+<p>给定一个二叉树，返回它的后序遍历。</p>
+
+<p>示例:</p>
+
+<pre><code class="language-text">输入: [1,null,2,3]  
+   1
+    \
+     2
+    /
+   3 
+
+输出: [3,2,1]
+</code></pre>
+
+<pre><code class="language-javascript">const postorderTraversal = root =&gt; {
+  return root ? [...postorderTraversal(root.left), ...postorderTraversal(root.right), root.val] : []
+}
+</code></pre>
+
+<h4 id="toc_12">151. 翻转字符串里的单词</h4>
+
+<p>给定一个字符串，逐个翻转字符串中的每个单词。</p>
+
+<p>示例 1：</p>
+
+<pre><code class="language-text">输入: &quot;the sky is blue&quot;
+输出: &quot;blue is sky the&quot;
+</code></pre>
+
+<p>示例 2：</p>
+
+<pre><code class="language-text">输入: &quot;  hello world!  &quot;
+输出: &quot;world! hello&quot;
+解释: 输入字符串可以在前面或者后面包含多余的空格，但是反转后的字符不能包括。
+</code></pre>
+
+<p>示例 3：</p>
+
+<pre><code class="language-text">输入: &quot;a good   example&quot;
+输出: &quot;example good a&quot;
+解释: 如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。
+</code></pre>
+
+<pre><code class="language-javascript">/**
+ * @param {string} s
+ * @return {string}
+ */
+const reverseWords = function(s) {
+  let arr = s
+    .split(&#39; &#39;)
+    .filter(item =&gt; item.length)
+    .reverse()
+    .join(&#39; &#39;)
+  return arr
+}
+
+</code></pre>
+
+<h4 id="toc_13">155. 最小栈</h4>
+
+<p>设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。</p>
+
+<p>push(x) —— 将元素 x 推入栈中。<br/>
+pop() —— 删除栈顶的元素。<br/>
+top() —— 获取栈顶元素。<br/>
+getMin() —— 检索栈中的最小元素。</p>
+
+<p>示例:</p>
+
+<pre><code class="language-text">输入：
+[&quot;MinStack&quot;,&quot;push&quot;,&quot;push&quot;,&quot;push&quot;,&quot;getMin&quot;,&quot;pop&quot;,&quot;top&quot;,&quot;getMin&quot;]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+输出：
+[null,null,null,null,-3,null,0,-2]
+
+解释：
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --&gt; 返回 -3.
+minStack.pop();
+minStack.top();      --&gt; 返回 0.
+minStack.getMin();   --&gt; 返回 -2.
+</code></pre>
+
+<pre><code class="language-javascript">/**
+ * initialize your data structure here.
+ */
+let MinStack = function() {
+  this.stack = []
+}
+
+/**
+ * @param {number} x
+ * @return {void}
+ */
+MinStack.prototype.push = function(x) {
+  this.stack.push(x)
+  return this.stack
+}
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function() {
+  return this.stack.pop()
+}
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function() {
+  return this.stack[this.stack.length - 1]
+}
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.getMin = function() {
+  return Math.min(...this.stack)
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * let obj = new MinStack()
+ * obj.push(x)
+ * obj.pop()
+ * let param_3 = obj.top()
+ * let param_4 = obj.getMin()
+ */
+
+</code></pre>
+
+<h4 id="toc_14">160. 相交链表</h4>
+
+<p>编写一个程序，找到两个单链表相交的起始节点。</p>
+
+<pre><code class="language-javascript">// 解法一: 标记法
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} headA
+ * @param {ListNode} headB
+ * @return {ListNode}
+ */
+const getIntersectionNode = (headA, headB) =&gt; {
+  while (headA) {
+    headA.temp = 1
+    headA = headA.next
+  }
+  while (headB) {
+    if (headB.temp) return headB
+    headB = headB.next
+  }
+}
+</code></pre>
+
+<pre><code class="language-javascript">// 解法二: 变轨链法
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} headA
+ * @param {ListNode} headB
+ * @return {ListNode}
+ */
+const getIntersectionNode = (headA, headB) =&gt; {
+  let pA = headA
+  let pB = headB
+  while (pA !== pB) {
+    pA = pA ? pA.next : headB
+    pB = pB ? pB.next : headA
+  }
+  return pA
+}
+
+</code></pre>
+
+<h4 id="toc_15">236. 二叉树的最近公共祖先</h4>
+
+<pre><code class="language-javascript">/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {TreeNode}
+ */
+const lowestCommonAncestor = (root, p, q) =&gt; {
+  if (!root || root == p || root == q) return root
+  let left = lowestCommonAncestor(root.left, p, q)
+  let right = lowestCommonAncestor(root.right, p, q)
+  if (left &amp;&amp; right) return root
+  return left ? left : right
+}
+
+</code></pre>
+
+<h4 id="toc_16">349. 两个数组的交集</h4>
+
+<p>给定两个数组，编写一个函数来计算它们的交集。</p>
+
+<p>示例 1：</p>
+
+<p>输入：nums1 = [1,2,2,1], nums2 = [2,2]<br/>
+输出：[2]<br/>
+示例 2：</p>
+
+<p>输入：nums1 = [4,9,5], nums2 = [9,4,9,8,4]<br/>
+输出：[9,4]</p>
+
+<pre><code class="language-javascript">/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number[]}
+ */
+const intersection = (nums1, nums2) =&gt; {
+  return [...new Set(nums1.filter(item =&gt; nums2.includes(item)))]
+}
+
+</code></pre>
+
+<h4 id="toc_17">567. 字符串的排列</h4>
+
+<p>给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。</p>
+
+<p>换句话说，第一个字符串的排列之一是第二个字符串的子串。</p>
+
+<pre><code class="language-text">示例1:
+
+输入: s1 = &quot;ab&quot; s2 = &quot;eidbaooo&quot;
+输出: True
+解释: s2 包含 s1 的排列之一 (&quot;ba&quot;).
+</code></pre>
+
+<pre><code class="language-javascript">/**
+ * @param {string} s1
+ * @param {string} s2
+ * @return {boolean}
+ */
+var checkInclusion = function(s1, s2) {
+    let lp = 0
+    let rp = 0
+    let needs = {}
+    let windows = {}
+    let match = 0
+
+    for(let i in s1) {
+        needs[s1[i]] ? needs[s1[i]]++ : (needs[s1[i]] = 1)
+    }
+
+    while(rp &lt; s2.length) {
+        if(needs[s2[rp]]) {
+            windows[s2[rp]] ? windows[s2[rp]]++ : (windows[s2[rp]] = 1)
+            if(windows[s2[rp]] === needs[s2[rp]]) match++
+        }
+        rp++
+        while(match === Object.keys(needs).length) {
+            if(rp - lp === s1.length) return true
+            if(needs[s2[lp]]) {
+                windows[s2[lp]]--
+                if(windows[s2[lp]] &lt; needs[s2[lp]]) match--
+            }
+            lp++
+        }
+    }
+
+    return false
+};
+</code></pre>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="16023381818411.html" 
+          title="Previous Post: 数据结构之链表">&laquo; 数据结构之链表</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="16023380956095.html" 
+          title="Next Post: 常见算法思路">常见算法思路 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" /></div>
+            
+                <h1>Evan的博客</h1>
+                <div class="site-des">Evan 的博客 - 代码，摄影，音乐</div>
+                <div class="social">
+
+
+
+
+
+
+<a target="_blank" class="instagram" href="https://www.instagram.com/a953328679/" title="Instagram">Instagram</a>
+<a target="_blank" class="weibo" href="https://weibo.com/wbxiaocong/" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/EvanOyam/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:o953328679@gmail.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="Interface.html"><strong>面试</strong></a>
+        
+            <a href="%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html"><strong>开发笔记</strong></a>
+        
+            <a href="%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html"><strong>工程实践</strong></a>
+         
+        
+            <a href="tag_JS.html"><strong>JS</strong></a>
+            
+            <a href="tag_Vue.html"><strong>Vue</strong></a>
+            
+            <a href="tag_%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.html"><strong>性能优化</strong></a>
+            
+            <a href="tag_%E7%AE%97%E6%B3%95.html"><strong>算法</strong></a>
+            
+            <a href="tag_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.html"><strong>计算机网络</strong></a>
+            
+        </p>
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="16023497016429.html">前端面经复盘</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023387735398.html">大前端相关面试题</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023387379097.html">常见 HTML 面试题</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023386965383.html">手撕 Promise</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023385653734.html">常用设计模式</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+
+<style type="text/css">
+figure{margin: 0;padding: 0;}
+figcaption{text-align:center;}
+
+/* PrismJS 1.14.0
+ http://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript */
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+    color: black;
+    background: none;
+    text-shadow: 0 1px white;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+    
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+    text-shadow: none;
+    background:#b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+    text-shadow: none;
+    background: #b3d4fc;
+}
+
+@media print {
+    code[class*="language-"],
+    pre[class*="language-"] {
+        text-shadow: none;
+    }
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+    padding: 1em;
+    margin: .5em 0;
+    overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+    background: #F7F7F7;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+    padding: .1em;
+    border-radius: .3em;
+    white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: slategray;
+}
+
+.token.punctuation {
+    color: #999;
+}
+
+.namespace {
+    opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    color: #9a6e3a;
+    background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: #07a;
+}
+
+.token.function,
+.token.class-name {
+    color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+    color: #e90;
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+.token.italic {
+    font-style: italic;
+}
+
+.token.entity {
+    cursor: help;
+}
+
+
+pre[class*="language-"].line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+}
+
+pre[class*="language-"].line-numbers > code {
+    position: relative;
+    white-space: inherit;
+}
+
+.line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    font-size: 100%;
+    left: -3.8em;
+    width: 3em; /* works for line-numbers below 1000 lines */
+    letter-spacing: -1px;
+    border-right: 1px solid #999;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+    .line-numbers-rows > span {
+        pointer-events: none;
+        display: block;
+        counter-increment: linenumber;
+    }
+
+        .line-numbers-rows > span:before {
+            content: counter(linenumber);
+            color: #999;
+            display: block;
+            padding-right: 0.8em;
+            text-align: right;
+        }
+
+</style>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+
+
+  </body>
+</html>

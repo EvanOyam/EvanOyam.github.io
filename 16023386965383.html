@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> 手撕 Promise - Evan的博客 </title>
+    
+    <meta name="keywords" content="JavaScript promise" />
+     
+    <meta name="description" content="promise" />
+    
+    <link href="atom.xml" rel="alternate" title="Evan的博客" type="application/atom+xml" />
+    
+    <link rel="shortcut icon" href="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" type="image/png" />
+    
+
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+
+    <script type="text/javascript">
+      function before_search() {
+        var searchVal = 'site:evanoyam.github.io ' + document.getElementById('search_input').value
+        document.getElementById('search_q').value = searchVal
+        return true
+      }
+    </script>
+  </head>
+  <body class="antialiased hide-extras">
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+        <nav class="top-bar docs-bar hide-for-small" data-topbar>
+          <section class="top-bar-section">
+            <div class="row">
+              <div style="position: relative; width: 100%">
+                <div style="position: absolute; width: 100%">
+                  <ul id="main-menu" class="left">
+                    
+                    <li id=""><a target="self" href="index.html">Home</a></li>
+                    
+                    <li id=""><a target="_self" href="archives.html">Archives</a></li>
+                    
+                  </ul>
+
+                  <ul class="right" id="search-wrap">
+                    <li>
+                      <form
+                        target="_blank"
+                        onsubmit="return before_search();"
+                        action="https://google.com/search"
+                        method="get"
+                      >
+                        <input type="hidden" id="search_q" name="q" value="" />
+                        <input tabindex="1" type="search" id="search_input" placeholder="Search" />
+                      </form>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </nav>
+
+        <nav class="tab-bar show-for-small">
+          <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+            <span> &nbsp; Evan的博客</span>
+          </a>
+        </nav>
+
+        <aside class="left-off-canvas-menu">
+          <ul class="off-canvas-list">
+            
+            <li><a target="self" href="index.html">Home</a></li>
+            
+            <li><a target="_self" href="archives.html">Archives</a></li>
+            
+
+            <li><label>Categories</label></li>
+
+            
+            <li><a href="Interface.html">面试</a></li>
+            
+            <li><a href="%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html">开发笔记</a></li>
+            
+            <li><a href="%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html">工程实践</a></li>
+            
+          </ul>
+        </aside>
+
+        <a class="exit-off-canvas" href="#"></a>
+
+        <section id="main-content" role="main" class="scroll-container"></section>
+      </div>
+    </div>
+  </body>
+</html>
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>手撕 Promise</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2020/10/10</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='Interface.html'>面试</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>手写 Promise 可谓是 17-19 年间常问的面试题了。虽然这两年问这种题的面试已经不多了，但是熟悉 Promise 的底层原理对自己的 JS 认知有很大的帮助。这篇文章会带大家写一个符合 promise A+ 规范的小型 Promise</p>
+
+<h2 id="toc_0">简单版 Promise</h2>
+
+<p><strong>Promise 的流程:</strong></p>
+
+<ol>
+<li>Promise 的构造方法接收一个 executor()，在 new Promise()时就立刻执行这个 executor 回调，executor()内部的异步任务被放入宏/微任务队列，等待执行</li>
+<li>then()被执行，收集成功/失败回调，放入成功/失败队列</li>
+<li>executor()的异步任务被执行，触发 resolve/reject，从成功/失败队列中取出回调依次执行</li>
+</ol>
+
+<blockquote>
+<ul>
+<li>本质上 Promise 就是一个观察者模式: 收集依赖 -&gt; 触发通知 -&gt; 取出依赖</li>
+<li>简单版的 Promise 不符合 Promise A+ 单向状态流通的规范</li>
+</ul>
+</blockquote>
+
+<pre><code class="language-javascript">class MyPromise {
+  // 构造方法接收一个回调
+  constructor(executor) {
+    this._resolveQueue = [] // then 收集的执行成功的回调队列
+    this._rejectQueue = [] // then 收集的执行失败的回调队列
+
+    // 由于resolve/reject是在executor内部被调用, 因此需要使用箭头函数固定this指向, 否则找不到this._resolveQueue
+    let _resolve = (val) =&gt; {
+      // 从成功队列里取出回调依次执行
+      while (this._resolveQueue.length) {
+        const callback = this._resolveQueue.shift()
+        callback(val)
+      }
+    }
+    // 实现同resolve
+    let _reject = (val) =&gt; {
+      while (this._rejectQueue.length) {
+        const callback = this._rejectQueue.shift()
+        callback(val)
+      }
+    }
+    // new Promise()时立即执行executor,并传入resolve和reject
+    executor(_resolve, _reject)
+  }
+
+  // then 方法,接收一个成功的回调和一个失败的回调，并 push 进对应队列
+  then(resolveFn, rejectFn) {
+    this._resolveQueue.push(resolveFn)
+    this._rejectQueue.push(rejectFn)
+  }
+}
+
+// 来看看发生了什么:
+// 1. MyPromise 构造函数生成一个实例，这时候传入的函数(也就是 executor)就立马执行了，这里是一个 setTimeout 的异步，推入了下一轮宏任务
+// 2. 紧接着调用了构造函数的 then 方法，传入了 resolveFn，这时候把这个 resolveFn 的回调塞进成功队列里面
+// 3. 代码跑完，开始下一轮的宏任务(也就是刚刚 new MyPromise 实例的时候的那个 setTimeout)
+// 4. 这个 setTimeout 执行了一句 resolve(&#39;result&#39;)，这时候触发了读取成功队列的操作，读出刚刚存好的 resolveFn 并且执行
+const p1 = new MyPromise((resolve, reject) =&gt; {
+  setTimeout(() =&gt; {
+    resolve(&#39;result&#39;)
+  }, 1000)
+})
+p1.then((res) =&gt; console.log(res))
+</code></pre>
+
+<h2 id="toc_1">符合 Promise A+ 规范的版本</h2>
+
+<ol>
+<li>Promise A+ 规范指出: Promise 本质是一个状态机，且状态只能为以下三种：Pending（等待态）、Fulfilled（执行态）、Rejected（拒绝态），状态的变更是单向的，只能从 Pending -&gt; Fulfilled 或 Pending -&gt; Rejected，状态变更不可逆</li>
+<li>then 方法接收两个可选参数，分别对应状态改变时触发的回调。then 方法返回一个 Promise。then 方法可以被同一个 Promise 调用多次(链式调用)。</li>
+</ol>
+
+<blockquote>
+<ul>
+<li>除了要符合 Promise A+ 规范之外，还要透传同步代码</li>
+<li>then 如果不是函数，还要封装成函数保证链式调用不被异常终端</li>
+<li>then 返回的是 Promise 支持链式调用</li>
+</ul>
+</blockquote>
+
+<pre><code class="language-javascript">//Promise/A+规定的三种状态
+const PENDING = &#39;pending&#39;
+const FULFILLED = &#39;fulfilled&#39;
+const REJECTED = &#39;rejected&#39;
+
+class MyPromise {
+  // 构造方法接收一个回调
+  constructor(executor) {
+    this._status = PENDING // Promise状态
+    this._value = undefined // 储存then回调return的值
+    this._resolveQueue = [] // 成功队列, resolve时触发
+    this._rejectQueue = [] // 失败队列, reject时触发
+
+    // 由于resolve/reject是在executor内部被调用, 因此需要使用箭头函数固定this指向, 否则找不到this._resolveQueue
+    let _resolve = (val) =&gt; {
+      //把resolve执行回调的操作封装成一个函数,放进setTimeout里,以兼容executor是同步代码的情况
+      const run = () =&gt; {
+        if (this._status !== PENDING) return // 对应规范中的&quot;状态只能由pending到fulfilled或rejected&quot;
+        this._status = FULFILLED // 变更状态
+        this._value = val // 储存当前value
+
+        // 这里之所以使用一个队列来储存回调,是为了实现规范要求的 &quot;then 方法可以被同一个 promise 调用多次&quot;
+        // 如果使用一个变量而非队列来储存回调,那么即使多次p1.then()也只会执行一次回调
+        while (this._resolveQueue.length) {
+          const callback = this._resolveQueue.shift()
+          callback(val)
+        }
+      }
+      setTimeout(run)
+    }
+    // 实现同resolve
+    let _reject = (val) =&gt; {
+      const run = () =&gt; {
+        if (this._status !== PENDING) return // 对应规范中的&quot;状态只能由pending到fulfilled或rejected&quot;
+        this._status = REJECTED // 变更状态
+        this._value = val // 储存当前value
+        while (this._rejectQueue.length) {
+          const callback = this._rejectQueue.shift()
+          callback(val)
+        }
+      }
+      setTimeout(run)
+    }
+    // new Promise()时立即执行executor,并传入resolve和reject
+    executor(_resolve, _reject)
+  }
+
+  // then方法,接收一个成功的回调和一个失败的回调
+  then(resolveFn, rejectFn) {
+    // 根据规范，如果then的参数不是function，则我们需要忽略它, 让链式调用继续往下执行
+    typeof resolveFn !== &#39;function&#39; ? (resolveFn = (value) =&gt; value) : null
+    typeof rejectFn !== &#39;function&#39;
+      ? (rejectFn = (reason) =&gt; {
+          throw new Error(reason instanceof Error ? reason.message : reason)
+        })
+      : null
+
+    // return一个新的promise
+    return new MyPromise((resolve, reject) =&gt; {
+      // 把resolveFn重新包装一下,再push进resolve执行队列,这是为了能够获取回调的返回值进行分类讨论
+      const fulfilledFn = (value) =&gt; {
+        try {
+          // 执行第一个(当前的)Promise的成功回调,并获取返回值
+          let x = resolveFn(value)
+          // 分类讨论返回值,如果是Promise,那么等待Promise状态变更,否则直接resolve
+          x instanceof MyPromise ? x.then(resolve, reject) : resolve(x)
+        } catch (error) {
+          reject(error)
+        }
+      }
+
+      // reject同理
+      const rejectedFn = (error) =&gt; {
+        try {
+          let x = rejectFn(error)
+          x instanceof MyPromise ? x.then(resolve, reject) : resolve(x)
+        } catch (error) {
+          reject(error)
+        }
+      }
+
+      switch (this._status) {
+        // 当状态为pending时,把then回调push进resolve/reject执行队列,等待执行
+        case PENDING:
+          this._resolveQueue.push(fulfilledFn)
+          this._rejectQueue.push(rejectedFn)
+          break
+        // 当状态已经变为resolve/reject时,直接执行then回调
+        case FULFILLED:
+          fulfilledFn(this._value) // this._value是上一个then回调return的值(见完整版代码)
+          break
+        case REJECTED:
+          rejectedFn(this._value)
+          break
+      }
+    })
+  }
+}
+</code></pre>
+
+<h2 id="toc_2">完整版</h2>
+
+<pre><code class="language-javascript">//Promise/A+规定的三种状态
+const PENDING = &#39;pending&#39;
+const FULFILLED = &#39;fulfilled&#39;
+const REJECTED = &#39;rejected&#39;
+
+class MyPromise {
+  // 构造方法接收一个回调
+  constructor(executor) {
+    this._status = PENDING // Promise状态
+    this._value = undefined // 储存then回调return的值
+    this._resolveQueue = [] // 成功队列, resolve时触发
+    this._rejectQueue = [] // 失败队列, reject时触发
+
+    // 由于resolve/reject是在executor内部被调用, 因此需要使用箭头函数固定this指向, 否则找不到this._resolveQueue
+    let _resolve = (val) =&gt; {
+      //把resolve执行回调的操作封装成一个函数,放进setTimeout里,以兼容executor是同步代码的情况
+      const run = () =&gt; {
+        if (this._status !== PENDING) return // 对应规范中的&quot;状态只能由pending到fulfilled或rejected&quot;
+        this._status = FULFILLED // 变更状态
+        this._value = val // 储存当前value
+
+        // 这里之所以使用一个队列来储存回调,是为了实现规范要求的 &quot;then 方法可以被同一个 promise 调用多次&quot;
+        // 如果使用一个变量而非队列来储存回调,那么即使多次p1.then()也只会执行一次回调
+        while (this._resolveQueue.length) {
+          const callback = this._resolveQueue.shift()
+          callback(val)
+        }
+      }
+      setTimeout(run)
+    }
+    // 实现同resolve
+    let _reject = (val) =&gt; {
+      const run = () =&gt; {
+        if (this._status !== PENDING) return // 对应规范中的&quot;状态只能由pending到fulfilled或rejected&quot;
+        this._status = REJECTED // 变更状态
+        this._value = val // 储存当前value
+        while (this._rejectQueue.length) {
+          const callback = this._rejectQueue.shift()
+          callback(val)
+        }
+      }
+      setTimeout(run)
+    }
+    // new Promise()时立即执行executor,并传入resolve和reject
+    executor(_resolve, _reject)
+  }
+
+  // then方法,接收一个成功的回调和一个失败的回调
+  then(resolveFn, rejectFn) {
+    // 根据规范，如果then的参数不是function，则我们需要忽略它, 让链式调用继续往下执行
+    typeof resolveFn !== &#39;function&#39; ? (resolveFn = (value) =&gt; value) : null
+    typeof rejectFn !== &#39;function&#39;
+      ? (rejectFn = (reason) =&gt; {
+          throw new Error(reason instanceof Error ? reason.message : reason)
+        })
+      : null
+
+    // return一个新的promise
+    return new MyPromise((resolve, reject) =&gt; {
+      // 把resolveFn重新包装一下,再push进resolve执行队列,这是为了能够获取回调的返回值进行分类讨论
+      const fulfilledFn = (value) =&gt; {
+        try {
+          // 执行第一个(当前的)Promise的成功回调,并获取返回值
+          let x = resolveFn(value)
+          // 分类讨论返回值,如果是Promise,那么等待Promise状态变更,否则直接resolve
+          x instanceof MyPromise ? x.then(resolve, reject) : resolve(x)
+        } catch (error) {
+          reject(error)
+        }
+      }
+
+      // reject同理
+      const rejectedFn = (error) =&gt; {
+        try {
+          let x = rejectFn(error)
+          x instanceof MyPromise ? x.then(resolve, reject) : resolve(x)
+        } catch (error) {
+          reject(error)
+        }
+      }
+
+      switch (this._status) {
+        // 当状态为pending时,把then回调push进resolve/reject执行队列,等待执行
+        case PENDING:
+          this._resolveQueue.push(fulfilledFn)
+          this._rejectQueue.push(rejectedFn)
+          break
+        // 当状态已经变为resolve/reject时,直接执行then回调
+        case FULFILLED:
+          fulfilledFn(this._value) // this._value是上一个then回调return的值(见完整版代码)
+          break
+        case REJECTED:
+          rejectedFn(this._value)
+          break
+      }
+    })
+  }
+
+  //catch方法其实就是执行一下then的第二个回调
+  catch(rejectFn) {
+    return this.then(undefined, rejectFn)
+  }
+
+  //finally方法
+  finally(callback) {
+    return this.then(
+      (value) =&gt; MyPromise.resolve(callback()).then(() =&gt; value), //执行回调,并returnvalue传递给后面的then
+      (reason) =&gt;
+        MyPromise.resolve(callback()).then(() =&gt; {
+          throw reason
+        }) //reject同理
+    )
+  }
+
+  //静态的resolve方法
+  static resolve(value) {
+    if (value instanceof MyPromise) return value //根据规范, 如果参数是Promise实例, 直接return这个实例
+    return new MyPromise((resolve) =&gt; resolve(value))
+  }
+
+  //静态的reject方法
+  static reject(reason) {
+    return new MyPromise((resolve, reject) =&gt; reject(reason))
+  }
+
+  //静态的all方法
+  static all(promiseArr) {
+    let index = 0
+    let result = []
+    return new MyPromise((resolve, reject) =&gt; {
+      promiseArr.forEach((p, i) =&gt; {
+        //Promise.resolve(p)用于处理传入值不为Promise的情况
+        MyPromise.resolve(p).then(
+          (val) =&gt; {
+            index++
+            result[i] = val
+            if (index === promiseArr.length) {
+              resolve(result)
+            }
+          },
+          (err) =&gt; {
+            reject(err)
+          }
+        )
+      })
+    })
+  }
+
+  //静态的race方法
+  static race(promiseArr) {
+    return new MyPromise((resolve, reject) =&gt; {
+      //同时执行Promise,如果有一个Promise的状态发生改变,就变更新MyPromise的状态
+      for (let p of promiseArr) {
+        MyPromise.resolve(p).then(
+          //Promise.resolve(p)用于处理传入值不为Promise的情况
+          (value) =&gt; {
+            resolve(value) //注意这个resolve是上边new MyPromise的
+          },
+          (err) =&gt; {
+            reject(err)
+          }
+        )
+      }
+    })
+  }
+}
+</code></pre>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="16023387379097.html" 
+          title="Previous Post: 常见 HTML 面试题">&laquo; 常见 HTML 面试题</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="16023385653734.html" 
+          title="Next Post: 常用设计模式">常用设计模式 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" /></div>
+            
+                <h1>Evan的博客</h1>
+                <div class="site-des">Evan 的博客 - 代码，摄影，音乐</div>
+                <div class="social">
+
+
+
+
+
+
+<a target="_blank" class="instagram" href="https://www.instagram.com/a953328679/" title="Instagram">Instagram</a>
+<a target="_blank" class="weibo" href="https://weibo.com/wbxiaocong/" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/EvanOyam/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:o953328679@gmail.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="Interface.html"><strong>面试</strong></a>
+        
+            <a href="%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html"><strong>开发笔记</strong></a>
+        
+            <a href="%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html"><strong>工程实践</strong></a>
+         
+        
+            <a href="tag_JS.html"><strong>JS</strong></a>
+            
+            <a href="tag_Vue.html"><strong>Vue</strong></a>
+            
+            <a href="tag_%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.html"><strong>性能优化</strong></a>
+            
+            <a href="tag_%E7%AE%97%E6%B3%95.html"><strong>算法</strong></a>
+            
+            <a href="tag_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.html"><strong>计算机网络</strong></a>
+            
+        </p>
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="16023497016429.html">前端面经复盘</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023387735398.html">大前端相关面试题</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023387379097.html">常见 HTML 面试题</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023386965383.html">手撕 Promise</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023385653734.html">常用设计模式</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+
+<style type="text/css">
+figure{margin: 0;padding: 0;}
+figcaption{text-align:center;}
+
+/* PrismJS 1.14.0
+ http://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript */
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+    color: black;
+    background: none;
+    text-shadow: 0 1px white;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+    
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+    text-shadow: none;
+    background:#b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+    text-shadow: none;
+    background: #b3d4fc;
+}
+
+@media print {
+    code[class*="language-"],
+    pre[class*="language-"] {
+        text-shadow: none;
+    }
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+    padding: 1em;
+    margin: .5em 0;
+    overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+    background: #F7F7F7;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+    padding: .1em;
+    border-radius: .3em;
+    white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: slategray;
+}
+
+.token.punctuation {
+    color: #999;
+}
+
+.namespace {
+    opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    color: #9a6e3a;
+    background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: #07a;
+}
+
+.token.function,
+.token.class-name {
+    color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+    color: #e90;
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+.token.italic {
+    font-style: italic;
+}
+
+.token.entity {
+    cursor: help;
+}
+
+
+pre[class*="language-"].line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+}
+
+pre[class*="language-"].line-numbers > code {
+    position: relative;
+    white-space: inherit;
+}
+
+.line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    font-size: 100%;
+    left: -3.8em;
+    width: 3em; /* works for line-numbers below 1000 lines */
+    letter-spacing: -1px;
+    border-right: 1px solid #999;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+    .line-numbers-rows > span {
+        pointer-events: none;
+        display: block;
+        counter-increment: linenumber;
+    }
+
+        .line-numbers-rows > span:before {
+            content: counter(linenumber);
+            color: #999;
+            display: block;
+            padding-right: 0.8em;
+            text-align: right;
+        }
+
+</style>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+
+
+  </body>
+</html>

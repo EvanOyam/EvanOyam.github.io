@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> 面试 - Evan的博客 </title>
+    <title> 开发笔记 - Evan的博客 </title>
      
     <link href="atom.xml" rel="alternate" title="Evan的博客" type="application/atom+xml" />
     
@@ -101,14 +101,83 @@
 		<div class="markdown-body home-categories">
 		
 			<div class="article">
-                <a class="clearlink" href="16023497016429.html">
+                <a class="clearlink" href="16023384045807.html">
                 
-                  <h1>前端面经复盘</h1>
+                  <h1>http 协议</h1>
                   <div class="a-content">
                       
                       <div class="a-content-text">
                         
-                        	这次面试总共花了约一个月，8 月中旬开始，到 9 月中旬。期间共面试 5 家公司：腾讯，字节跳动，百度，富途，转转。面试完之后打算抽空简单写写总结，复盘。
+                        	<h2 id="toc_0">网络模型</h2>
+
+<table>
+<thead>
+<tr>
+<th>层数</th>
+<th>OSI 参考模型</th>
+<th>TCP/IP 五层模型</th>
+<th>TCP/IP 四层模型</th>
+<th>包含的协议</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>第七层</td>
+<td>应用层</td>
+<td>应用层</td>
+<td>应用层</td>
+<td>HTTP、FTP、DNS、TFTP、SMTP 等</td>
+</tr>
+<tr>
+<td>第六层</td>
+<td>表示层</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>第五层</td>
+<td>会话层</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>第四层</td>
+<td>传输层</td>
+<td>传输层</td>
+<td>传输层</td>
+<td>TCP、UDP 等</td>
+</tr>
+<tr>
+<td>第三层</td>
+<td>网络层</td>
+<td>网络层</td>
+<td>网络层</td>
+<td>IP 等</td>
+</tr>
+<tr>
+<td>第二层</td>
+<td>数据链路层</td>
+<td>数据链路层</td>
+<td>数据链路层</td>
+<td>底层网络协议</td>
+</tr>
+<tr>
+<td>第一层</td>
+<td>物理层</td>
+<td>物理层</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="toc_1">http请求报文</h2>
+
+<p><img src="https://img.bluepay.asia/upload/manual/20200426/16100736.png" alt="image"/></p>
+
                         
                       </div>
                   </div>
@@ -116,10 +185,10 @@
                 <div class="read-more clearfix">
                   <div class="more-left left">
                   
-                    <span class="date">2020/10/11</span>
+                    <span class="date">2020/10/10</span>
                     <span>posted in&nbsp;</span> 
           				  
-          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
+          					    <span class="posted-in"><a href='%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html'>开发笔记</a></span>
           				   
                     
 
@@ -135,14 +204,58 @@
               </div><!-- article -->
         
 			<div class="article">
-                <a class="clearlink" href="16023387735398.html">
+                <a class="clearlink" href="16022505778243.html">
                 
-                  <h1>大前端相关面试题</h1>
+                  <h1>Vue实例方法&Vue use</h1>
                   <div class="a-content">
                       
                       <div class="a-content-text">
                         
-                        	近两年大前端相关的话题越来越多。所谓大前端，我的理解是：对前端工程师知识体系中广度的考核。尤其是 node 诞生之后，JS 能干的东西越来越多，简单的如写个页面，复杂的甚至有 NodeOS 这种操作系统的玩意。
+                        	<p><strong>这篇markdown记录了：</strong></p>
+
+<blockquote>
+<ol>
+<li><code>Vue use</code>和<code>Vue.prototype.$xx</code>的概念</li>
+<li>如何创建且使用一个插件</li>
+<li>如何在Vue的原型上挂载对象</li>
+</ol>
+</blockquote>
+
+<h2 id="toc_0">Vue use()</h2>
+
+<p><a href="https://cn.vuejs.org/v2/guide/plugins.html"><code>Vue use()</code></a>用于使用Vue插件，本质是调用Vue插件中的install方法。</p>
+
+<h4 id="toc_1">创建一个plugin</h4>
+
+<p>Vue插件本身是一个对象，这个对象中必须包含install方法，install是一个函数。<br/><br/>
+本质上<code>Vue.use()</code>就是调用插件中定义的install方法，需要在<code>new Vue()</code>之前调用。</p>
+
+<pre><code class="language-javascript">// 定义插件
+const plugin = {
+  install(){
+    document.write(&#39;我是一个插件&#39;)
+  }
+}
+
+// 使用插件
+Vue.use(plugin); // html页面上显示&quot;我是一个插件&quot;
+</code></pre>
+
+<h2 id="toc_2">Vue.prototype.$xx</h2>
+
+<p><code>Vue.prototype.$xx</code>会往Vue实例的原型上挂载一个对象，同样也需要在<code>new Vue()</code>之前挂载。</p>
+
+<pre><code class="language-javascript">// 定义Vue原型上的myName属性，加上$符号防止冲突
+Vue.prototype.$myName = &#39;Evan&#39;
+// 在Vue实例中可直接使用
+console.log(this.$myName) // 输出Evan
+</code></pre>
+
+<h2 id="toc_3">总结</h2>
+
+<p><code>Vue use()</code>使用的是Vue的插件，<code>Vue.prototype.$xx</code>是往Vue原型链上挂载一个对象。<br/><br/>
+在插件中的install方法中，可以调用<code>Vue.prototype.$xx</code>，这样在<code>Vue use()</code>之后，在Vue原型链上就挂载了自定义的对象。</p>
+
                         
                       </div>
                   </div>
@@ -150,10 +263,10 @@
                 <div class="read-more clearfix">
                   <div class="more-left left">
                   
-                    <span class="date">2020/10/10</span>
+                    <span class="date">2020/10/09</span>
                     <span>posted in&nbsp;</span> 
           				  
-          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
+          					    <span class="posted-in"><a href='%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html'>开发笔记</a></span>
           				   
                     
 
@@ -169,14 +282,136 @@
               </div><!-- article -->
         
 			<div class="article">
-                <a class="clearlink" href="16023387379097.html">
+                <a class="clearlink" href="16022504338074.html">
                 
-                  <h1>常见 HTML 面试题</h1>
+                  <h1>插槽</h1>
                   <div class="a-content">
                       
                       <div class="a-content-text">
                         
-                        	常见的 html 和 css 面试题汇总
+                        	<p><strong>这篇markdonw记录了：</strong></p>
+
+<blockquote>
+<ol>
+<li>插槽的概念</li>
+<li>具名插槽</li>
+<li>作用域插槽</li>
+</ol>
+</blockquote>
+
+<h2 id="toc_0">什么是插槽</h2>
+
+<p>插槽就是在组件内预留一个<slot>标签，用来容纳组件起始标签和结束标签之间的内容。如果没有<slot>标签，那么组件起始和结束标签件的内容将会被抛弃</p>
+
+<pre><code class="language-markup">&lt;!-- 自定义一个navigation组件 --&gt;
+&lt;a v-bind:href=&quot;url&quot;
+   class=&quot;nav-link&quot;&gt;
+   &lt;!-- 预留一个slot --&gt;
+   &lt;slot&gt;&lt;/slot&gt;
+&lt;/a&gt;
+
+&lt;navigation-link url=&quot;/profile&quot;&gt;
+  &lt;!-- 组件内的html内容会被加载到slot插槽中 --&gt;
+  &lt;span&gt;Your Profile&lt;/span&gt;
+&lt;/navigation-link&gt;
+</code></pre>
+
+<blockquote>
+<ul>
+<li>插槽允许默认内容，它只会在没有提供内容的时候被渲染。</li>
+</ul>
+</blockquote>
+
+<pre><code class="language-markup">&lt;!-- submit-button组件内的插槽提供了默认内容 --&gt;
+&lt;button type=&quot;submit&quot;&gt;
+  &lt;slot&gt;Submit&lt;/slot&gt;
+&lt;/button&gt;
+
+&lt;!-- 当不提供内容的情况下，会渲染默认内容Submit --&gt;
+&lt;submit-button&gt;&lt;/submit-button&gt;
+
+&lt;!-- 提供了内容，会渲染提供的html: Save --&gt;
+&lt;submit-button&gt;Save&lt;/submit-button&gt;
+</code></pre>
+
+<h2 id="toc_1">具名插槽</h2>
+
+<p>插槽有个name属性，用于指定插入元素的位置。这种插槽被称为具名插槽。不带name属性的插槽默认会以<strong>default</strong>命名。在使用具名插槽时，需要用template标签包裹html内容，并且用v-slot指定对应的插槽位置。</p>
+
+<pre><code class="language-markup">&lt;!-- base-layout组件 --&gt;
+&lt;div class=&quot;container&quot;&gt;
+  &lt;header&gt;
+    &lt;!-- 给插槽命名 --&gt;
+    &lt;slot name=&quot;header&quot;&gt;&lt;/slot&gt;
+  &lt;/header&gt;
+  &lt;main&gt;
+    &lt;!-- 未命名插槽默认是default --&gt;
+    &lt;slot&gt;&lt;/slot&gt;
+  &lt;/main&gt;
+  &lt;footer&gt;
+    &lt;slot name=&quot;footer&quot;&gt;&lt;/slot&gt;
+  &lt;/footer&gt;
+&lt;/div&gt;
+
+&lt;!-- 使用base-layout组件 --&gt;
+
+&lt;base-layout&gt;
+  &lt;!-- 用template包裹html内容，且v-slot指向插槽位置 --&gt;
+  &lt;template v-slot:header&gt;
+    &lt;h1&gt;Here might be a page title&lt;/h1&gt;
+  &lt;/template&gt;
+
+  &lt;!-- 默认内容会插入default插槽 --&gt;
+  &lt;p&gt;A paragraph for the main content.&lt;/p&gt;
+  &lt;p&gt;And another one.&lt;/p&gt;
+
+  &lt;template v-slot:footer&gt;
+    &lt;p&gt;Here&#39;s some contact info&lt;/p&gt;
+  &lt;/template&gt;
+&lt;/base-layout&gt;
+</code></pre>
+
+<h2 id="toc_2">作用域插槽</h2>
+
+<p>一般情况下，组件只能访问自己组件内的状态。也就是父组件没办法使用插槽中定义的状态。如果要解决这个问题，就要使用作用域插槽。</p>
+
+<pre><code class="language-markup">&lt;!-- 组件show-name --&gt;
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;!-- 若想让外部组件访问到name，就要绑定name，用props的方式抛出去 --&gt;
+    &lt;slot :user=&quot;name&quot;&gt;&lt;/slot&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+export default {
+  name: &quot;SlotComp&quot;,
+  data() {
+    return {
+      name: &quot;Evan&quot;
+    };
+  }
+};
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;!-- 作用域插槽必须指定v-slot，同时随便给props命名，命名后可取值 --&gt;
+    &lt;SlotComp v-slot:default=&quot;Props&quot;&gt;I am {{Props.user}}&lt;/SlotComp&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import SlotComp from &quot;./components/SlotComp&quot;;
+
+export default {
+  name: &quot;App&quot;,
+  components: {
+    SlotComp
+  }
+};
+&lt;/script&gt;
+</code></pre>
+
                         
                       </div>
                   </div>
@@ -184,10 +419,10 @@
                 <div class="read-more clearfix">
                   <div class="more-left left">
                   
-                    <span class="date">2020/10/10</span>
+                    <span class="date">2020/10/09</span>
                     <span>posted in&nbsp;</span> 
           				  
-          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
+          					    <span class="posted-in"><a href='%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html'>开发笔记</a></span>
           				   
                     
 
@@ -203,14 +438,140 @@
               </div><!-- article -->
         
 			<div class="article">
-                <a class="clearlink" href="16023386965383.html">
+                <a class="clearlink" href="16022502628979.html">
                 
-                  <h1>手撕 Promise</h1>
+                  <h1>better-scroll排坑指南</h1>
                   <div class="a-content">
                       
                       <div class="a-content-text">
                         
-                        	手写 Promise 可谓是 17-19 年间常问的面试题了。虽然这两年问这种题的面试已经不多了，但是熟悉 Promise 的底层原理对自己的 JS 认知有很大的帮助。这篇文章会带大家写一个符合 promise A+ 规范的小型 Promise
+                        	<p><strong>这篇markdown记录了：</strong></p>
+
+<blockquote>
+<ol>
+<li>不可滚动</li>
+<li>监听不到scroll事件、无法点击</li>
+<li>滚动的时候click事件不能实时响应</li>
+<li>动态改变better-scroll中的数据，可滚动区域延迟或不响应</li>
+<li>上拉加载、下拉刷新后延迟响应</li>
+<li>横向better-scroll</li>
+<li><a href="https://ustbhuangyi.github.io/better-scroll/doc/zh-hans/options.html">better-scroll文档</a></li>
+</ol>
+</blockquote>
+
+<h2 id="toc_0">better-scroll 不可滚动</h2>
+
+<p>better-scroll 有两层关系，最外层是wrapper，滚动的是装载在第一个子元素content内的内容。better-scroll 只处理容器（wrapper）的第一个子元素（content）的滚动，其它的元素都会被忽略。此外，需要给wrapper一个高度</p>
+
+<pre><code class="language-markup">&lt;div class=&quot;wrapper&quot;&gt;
+  &lt;ul class=&quot;content&quot;&gt;
+    &lt;li&gt;...&lt;/li&gt;
+    &lt;li&gt;...&lt;/li&gt;
+    ...
+  &lt;/ul&gt;
+  &lt;!-- 这里可以放一些其它的 DOM，但不会影响滚动 --&gt;
+&lt;/div&gt;
+</code></pre>
+
+<pre><code class="language-javascript">this.scroll = new BScroll(this.$refs.wrapper, {
+  click: true,
+  tap: true,
+  probeType: 2
+})
+</code></pre>
+
+<p><img src="http://static.galileo.xiaojukeji.com/static/tms/shield/scroll-4.png" alt="better-scroll"/></p>
+
+<h2 id="toc_1">监听不到scroll事件、无法点击</h2>
+
+<ol>
+<li>scroll事件需要派发，创建better-scroll时由probeType属性控制，不派发scroll事件则无法监听</li>
+<li>better-scroll默认禁用了click和tap事件，在创建时开启事件</li>
+</ol>
+
+<pre><code class="language-javascript">this.scroll = new BScroll(this.$refs.wrapper, {
+  // 开启click事件
+  click: true,
+  // 开启tap事件
+  tap: true,
+  // 派发滚动事件，默认是0，不派发
+  // 1 -&gt; 延时派发
+  // 2 -&gt; 滚动时实时派发
+  // 3 -&gt; 任何动画效果过程都实时派发
+  probeType: 2
+})
+</code></pre>
+
+<h2 id="toc_2">滚动时click事件不能实时响应</h2>
+
+<p>better-scroll滚动过程中是不允许点击的，bounce动画的时候也是不允许点击的，可以取消bounce动画或者缩短bounce动画的时间</p>
+
+<h2 id="toc_3">动态改变better-scroll中的数据，可滚动区域延迟或不响应</h2>
+
+<p>每次修改完数据之后，需要refresh一次，建议watch中监听到数据改变就刷新</p>
+
+<pre><code class="language-javascript">watch: {
+  // 每次修改BScroll内容的高度，需要在nextTick中refresh
+  groupListData: {
+    handler() {
+      this.$nextTick(() =&gt; {
+        this.scroll.refresh()
+      })
+    },
+    deep: true
+  }
+}
+</code></pre>
+
+<h2 id="toc_4">上拉加载、下拉刷新后延迟响应</h2>
+
+<p>better scroll提供下拉和上拉事件:</p>
+
+<ol>
+<li>下拉刷新事件: pullingDown</li>
+<li>上拉加载事件: pullingUp</li>
+</ol>
+
+<p>在执行完事件之后，必须执行对应的声明完成的方法: 下拉刷新用 finishPullDown 来声明执行完毕；上拉加载用 finishPullUp 来声明执行完毕。</p>
+
+<p>此外，如果修改了better scroll中content的长度，必须要refresh一次。也建议在watch中监听数据变化</p>
+
+<pre><code class="language-javascript">// 下拉刷新
+this.scroll.on(&#39;pullingDown&#39;, () =&gt; {
+  // do sth...
+})
+
+// 上拉加载
+this.scroll.on(&#39;pullingUp&#39;, () =&gt; {
+  // do sth...
+})
+</code></pre>
+
+<h2 id="toc_5">横向better-scroll</h2>
+
+<p>better-scroll可以设置成横向滚动。通过设置 scrollX 的值以及禁用 scrollY 的值实现滚动效果。</p>
+
+<blockquote>
+<ul>
+<li>禁用scrollY可能导致页面无法下滑，需要声明eventPassthrough为vertical来确保页面纵向使用原生滚动</li>
+<li>横向滚动时默认不会派发scroll事件，需要声明probeType</li>
+</ul>
+</blockquote>
+
+<pre><code class="language-javascript">this.scroll = new BScroll(this.$refs.tab, {
+  startX: 0,
+  click: true,
+  tap: true,
+  // 允许横向滚动，禁止纵向滚动
+  scrollX: true,
+  scrollY: false,
+  // 纵向使用原生滚动，不禁用纵向滚动事件
+  eventPassthrough: &#39;vertical&#39;,
+  // 派发滚动事件
+  probeType: 2
+})
+</code></pre>
+
                         
                       </div>
                   </div>
@@ -218,214 +579,10 @@
                 <div class="read-more clearfix">
                   <div class="more-left left">
                   
-                    <span class="date">2020/10/10</span>
+                    <span class="date">2020/10/09</span>
                     <span>posted in&nbsp;</span> 
           				  
-          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
-          				   
-                    
-
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="16023385653734.html">
-                
-                  <h1>常用设计模式</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	这篇文章主要汇总一些在前端中常见的设计模式，不会每一个都展开讲，遇到觉得有必要深入记录的设计模式就会展开细说。
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                  
-                    <span class="date">2020/10/10</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
-          				   
-                    
-
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="16023385181073.html">
-                
-                  <h1>强缓存与协商缓存</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	这篇文章介绍了强缓存与协商缓存，即本地缓存与 HTTP 缓存的异同。
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                  
-                    <span class="date">2020/10/10</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
-          				   
-                    
-
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="16023383568771.html">
-                
-                  <h1>面试常见性能问题</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	总结了一些常见的性能相关的面试题，分享给大家，也供自己复习的时候看。
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                  
-                    <span class="date">2020/10/10</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
-          				   
-                    
-
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="16023383038322.html">
-                
-                  <h1>数据结构之图</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	图是一种各个节点可相互连接的数据结构
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                  
-                    <span class="date">2020/10/10</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
-          				   
-                    
-
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="16023382883992.html">
-                
-                  <h1>数据结构之数组</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	数组是最简单的内存数据结构，一般来说存储同种数据类型，不过 js 允许数组存储不同的数据类型
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                  
-                    <span class="date">2020/10/10</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
-          				   
-                    
-
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="16023382564461.html">
-                
-                  <h1>数据结构之栈</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	栈是一种后进先出（LIFO）的有序的数据结构，新元素在栈顶，旧元素在栈底。可以利用数组来创建栈。
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                  
-                    <span class="date">2020/10/10</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
+          					    <span class="posted-in"><a href='%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html'>开发笔记</a></span>
           				   
                     
 
@@ -451,7 +608,7 @@
 			  </div>
 			  <div class="large-6 columns">
 			<p class="text-right" style="padding-top:25px;">
-			 <a href="Interface_1.html">&raquo; Next Page</a> 
+			
 			</p>
 			  </div>
 			</div>

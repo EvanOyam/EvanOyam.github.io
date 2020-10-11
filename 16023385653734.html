@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> Vue 响应式原理 - Evan的博客 </title>
+    <title> 常用设计模式 - Evan的博客 </title>
     
-    <meta name="keywords" content="vue 双向绑定 mvvm 设计模式 发布订阅" />
+    <meta name="keywords" content="设计模式" />
      
-    <meta name="description" content="vue响应式原理" />
+    <meta name="description" content="设计模式" />
     
     <link href="atom.xml" rel="alternate" title="Evan的博客" type="application/atom+xml" />
     
@@ -105,10 +105,10 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>Vue 响应式原理</h1>
+          <h1>常用设计模式</h1>
      
         <div class="read-more clearfix">
-          <span class="date">2020/10/09</span>
+          <span class="date">2020/10/10</span>
 
           <span>posted in&nbsp;</span> 
           
@@ -125,254 +125,83 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p>Vue 响应式基本是面试必问的内容，但很多同学对响应式的理解仍仅仅停留在 <code>Object.definedProperty</code> 的阶段，一旦面试官稍微问深一点点，就答不出个所以然了。实际上 Vue 的响应式远不止这个简单的数据劫持而已。这篇文章会由浅入深，夹带部分源码，来介绍整个响应式的过程。看完这篇文章，不但对各位看官的面试有帮助，也能帮助你了解发布订阅的设计模式。</p>
+      <p>这篇文章主要汇总一些在前端中常见的设计模式，不会每一个都展开讲，遇到觉得有必要深入记录的设计模式就会展开细说。</p>
 
-<h2 id="toc_0">基础概念</h2>
+<ol>
+<li>使用单体模式来实现弹窗的基本原理</li>
+<li><strong>使用虚拟代理实现图片的预加载、懒加载</strong></li>
+<li>虚拟代理合并 http 请求的理解</li>
+<li><strong>Vue 观察者模式实现双向绑定</strong></li>
+<li>模块模式封装代码块</li>
+<li>代理模式实现事件委托</li>
+<li>工厂模式实现游戏职业选择（或者自动贩卖机，计算器等）</li>
+<li>策略模式实现表单校验</li>
+<li>外观模式实现浏览器兼容</li>
+<li>备忘录模式实现分页控件</li>
+<li>状态模式实现下载</li>
+<li><strong>适配器适配前后端数据格式</strong></li>
+<li><strong>单例模式弹窗</strong></li>
+<li>工厂模式 new Vue</li>
+<li><strong>代理模式实现拦截器</strong></li>
+</ol>
 
-<p>Vue 的响应式也叫双向绑定，是 MVVM 中的核心，也就是视图 View 和模型 Model 的双向通信过程。Vue 实现双向通信，依赖的基础是<strong>数据劫持 + 发布订阅</strong></p>
+<h4 id="toc_0">观察者模式</h4>
 
-<blockquote>
-<p>Model 的变更决定了 View 的渲染，View 的用户交互反向作用于 Model 的变更</p>
-</blockquote>
-
-<p>很多人对Vue响应式的理解只停留在数据劫持的阶段。其实要实现一个完整的双向绑定框架，除了对数据的劫持之外，还需要一个可靠的发布订阅机制</p>
-
-<h4 id="toc_1">数据劫持</h4>
-
-<p>所谓数据劫持，就是在<strong>读取 / 写入数据的时候触发一个钩子</strong>，在这个钩子中注入自己的逻辑，以达到一些特定的目的</p>
-
-<blockquote>
-<p>Vue 2.x 用的是 <code>Object.definedProperty</code> 来劫持数据，Vue 3.x 用的是 <code>Proxy</code> 来劫持数据</p>
-</blockquote>
-
-<pre><code class="language-javascript">// Object.definedProperty 数据劫持
-Object.defineProperty(obj, key, {
-  enumerable: true,
-  configurable: true,
-  get() {
-    console.log(&quot;getter&quot;) // 读取属性时劫持数据
-    return val
-  },
-  set(newV) {
-    console.log(&quot;setter&quot;) // 设置属性时劫持数据
-    val = newV
-  }
-})
-
-// Proxy 劫持数据
-new Proxy(obj, {
-  get(obj, key) {
-    console.log(&#39;getter&#39;)
-    return obj[key]
-  },
-  set(obj, key, newV) {
-    console.log(&#39;setter&#39;)
-    obj[key] = newV
-  }
-})
-</code></pre>
-
-<h4 id="toc_2">发布订阅</h4>
-
-<p>发布订阅是一种比较常见的设计模式。订阅者向发布者订阅某条消息，当消息发生变更时（或者满足某个条件 / 时机时），发布者向订阅者推送消息。</p>
-
-<pre><code class="language-javascript">class Dep {
+<pre><code class="language-javascript">class Subject {
   constructor() {
-    this.eventQueueMap = new Map()
+    this.observers = []
   }
-  on(event, cb) {
-    this.eventQueueMap.has(event) ? this.eventQueueMap.get(event).push(cb) : this.eventQueueMap.set(event, [cb])
+
+  add(observer) {
+    this.observers.push(observer)
   }
-  emit(event, ...args) {
-    const eventQueue = this.eventQueueMap.get(event)
-    if (!eventQueue) return false
-    eventQueue.forEach(cb =&gt; {
-      cb(args)
-    })
-  }
-  off(event) {
-    if (this.eventQueueMap.has(event)) this.eventQueueMap.delete(event)
+
+  notify(...args) {
+    this.observers.forEach((observer) =&gt; observer.update(...args))
   }
 }
 
-const event = new Dep()
-
-// 订阅
-event.on(&#39;test&#39;, function(name) {
-  console.log(name)
-})
-
-// 发布
-event.emit(&#39;test&#39;, &#39;二哈&#39;, &#39;波斯猫&#39;)
-</code></pre>
-
-<h2 id="toc_3">实现一个响应式框架</h2>
-
-<h4 id="toc_4">先看一下Vue响应式的实现过程</h4>
-
-<p><img src="https://cn.vuejs.org/images/data.png" alt="image"/></p>
-
-<ol>
-<li>首先初始化 <code>data</code> 对象，劫持这堆东西，让他们变得可追踪</li>
-<li>初始化 <code>Watvher</code>，订阅自己关注的数据</li>
-<li>读取数据时触发 <code>getter</code>，实现 <code>Model -&gt; View</code> 的渲染</li>
-<li>设置数据时触发 <code>setter</code>，实现 <code>View -&gt; Model</code> 的变更，同时 <code>Model</code> 变更后 <code>Watcher</code> 重新渲染视图</li>
-</ol>
-
-<blockquote>
-<p>在整个响应式的过程中其实还涉及到 Dep 依赖收集和 Compile 解析器等功能，后面会慢慢讲解</p>
-</blockquote>
-
-<h4 id="toc_5">自己做一个</h4>
-
-<p>要做一个响应式框架，涉及到监听器 <code>Observer</code>，依赖收集中心 <code>Dep</code>，订阅者 <code>Watcher</code>，解析器 <code>Compile</code></p>
-
-<ol>
-<li>监听器 <code>Observer</code> 负责劫持数据。</li>
-</ol>
-
-<blockquote>
-<p>需要递归把数据对象的所有属性都劫持成可追踪的</p>
-</blockquote>
-
-<ol>
-<li>依赖收集中心 <code>Dep</code> 负责管理订阅者，发布消息，是发布订阅中的发布者。</li>
-</ol>
-
-<blockquote>
-<p>不是所有的数据都是 View 用得上的，只需要派发有人订阅的数据即可。Dep 依赖收集中心就是来负责管理这些订阅者的。</p>
-</blockquote>
-
-<ol>
-<li>订阅者 <code>Watcher</code> 负责订阅自身关注的数据，可以收到属性的变化通知并执行相应的函数，从而更新视图，是发布订阅中的订阅者</li>
-</ol>
-
-<blockquote>
-<p>在订阅者初始化的时候，触发劫持对象的 getter，将自己注入到 Dep 中，表示需要订阅某个数据</p>
-</blockquote>
-
-<ol>
-<li>解析器 <code>Compile</code> 负责扫描和解析每个节点的相关指令，来识别哪些数据需要订阅，需要双向绑定</li>
-</ol>
-
-<blockquote>
-<p>解析器就是发布 - 订阅的桥梁，让订阅者和发布者之间产生联系。比如识别到 <code>{{}}</code> 就初始化一个 Watcher 监听它，并且由 Dep 管理这个 Watcher，篇幅有限，本文就不实现 Compile 了</p>
-</blockquote>
-
-<h4 id="toc_6">监听器 Observer</h4>
-
-<pre><code class="language-javascript">class Observer {
-  constructor() {
-    this.dep = new Dep()
-  }
-  observe(obj) {
-    if (!obj || typeof obj !== &#39;object&#39;) return obj
-    Reflect.ownKeys(obj).forEach(key =&gt; {
-      // 劫持对象的所有属性
-      this.reactiveFn(obj, key, obj[key])
-    })
-  }
-  reactiveFn(obj, key, val) {
-    // 递归劫持所有属性的子属性
-    this.observe(val)
-    Object.defineProperty(obj, key, {
-      enumerable: true,
-      configurable: true,
-      get: () =&gt; {
-        // 只有初始化 Watcher 时触发的 getter，才需要订阅
-        if (Dep.target) {
-          this.dep.addSub(Dep.target) // 订阅数据
-        }
-        return val
-      },
-      set: newV =&gt; {
-        // 通知 Watcher
-        if (val !== newV) {
-          val = newV
-          this.dep.notify()
-        }
-      }
-    })
-  }
-}
-</code></pre>
-
-<h4 id="toc_7">依赖收集中心 Dep</h4>
-
-<pre><code class="language-javascript">class Dep {
-  constructor() {
-    this.subs = []
-  }
-  // 把 watcher 塞入订阅者队列
-  addSub(sub) {
-    this.subs.push(sub)
-  }
-  // 通知所有的订阅者数据已变更
-  notify() {
-    this.subs.forEach(function(sub) {
-      sub.update()
-    })
-  }
-}
-</code></pre>
-
-<h4 id="toc_8">订阅者 Watcher</h4>
-
-<pre><code class="language-javascript">class Watcher {
-  constructor(vm, exp, cb) {
-    this.vm = vm
-    this.exp = exp
+class Observer {
+  constructor(cb) {
     this.cb = cb
-    this.value = this.watch() // 将自己添加到订阅器
   }
-  update() {
-    var value = this.vm.data[this.exp]
-    var oldVal = this.value
-    if (value !== oldVal) {
-      this.value = value
-      this.cb.call(this.vm, value, oldVal)
-    }
-  }
-  watch() {
-    Dep.target = this // 缓存自己
-    var value = this.vm.data[this.exp] // 强制执行监听器里的get函数
-    Dep.target = null // 释放自己
-    return value
-  }
-}
-</code></pre>
-
-<h4 id="toc_9">测试用例</h4>
-
-<pre><code class="language-javascript">// 这里省去解析器Compile
-class MyVue {
-  constructor(options) {
-    this.data = options.data()
-    const observer = new Observer()
-    observer.observe(this.data)
-    for (let key in this.data) {
-      console.log(&#39;初始化模板的值为&#39;, this.data[key])
-      new Watcher(this, key, function(value) {
-        console.log(&#39;值被修改为&#39;, value)
-      })
-    }
-    return this
+  update(...args) {
+    this.cb(...args)
   }
 }
 
-const vm = new MyVue({
-  data() {
-    return {
-      name: &#39;Evan&#39;,
-      age: 24
-    }
-  }
+const observer1 = new Observer(function (name) {
+  console.log(&#39;name1: &#39;, name)
 })
-setTimeout(function() {
-  vm.data.name = &#39;Fiona&#39;
-  vm.data.age = 26
-}, 2000)
+
+const observer2 = new Observer(function (name) {
+  console.log(&#39;name2: &#39;, name)
+})
+
+const subject1 = new Subject()
+subject1.add(observer1)
+subject1.add(observer2)
+
+subject1.notify(&#39;evan&#39;)
 </code></pre>
+
+<h4 id="toc_1">发布订阅模式</h4>
+
+<p>观察者模式和发布订阅模式最大的区别，就是发布订阅有事件中心，发布者和订阅者之间不直接互通，由事件中心来控制消息的传递。而观察者模式中观察者和被观察者（事件）之间是彼此感知的，相互耦合的。</p>
+
+<p>举个例子，观察者模式就像是面试官直接监考面试者做题，前端面试官监考前端面试者，后端面试官监考后端面试者。面试者做完了将告诉自己的面试官（观察者）</p>
+
+<p>而发布订阅模式，则是 hr 监考面试者做题，这里可能有前端面试者，有后端面试者，运维面试者等等。某个考生做完题，告诉 hr，然后 hr 去通知对应的面试官</p>
+
+<p>换句话说，<strong>观察者模式没有中间商赚差价</strong></p>
+
+<blockquote>
+<ul>
+<li>这两者之间是各有优劣的。</li>
+<li>发布订阅模式的优点是解耦，发布者和订阅者独立管理，开发使用的时候只需要关注消息中心即可，由消息中心收集 / 推送。缺点就是随着管理的消息越来越多，消息中心需要管理的队列就越来越庞大，而且多了一个中间层，性能也稍微差一些。就像上面的例子，当面试者很多的时候，hr 就会很忙了，处理并且通知各类面试官。除了忙之外效率也没有面试者和面试官直接沟通来的高</li>
+<li>观察者模式的优点是足够直接，最直接的响应式。当被观察者状态变更的时候，观察者马上就能知道。缺点是彼此耦合，不利于独立维护和管理，开发者需要同时维护观察者和被观察者两个实例。不够灵活自由。此外没有消息队列，意味着每一种观察类型都要构建其观察者和事件的实例。在前端中 addEventListener 其实就是一种观察者的应用</li>
+</ul>
+</blockquote>
 
 
     
@@ -383,13 +212,16 @@ setTimeout(function() {
         <div class="large-6 columns">
         <p class="text-left" style="padding:15px 0px;">
       
-          <a href="16021784313262.html" 
-          title="Previous Post: 常见 Vue 面试题">&laquo; 常见 Vue 面试题</a>
+          <a href="16023386965383.html" 
+          title="Previous Post: 手撕 Promise">&laquo; 手撕 Promise</a>
       
         </p>
         </div>
         <div class="large-6 columns">
       <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="16023385181073.html" 
+          title="Next Post: 强缓存与协商缓存">强缓存与协商缓存 &raquo;</a>
       
       </p>
         </div>

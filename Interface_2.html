@@ -3,12 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> Vue 响应式原理 - Evan的博客 </title>
-    
-    <meta name="keywords" content="vue 双向绑定 mvvm 设计模式 发布订阅" />
+    <title> 面试 - Evan的博客 </title>
      
-    <meta name="description" content="vue响应式原理" />
-    
     <link href="atom.xml" rel="alternate" title="Evan的博客" type="application/atom+xml" />
     
     <link rel="shortcut icon" href="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" type="image/png" />
@@ -96,318 +92,169 @@
   </body>
 </html>
  <script type="text/javascript">
-  $(function(){
-    $('#menu_item_index').addClass('is_active');
-  });
+	$(function(){
+		$('#menu_item_index').addClass('is_active');
+	});
 </script>
 <div class="row">
-  <div class="large-8 medium-8 columns">
-      <div class="markdown-body article-wrap">
-       <div class="article">
-          
-          <h1>Vue 响应式原理</h1>
-     
-        <div class="read-more clearfix">
-          <span class="date">2020/10/09</span>
+	<div class="large-8 medium-8 columns">
+		<div class="markdown-body home-categories">
+		
+			<div class="article">
+                <a class="clearlink" href="16022501324283.html">
+                
+                  <h1>白屏优化与性能指标</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	工作中接到一个需求，需要对首屏的性能数据做分析。于是调研了一遍 `performance API`，并且结合实际情况做了一些性能数据埋点的实践。
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2020/10/09</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
+          				  
+          					    <span class="posted-in"><a href='%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html'>工程实践</a></span>
+          				   
+                    
 
-          <span>posted in&nbsp;</span> 
-          
-              <span class="posted-in"><a href='Interface.html'>面试</a></span>
-           
-         
-          <span class="comments">
-            
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
 
-            
-          </span>
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="16021877148099.html">
+                
+                  <h1>常见 JS 面试题</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	总结了一些常见的 JS 面试题，分享给大家，也供自己复习的时候看。
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2020/10/09</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
+          				   
+                    
 
-        </div>
-      </div><!-- article -->
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
 
-      <div class="article-content">
-      <p>Vue 响应式基本是面试必问的内容，但很多同学对响应式的理解仍仅仅停留在 <code>Object.definedProperty</code> 的阶段，一旦面试官稍微问深一点点，就答不出个所以然了。实际上 Vue 的响应式远不止这个简单的数据劫持而已。这篇文章会由浅入深，夹带部分源码，来介绍整个响应式的过程。看完这篇文章，不但对各位看官的面试有帮助，也能帮助你了解发布订阅的设计模式。</p>
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="16021784313262.html">
+                
+                  <h1>常见 Vue 面试题</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	总结了一些常见的 Vue 面试题，分享给大家，也供自己复习的时候看。
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2020/10/09</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
+          				   
+                    
 
-<h2 id="toc_0">基础概念</h2>
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
 
-<p>Vue 的响应式也叫双向绑定，是 MVVM 中的核心，也就是视图 View 和模型 Model 的双向通信过程。Vue 实现双向通信，依赖的基础是<strong>数据劫持 + 发布订阅</strong></p>
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
+                <a class="clearlink" href="16021782785833.html">
+                
+                  <h1>Vue 响应式原理</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	Vue 响应式基本是面试必问的内容，但很多同学对响应式的理解仍仅仅停留在 `Object.definedProperty` 的阶段，一旦面试官稍微问深一点点，就答不出个所以然了。实际上 Vue 的响应式远不止这个简单的数据劫持而已。这篇文章会由浅入深，夹带部分源码，来介绍整个响应式的过程。看完这篇文章，不但对各位看官的面试有帮助，也能帮助你了解发布订阅的设计模式。
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2020/10/09</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='Interface.html'>面试</a></span>
+          				   
+                    
 
-<blockquote>
-<p>Model 的变更决定了 View 的渲染，View 的用户交互反向作用于 Model 的变更</p>
-</blockquote>
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
 
-<p>很多人对Vue响应式的理解只停留在数据劫持的阶段。其实要实现一个完整的双向绑定框架，除了对数据的劫持之外，还需要一个可靠的发布订阅机制</p>
-
-<h4 id="toc_1">数据劫持</h4>
-
-<p>所谓数据劫持，就是在<strong>读取 / 写入数据的时候触发一个钩子</strong>，在这个钩子中注入自己的逻辑，以达到一些特定的目的</p>
-
-<blockquote>
-<p>Vue 2.x 用的是 <code>Object.definedProperty</code> 来劫持数据，Vue 3.x 用的是 <code>Proxy</code> 来劫持数据</p>
-</blockquote>
-
-<pre><code class="language-javascript">// Object.definedProperty 数据劫持
-Object.defineProperty(obj, key, {
-  enumerable: true,
-  configurable: true,
-  get() {
-    console.log(&quot;getter&quot;) // 读取属性时劫持数据
-    return val
-  },
-  set(newV) {
-    console.log(&quot;setter&quot;) // 设置属性时劫持数据
-    val = newV
-  }
-})
-
-// Proxy 劫持数据
-new Proxy(obj, {
-  get(obj, key) {
-    console.log(&#39;getter&#39;)
-    return obj[key]
-  },
-  set(obj, key, newV) {
-    console.log(&#39;setter&#39;)
-    obj[key] = newV
-  }
-})
-</code></pre>
-
-<h4 id="toc_2">发布订阅</h4>
-
-<p>发布订阅是一种比较常见的设计模式。订阅者向发布者订阅某条消息，当消息发生变更时（或者满足某个条件 / 时机时），发布者向订阅者推送消息。</p>
-
-<pre><code class="language-javascript">class Dep {
-  constructor() {
-    this.eventQueueMap = new Map()
-  }
-  on(event, cb) {
-    this.eventQueueMap.has(event) ? this.eventQueueMap.get(event).push(cb) : this.eventQueueMap.set(event, [cb])
-  }
-  emit(event, ...args) {
-    const eventQueue = this.eventQueueMap.get(event)
-    if (!eventQueue) return false
-    eventQueue.forEach(cb =&gt; {
-      cb(args)
-    })
-  }
-  off(event) {
-    if (this.eventQueueMap.has(event)) this.eventQueueMap.delete(event)
-  }
-}
-
-const event = new Dep()
-
-// 订阅
-event.on(&#39;test&#39;, function(name) {
-  console.log(name)
-})
-
-// 发布
-event.emit(&#39;test&#39;, &#39;二哈&#39;, &#39;波斯猫&#39;)
-</code></pre>
-
-<h2 id="toc_3">实现一个响应式框架</h2>
-
-<h4 id="toc_4">先看一下Vue响应式的实现过程</h4>
-
-<p><img src="https://cn.vuejs.org/images/data.png" alt="image"/></p>
-
-<ol>
-<li>首先初始化 <code>data</code> 对象，劫持这堆东西，让他们变得可追踪</li>
-<li>初始化 <code>Watvher</code>，订阅自己关注的数据</li>
-<li>读取数据时触发 <code>getter</code>，实现 <code>Model -&gt; View</code> 的渲染</li>
-<li>设置数据时触发 <code>setter</code>，实现 <code>View -&gt; Model</code> 的变更，同时 <code>Model</code> 变更后 <code>Watcher</code> 重新渲染视图</li>
-</ol>
-
-<blockquote>
-<p>在整个响应式的过程中其实还涉及到 Dep 依赖收集和 Compile 解析器等功能，后面会慢慢讲解</p>
-</blockquote>
-
-<h4 id="toc_5">自己做一个</h4>
-
-<p>要做一个响应式框架，涉及到监听器 <code>Observer</code>，依赖收集中心 <code>Dep</code>，订阅者 <code>Watcher</code>，解析器 <code>Compile</code></p>
-
-<ol>
-<li>监听器 <code>Observer</code> 负责劫持数据。</li>
-</ol>
-
-<blockquote>
-<p>需要递归把数据对象的所有属性都劫持成可追踪的</p>
-</blockquote>
-
-<ol>
-<li>依赖收集中心 <code>Dep</code> 负责管理订阅者，发布消息，是发布订阅中的发布者。</li>
-</ol>
-
-<blockquote>
-<p>不是所有的数据都是 View 用得上的，只需要派发有人订阅的数据即可。Dep 依赖收集中心就是来负责管理这些订阅者的。</p>
-</blockquote>
-
-<ol>
-<li>订阅者 <code>Watcher</code> 负责订阅自身关注的数据，可以收到属性的变化通知并执行相应的函数，从而更新视图，是发布订阅中的订阅者</li>
-</ol>
-
-<blockquote>
-<p>在订阅者初始化的时候，触发劫持对象的 getter，将自己注入到 Dep 中，表示需要订阅某个数据</p>
-</blockquote>
-
-<ol>
-<li>解析器 <code>Compile</code> 负责扫描和解析每个节点的相关指令，来识别哪些数据需要订阅，需要双向绑定</li>
-</ol>
-
-<blockquote>
-<p>解析器就是发布 - 订阅的桥梁，让订阅者和发布者之间产生联系。比如识别到 <code>{{}}</code> 就初始化一个 Watcher 监听它，并且由 Dep 管理这个 Watcher，篇幅有限，本文就不实现 Compile 了</p>
-</blockquote>
-
-<h4 id="toc_6">监听器 Observer</h4>
-
-<pre><code class="language-javascript">class Observer {
-  constructor() {
-    this.dep = new Dep()
-  }
-  observe(obj) {
-    if (!obj || typeof obj !== &#39;object&#39;) return obj
-    Reflect.ownKeys(obj).forEach(key =&gt; {
-      // 劫持对象的所有属性
-      this.reactiveFn(obj, key, obj[key])
-    })
-  }
-  reactiveFn(obj, key, val) {
-    // 递归劫持所有属性的子属性
-    this.observe(val)
-    Object.defineProperty(obj, key, {
-      enumerable: true,
-      configurable: true,
-      get: () =&gt; {
-        // 只有初始化 Watcher 时触发的 getter，才需要订阅
-        if (Dep.target) {
-          this.dep.addSub(Dep.target) // 订阅数据
-        }
-        return val
-      },
-      set: newV =&gt; {
-        // 通知 Watcher
-        if (val !== newV) {
-          val = newV
-          this.dep.notify()
-        }
-      }
-    })
-  }
-}
-</code></pre>
-
-<h4 id="toc_7">依赖收集中心 Dep</h4>
-
-<pre><code class="language-javascript">class Dep {
-  constructor() {
-    this.subs = []
-  }
-  // 把 watcher 塞入订阅者队列
-  addSub(sub) {
-    this.subs.push(sub)
-  }
-  // 通知所有的订阅者数据已变更
-  notify() {
-    this.subs.forEach(function(sub) {
-      sub.update()
-    })
-  }
-}
-</code></pre>
-
-<h4 id="toc_8">订阅者 Watcher</h4>
-
-<pre><code class="language-javascript">class Watcher {
-  constructor(vm, exp, cb) {
-    this.vm = vm
-    this.exp = exp
-    this.cb = cb
-    this.value = this.watch() // 将自己添加到订阅器
-  }
-  update() {
-    var value = this.vm.data[this.exp]
-    var oldVal = this.value
-    if (value !== oldVal) {
-      this.value = value
-      this.cb.call(this.vm, value, oldVal)
-    }
-  }
-  watch() {
-    Dep.target = this // 缓存自己
-    var value = this.vm.data[this.exp] // 强制执行监听器里的get函数
-    Dep.target = null // 释放自己
-    return value
-  }
-}
-</code></pre>
-
-<h4 id="toc_9">测试用例</h4>
-
-<pre><code class="language-javascript">// 这里省去解析器Compile
-class MyVue {
-  constructor(options) {
-    this.data = options.data()
-    const observer = new Observer()
-    observer.observe(this.data)
-    for (let key in this.data) {
-      console.log(&#39;初始化模板的值为&#39;, this.data[key])
-      new Watcher(this, key, function(value) {
-        console.log(&#39;值被修改为&#39;, value)
-      })
-    }
-    return this
-  }
-}
-
-const vm = new MyVue({
-  data() {
-    return {
-      name: &#39;Evan&#39;,
-      age: 24
-    }
-  }
-})
-setTimeout(function() {
-  vm.data.name = &#39;Fiona&#39;
-  vm.data.age = 26
-}, 2000)
-</code></pre>
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+              
 
 
-    
-
-      </div>
-
-      <div class="row">
-        <div class="large-6 columns">
-        <p class="text-left" style="padding:15px 0px;">
-      
-          <a href="16021784313262.html" 
-          title="Previous Post: 常见 Vue 面试题">&laquo; 常见 Vue 面试题</a>
-      
-        </p>
-        </div>
-        <div class="large-6 columns">
-      <p class="text-right" style="padding:15px 0px;">
-      
-      </p>
-        </div>
-      </div>
-      <div class="comments-wrap">
-        <div class="share-comments">
-          
-
-          
-
-          
-        </div>
-      </div>
-    </div><!-- article-wrap -->
-  </div><!-- large 8 -->
-
-
-
+			<div class="row">
+			  <div class="large-6 columns">
+			  <p class="text-left" style="padding-top:25px;">
+			   <a href="Interface_1.html">&laquo; Prev Page</a>  
+			  </p>
+			  </div>
+			  <div class="large-6 columns">
+			<p class="text-right" style="padding-top:25px;">
+			
+			</p>
+			  </div>
+			</div>
+		</div>
+	</div><!-- large 8 -->
 
  <div class="large-4 medium-4 columns">
   <div class="hide-for-small">
@@ -569,8 +416,6 @@ Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
 
 
 
-
-<script src="asset/prism.js"></script>
 
 
 <style type="text/css">

@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> 面试常见性能问题 - Evan的博客 </title>
+    
+    <meta name="keywords" content="性能优化 前端面试" />
+     
+    <meta name="description" content="常见性能面试题" />
+    
+    <link href="atom.xml" rel="alternate" title="Evan的博客" type="application/atom+xml" />
+    
+    <link rel="shortcut icon" href="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" type="image/png" />
+    
+
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+
+    <script type="text/javascript">
+      function before_search() {
+        var searchVal = 'site:evanoyam.github.io ' + document.getElementById('search_input').value
+        document.getElementById('search_q').value = searchVal
+        return true
+      }
+    </script>
+  </head>
+  <body class="antialiased hide-extras">
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+        <nav class="top-bar docs-bar hide-for-small" data-topbar>
+          <section class="top-bar-section">
+            <div class="row">
+              <div style="position: relative; width: 100%">
+                <div style="position: absolute; width: 100%">
+                  <ul id="main-menu" class="left">
+                    
+                    <li id=""><a target="self" href="index.html">Home</a></li>
+                    
+                    <li id=""><a target="_self" href="archives.html">Archives</a></li>
+                    
+                  </ul>
+
+                  <ul class="right" id="search-wrap">
+                    <li>
+                      <form
+                        target="_blank"
+                        onsubmit="return before_search();"
+                        action="https://google.com/search"
+                        method="get"
+                      >
+                        <input type="hidden" id="search_q" name="q" value="" />
+                        <input tabindex="1" type="search" id="search_input" placeholder="Search" />
+                      </form>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </nav>
+
+        <nav class="tab-bar show-for-small">
+          <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+            <span> &nbsp; Evan的博客</span>
+          </a>
+        </nav>
+
+        <aside class="left-off-canvas-menu">
+          <ul class="off-canvas-list">
+            
+            <li><a target="self" href="index.html">Home</a></li>
+            
+            <li><a target="_self" href="archives.html">Archives</a></li>
+            
+
+            <li><label>Categories</label></li>
+
+            
+            <li><a href="Interface.html">面试</a></li>
+            
+            <li><a href="%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html">开发笔记</a></li>
+            
+            <li><a href="%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html">工程实践</a></li>
+            
+          </ul>
+        </aside>
+
+        <a class="exit-off-canvas" href="#"></a>
+
+        <section id="main-content" role="main" class="scroll-container"></section>
+      </div>
+    </div>
+  </body>
+</html>
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>面试常见性能问题</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2020/10/10</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='Interface.html'>面试</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>总结了一些常见的性能相关的面试题，分享给大家，也供自己复习的时候看。</p>
+
+<p>其他类型的常见面试题：</p>
+
+<ul>
+<li><a href="16023387379097.html">常见 HTML 和 CSS 面试题</a></li>
+<li><a href="16021877148099.html">常见 JS 面试题</a></li>
+<li><a href="16021784313262.html">常见 Vue 面试题</a></li>
+<li><a href="16023383568771.html">常见性能相关面试题</a></li>
+<li><a href="16023387735398.html">常见大前端相关面试题</a></li>
+</ul>
+
+<h4 id="toc_0">1. 浏览器的渲染过程</h4>
+
+<p>这里不讨论网络请求，只讨论拿到 html 之后</p>
+
+<ul>
+<li>首先并行请求 css 和 js</li>
+</ul>
+
+<blockquote>
+<p>js 会阻塞 dom 解析，因为 js 能操作 dom，所以在请求 js 的时候 dom 是停止解析的，因为浏览器不知道这个未知的 js 会对 dom 干啥</p>
+</blockquote>
+
+<ul>
+<li>dom 树解析完毕，结合 css 树生成渲染树</li>
+<li>在页面上绘制，如果涉及到动画或者需要 GPU 引擎的，还会开启 GPU 加速</li>
+<li>最后再检查有没有不断触发渲染的元素（比如 video，动画等）有的话就扔进复合层（合成层）中单独处理</li>
+</ul>
+
+<h4 id="toc_1">2. DOM 树 和 渲染树 的区别</h4>
+
+<p>DOM 树就是 html 节点构成的一颗树，渲染树是 DOM 树加上 CSS 树的样式属性，最终合并的一颗带有样式属性的节点树</p>
+
+<h4 id="toc_2">3. 重绘和回流的区别和关系</h4>
+
+<p><img src="https://qiniu.evanweb.cn/1591067102313.jpg" alt="image"/><br/>
+浏览器渲染的过程是，js 先控制 dom 的属性，如果 dom 的布局发生改变，则触发回流（重排）如果是非布局相关的样式变动，则触发重绘，然后开始在页面上绘制相关的元素，最后如果某个元素频繁刷新（如 video 和动画元素）就会把它扔进合成层，独立一个新的层来让他处理</p>
+
+<ol>
+<li>只要是布局相关的属性被访问，或者布局被修改，就会产生回流</li>
+<li>颜色和其他非布局样式相关的属性被修改则只是重绘</li>
+<li>如果有频繁渲染的元素就会被扔进合成层独立出来</li>
+<li>重绘不一定会回流，回流一定会重绘</li>
+</ol>
+
+<h4 id="toc_3">4. 如何最小化重绘 (repaint) 和回流(reflow)</h4>
+
+<ol>
+<li>让元素脱离文档流再操作（display:none），操作完再重新塞到 dom 树中</li>
+<li>减少操作 dom，读取布局相关属性的时候先缓存一个值，在 js 层面操作而不要频繁读取</li>
+<li>利用动画属性开启 GPU 硬件加速</li>
+</ol>
+
+<h4 id="toc_4">5. script 的位置是否会影响首屏显示时间？</h4>
+
+<p>script 标签如果不加 defer/async 属性，是会阻塞 dom 生成的，如果 script 在 dom 节点之前，那在脚本下载且执行完之前，html 是不会继续解析的，这样会影响首屏</p>
+
+<h4 id="toc_5">6. 事件的三个阶段以及事件的执行顺序和事件的执行次数？</h4>
+
+<p>事件有捕获，目标，冒泡三个阶段，先是捕获阶段，到目标阶段，再到冒泡阶段</p>
+
+<p>addEventListener 的第三个参数就是用来控制捕获还是冒泡阶段执行回调，true 是捕获，false 是冒泡，默认 false</p>
+
+<h4 id="toc_6">7. 什么是事件代理（委托）</h4>
+
+<p>由于事件都有冒泡机制，所以可以把触发的回调绑定到目标元素的父元素上，利用事件冒泡来触发回调，再通过 target 来确定实际触发的元素是哪个</p>
+
+<pre><code class="language-javascript">function colorChange(e) {
+  var e = e || window.event // 兼容性的处理
+  if (e.target.nodeName.toLowerCase() === &#39;li&#39;) {
+    box.innerHTML = &#39;该颜色为&#39; + e.target.innerHTML
+  }
+}
+color_list.addEventListener(&#39;click&#39;, colorChange, false)
+</code></pre>
+
+<blockquote>
+<p><code>e.target</code> 和 <code>e.currentTarget</code> 是不同的，前者是指事件的发出者（目标元素），后者是指事件的监听者。如上述代码，target 就是点击的元素（li），currentTarge 就是事件监听绑定的元素（ul）</p>
+</blockquote>
+
+<h4 id="toc_7">8. W3C 事件的 target 与 currentTarget 的区别？</h4>
+
+<p><code>e.target</code> 是指事件的发出者（目标元素），<code>e.currentTarget</code> 是指事件的监听者。</p>
+
+<h4 id="toc_8">9. pageX,clientX,screenX,offsetX 的区别是什么？</h4>
+
+<p>这些都是事件中目标元素的位置属性</p>
+
+<ul>
+<li>pageX 是距离 document 顶点的 x 轴距离，相对的是整个文档流</li>
+</ul>
+
+<blockquote>
+<p>IE 下无效</p>
+</blockquote>
+
+<ul>
+<li>clientX 是距离可视视窗（浏览器）顶点的 x 轴距离</li>
+<li>screenX 是距离屏幕定点 x 轴的距离，与浏览器窗口大小无关</li>
+<li>offsetX 是距离当前元素顶点的 x 周距离</li>
+</ul>
+
+<blockquote>
+<p>Firefox 无效，用 layerX</p>
+</blockquote>
+
+<h4 id="toc_9">10. script 标签中的 defer 和 async 有什么作用</h4>
+
+<p>首先需要明确一点的是，js 执行过程中 dom 渲染是必须暂停的。因为并行渲染 dom 和执行 js 的结果是不可预估的，天知道 js 里干了什么</p>
+
+<p>defer 也好 async 也好，他们只是异步加载 js 并不是执行 js。他两都是在 dom 渲染的时候同时去加载 js</p>
+
+<p>但区别在于 defer 是等 dom 渲染完再执行 js，而 async 是 js 下载完了就停止 dom 解析，执行完 js 再继续解析 dom</p>
+
+<p><img src="https://qiniu.evanweb.cn/WechatIMG1.png" alt="image"/></p>
+
+<blockquote>
+<ul>
+<li>defer 是在 dom 解析完，<code>DOMContentLoaded</code> 事件触发之前完成，执行的顺序按加载的顺序</li>
+<li>async 是完全乱序的，反正什么时候下载完脚本，他紧跟着就执行。实际上 async 用处并不大甚至用不好可能还会有些负面影响</li>
+</ul>
+</blockquote>
+
+<h4 id="toc_10">11. 页面编码和被请求的资源编码如果不一致（乱码）如何处理？</h4>
+
+<p>请求和响应头加上 UTF-8</p>
+
+<h4 id="toc_11">12. 事件绑定有哪些不同方法，有什么不同，哪种好</h4>
+
+<ol>
+<li>内联绑定</li>
+<li>script 绑定</li>
+<li>addEventListener</li>
+</ol>
+
+<p>最好用 addEventListener，它不但代码上解耦方便复用，而且它能控制捕获还是冒泡执行。另外它是可以多次绑定同一个回调的</p>
+
+<h4 id="toc_12">13. 如何阻止默认和冒泡事件</h4>
+
+<ol>
+<li>阻止默认事件</li>
+</ol>
+
+<p>w3c 标准： <code>e.preventDefault()</code>，IE 标准： <code>e.returnValue = false</code></p>
+
+<ol>
+<li>阻止冒泡</li>
+</ol>
+
+<p>w3c 标准： <code>e.stopPopagation()</code>，IE 标准： <code>e.cancelBubble = true</code></p>
+
+<ol>
+<li>vue 可以用 <code>.prevent</code> 事件修饰符来禁止默认事件，用 <code>.stop</code> 来阻止冒泡</li>
+</ol>
+
+<h4 id="toc_13">14. 介绍一下 websocket，和长轮询有什么不同</h4>
+
+<p><strong>长连接</strong></p>
+
+<p>长连接是相对短连接而言的，短连接就是每一个 http 请求都只用一个 tcp/ip，请求结束 tcp/ip 就挥手结束</p>
+
+<p>而长连接是请求结束后，保持当前 tcp/ip 继续连接，这样就能在一个 tcp/ip 中持续发送数据包（需要注意 http 是断开的，tcp 连接和 http 连接没有必然联系，一个在应用层，一个在传输层）</p>
+
+<p><strong>轮询</strong></p>
+
+<p>轮询就是客户端不断发送请求给服务端，服务端不断响应一个个请求已达到类似保活的能力。其中又分为短轮询和长轮询</p>
+
+<p>短轮询就是客户端每次发送请求给服务端，服务端都立马响应</p>
+
+<p>长轮询就是客户端发送请求给服务端之后，服务端等待业务处理，有消息的时候再响应。如果一直没有消息，就达到设置好的超时时间后响应</p>
+
+<p><strong>websocket</strong></p>
+
+<p>websocket 是一种双工通信的协议，是对 tcp/ip 的抽象，封装了一层 api 提供给上层应用，也就是说他是应用层的协议。websocket 是一种双向通信的方案</p>
+
+<ol>
+<li>websocket 建立在 tcp 之上，并且握手阶段采用 http 协议</li>
+<li>没有同源限制，客户端可以与任意服务端通信</li>
+<li>有 ws 和 wss 两种连接方式，类似与 http 与 https 的关系，wss 就是在 tcp/ip 和 ws 之间加了 TLS 证书认证</li>
+<li>数据传输阶段使用 frame（数据帧）进行通信，frame 可以选择文本数据或二进制数据传输</li>
+</ol>
+
+<p>出于安全考虑和避免网络截获，客户端发送的数据帧必须进行掩码处理后才能发送到服务器，不论是否是在 TLS 安全协议上都要进行掩码处理</p>
+
+<blockquote>
+<p>上述三者都能实现服务端主动推送，客户端服务端保活，但区别就在于：</p>
+
+<ol>
+<li>轮询是客户端主导的，服务端被动响应，只不过响应的频率高就能简单理解成“服务端主动推送了”</li>
+<li>长连接能实现真正的服务端推送，但是他是建立在应用层的 http 上的</li>
+<li>websocket 是 tcp/ip 的上层抽象，他的服务端推送和保活都是基于 tcp/ip 封装的结果</li>
+</ol>
+</blockquote>
+
+<p><strong>注意：长连接和 websocket 都能服务端主动推送，但是本质上是有区别的</strong></p>
+
+<blockquote>
+<ul>
+<li>长连接是客户端发起一个 http 请求后，服务端保持请求状态而不响应，直到需要推送的时候再响应。因为 http 是一个 req 和 res 相对应的连接，所以每次服务端响应之后，http 断开，这时候客户端再发一个 http 过来，服务端保持请求状态。换句话说如果客户端不发 http 过来，就算是 tcp 连着，服务端推送消息客户端也收不到，因为不知道是客户端是谁</li>
+<li>而 websocket 不是 http 协议，他是基于传输层 tcp/ip 的上层封装，从传输层实现的连接保持，服务端能推送且客户端能接收</li>
+</ul>
+</blockquote>
+
+<h4 id="toc_14">15. 浏览器有哪些进程，这些进程又有哪些线程</h4>
+
+<p>对操作系统来说，大多数任务都是一个进程，但是浏览器是个例外，这是个多进程应用</p>
+
+<p>以 Chrome 举例，有如下进程:</p>
+
+<ol>
+<li><p>主进程 Browser Process</p>
+<blockquote>
+<p>负责浏览器界面的显示与交互。各个页面的管理, 创建和销毁其他进程。网络的资源管理、下载等。</p>
+</blockquote></li>
+<li><p>插件进程 Plugin Process</p>
+<blockquote>
+<p>Chrome 插件所用的进程</p>
+</blockquote></li>
+<li><p>GPU 进程 GPU Process</p>
+<blockquote>
+<p>GPU 绘制的进程</p>
+</blockquote></li>
+<li><p>渲染进程 Renderer Process</p>
+<blockquote>
+<p>前端最应该关注的进程，包括 5 个线程:</p>
+<ul>
+<li>渲染线程，与 js 线程互斥</li>
+<li>js 线程，与渲染线程互斥</li>
+<li>事件处理线程，收集异步回调，触发时塞到 js 线程的处理队列</li>
+<li>定时器线程，类似事件处理线程，触发时将定时器塞到 js 线程的处理队列</li>
+<li>异步 http 线程，当 ajax 状态发生改变时，就把回调塞到 js 线程的处理队列</li>
+</ul>
+</blockquote></li>
+</ol>
+
+<p>其中 js 线程和渲染线程是互斥的，因为 js 线程能修改 dom 节点，如果同时渲染和修改节点就会出问题</p>
+
+<h4 id="toc_15">16. 为什么 JavaScript 引擎是单线程，JavaScript 可以多线程吗</h4>
+
+<p>js 最初的设计是为了 web 动态交互的，之所以设计成单线程，是因为如果是多线程，js 操作 dom 的时候还要考虑有没有其他线程在处理，这就涉及到上锁的操作</p>
+
+<p>在浏览器环境中，w3c 提出了新的规范 web worker，他是一个独立的线程，但是他又不可以操作 dom（原因和 js 为什么是单线程类似）他可以做一些比如埋点等非 dom 操作的事情</p>
+
+<p>但是在 node 环境中，因为是个服务端环境，也不涉及什么 dom，所以 node 的多线程就显得有点用了，虽然 node 有 libuv 这种非阻塞的库</p>
+
+<p>但是如果是 cpu 密集操作，高强度运算（比如机器学习之类的）需要等待较长的同步时间，单线程就蛋疼了，他会阻塞掉后续的代码。所以 node 提出了多线程 worker_threads</p>
+
+<h4 id="toc_16">17. JWT 和 session 有什么不同，JWT 解决了什么问题</h4>
+
+<p>JWT 是 json web token 的缩写，它包含三部分，头部 header，负载 payload，签名 signature。</p>
+
+<p>传统 session 是服务器开启一个会话，保存用户信息或其他相关信息，然后把 session id 返回给前端，前端写入 cookies 中。每次请求携带 session id 来判断用户身份</p>
+
+<p>JWT 是服务器不保存任何状态（无状态），服务器签发一个包含过期时间的，加密的 json 给前端，前端每次请求在请求头的 Authorization 中加上 token，服务器判断是否过期即可</p>
+
+<p>JWT 最大的优势就是解决了集群的问题，如果是 session，分流后不同机器还要保证能读到同一份 session，比如 session 持久化写到某个地方。JWT 就不需要了，反正服务器是无状态的，利于扩展。并且合理利用 JWT 可以减少服务器对数据库的读写</p>
+
+<p>JWT 也有缺点，一旦签发之后，是不能中断 token 的有效期的，因为过期时间是在 token 内的。JWT 虽然有 signature 签名保证数据不被串改，token 本质上也是对外暴露的。所以生成 token 之后最好还是加密一下</p>
+
+<h4 id="toc_17">18. 什么是 XSS 攻击，如何防护</h4>
+
+<p>XSS 就是跨站脚本攻击，常见的有三种：反射型，持久型，dom 型</p>
+
+<p>三种类型：</p>
+
+<ol>
+<li>反射型就是恶意脚本不写入数据库，仅仅是到后端业务逻辑，返回前端</li>
+<li>持久型是写入数据库的，每次查询接口读库都会触发这段恶意代码</li>
+<li>dom 型简单来说就是前端代码不严谨导致的，把不可信的字符当作 js 脚本来解析了。比如 innerHTML，vue 中的 v-html，都会有被 xss 的风险</li>
+</ol>
+
+<p>防范：</p>
+
+<ol>
+<li>防范 xss 最关键就是不要把不可信的文本当作 js 去执行，所以转译是最有效的一种办法。转译需要前后端都做配合，后端写库或者收到响应的时候把敏感字符转码，前端也要避免执行到恶意脚本<br/>
+&gt; 这里不建议自己去做 xss，要选择市面上成熟的 xss 预防方案，因为自己做 xss 很有可能某个细节疏忽导致出现漏洞，比如 css 请求一个图片能被 xss，网址 url 拼接参数也能被 xss，事件中也可能被注入等等...</li>
+<li>cookies 采用 http-only 的头，不允许 js 读取</li>
+<li>控制内容长度，脚本一般较长，控制内容长度也能起到一定的效果</li>
+<li>开启 CSP 等</li>
+</ol>
+
+<h4 id="toc_18">19. 什么是 CSRF 攻击，如何防护</h4>
+
+<p>CSRF 是跨站伪造请求:</p>
+
+<p>现在有正规网站 A，恶意网站 B，正常用户 C</p>
+
+<ol>
+<li>正常用户 C 访问正常网站 A，登陆</li>
+<li>A 产生 C 的 cookies，并且 A 的服务器写入 session</li>
+<li>C 被诱导去恶意网站 B（比如迁入 a 的广告等）</li>
+<li>此时 B 拿到 C 的 cookies，伪造一个请求（比如通过好友申请，付款，修改个人信息等，反正就是伪造一个请求）以 C 的身份发起请求</li>
+<li>服务端认证 cookies 通过，恶意请求成功</li>
+</ol>
+
+<p>如何防护？</p>
+
+<ol>
+<li>验证 Referer<br/>
+&gt; 在请求头中有个 Referer 字段，表示请求者的来源地址。可以验证这个字段，如果不是自己的网站，就拒绝请求</li>
+<li>表单提交的时候需要验证码<br/>
+&gt; 这样就算伪造了请求，也不知道验证码是什么（不在原网页上了，看不到验证码）也就无法请求成功</li>
+<li>用户的验证信息不在 cookies 中，而是在请求头或者携带 token 参数去请求</li>
+</ol>
+
+<h4 id="toc_19">20. 网页验证码是干嘛的，是为了解决什么安全问题</h4>
+
+<ol>
+<li>防止机器人刷脚本</li>
+<li>起到一些防止 CSRF 攻击的效果</li>
+<li>降低高并发请求频率</li>
+</ol>
+
+<h4 id="toc_20">21. 什么是强缓存，什么是协商缓存</h4>
+
+<p><strong>强缓存:</strong></p>
+
+<p>强缓存是是请求未到达服务器的缓存，一般来自硬盘，内存等，http 状态码是 200</p>
+
+<p>强缓存有两种类型，一种响应头为 expired，另一种响应头带有 cache-control</p>
+
+<p>expired 是一个绝对日期，指的是资源生效的最后日期。但是会收客户端影响，比如客户端把本地时间改了，就能让缓存失效</p>
+
+<p>cache-control 是一种新的强缓存控制策略，是一个相对时间，指的是缓存生效的期限（比如 30 天）这样缓存就不受客户端因素的影响。此外 cache-control 还能设置成 no-store（不缓存）no-cache（不强缓存，走协商缓存）</p>
+
+<p><strong>协商缓存:</strong></p>
+
+<p>协商缓存是发起了 http 请求，和服务器最新资源比对之后，如果资源未更新就返回缓存资源，http 状态码是 304。与强缓存不一样的是协商缓存需要发起请求和服务器比对资源状态</p>
+
+<p>协商缓存也有两种，一种是通过时间来比对，响应头是 Last-motify-since，指的是文件最新更改的时间。如果请求头所带的时间和服务器最新资源的时间匹配则返回缓存，不匹配则返回新的资源</p>
+
+<p>另一种是通过 Etag 在判断资源是否更新，这种精度更大，因为时间比对如果是毫秒级的更新那么缓存可能存在误差，而且不知道新旧文件本质内容是不是一样的。Etag 是判断两个文件的 hash 是否一样，如果 hash 一样就意味着文件没有变更，返回缓存，如果 hash 不同，则返回最新资源</p>
+
+<h4 id="toc_21">22. 什么是 ajax，ajax 的作用是什么</h4>
+
+<p>ajax 就是发起网络请求，动态刷新页面</p>
+
+<h4 id="toc_22">23. 如何创建一个 Ajax</h4>
+
+<pre><code class="language-javascript">const sendAjax = (method, url) =&gt; {return new Promise((resolve, reject) =&gt; {const mAjax = new XMLHttpRequest()
+    mAjax.open(method, url, true)
+    mAjax.setRequestHeader(&#39;Content-type&#39;, &#39;text/html&#39;)
+    mAjax.send()mAjax.onreadystatechange = function() {if (readyState == 4 &amp;&amp; (status == 200 || status == 304)) {resolve()
+      } else {reject()
+      }
+    }
+  })
+}
+</code></pre>
+
+<h4 id="toc_23">24. json，jsonp，xml 的区别</h4>
+
+<p>json 是一种文件传输格式，轻量级，高效，也常做配置文件</p>
+
+<p>jsonp 简单来说就是一个脚本（script 标签），回调回来是一个 json。常用来跨域，因为 script 标签不受同源策略影响</p>
+
+<p>xml 使用描述文件，更繁琐也更全面</p>
+
+<h4 id="toc_24">25. 什么情况下会造成跨域</h4>
+
+<ol>
+<li>不同协议，如 http 和 https</li>
+<li>不同域名，子域名和主域名不同都会跨域</li>
+<li>不同端口</li>
+</ol>
+
+<h4 id="toc_25">26. 跨域请求解决方案有什么</h4>
+
+<ol>
+<li>jsonp。利用 script 标签不受同源策略控制的特点，script 请求一个脚本，这个脚本回调返回 json 数据即可</li>
+<li>响应头允许跨域，比如 koa2 的 koa2-cors 包，ng 允许跨域</li>
+</ol>
+
+<h4 id="toc_26">27. http 常见的状态码有哪些</h4>
+
+<p><strong>1xx:</strong></p>
+
+<ol>
+<li>101 升级请求，如升级成 websocket</li>
+</ol>
+
+<p><strong>2xx:</strong></p>
+
+<ol>
+<li>200 请求成功</li>
+<li>204 请求成功，服务器不需要返回内容</li>
+</ol>
+
+<p><strong>3xx:</strong></p>
+
+<ol>
+<li>301 永久重定向</li>
+<li>302 临时重定向</li>
+<li>303 重定向且 post 自动改成 get</li>
+<li>304 资源未变更</li>
+<li>307 重定向但是 post 不会改成 get</li>
+</ol>
+
+<p><strong>4xx:</strong></p>
+
+<ol>
+<li>400 客户端错误请求，服务端不能或无法响应。如参数错误等</li>
+<li>401 身份未认证</li>
+<li>403 禁止访问</li>
+<li>404 找不到资源</li>
+</ol>
+
+<p><strong>5xx:</strong></p>
+
+<ol>
+<li>500 服务器错误</li>
+<li>503 服务器超载</li>
+</ol>
+
+<h4 id="toc_27">28. http 和 https 有什么区别，哪个更安全，为什么</h4>
+
+<p>https 是在应用层（http）和传输层（tcp）之间加多了 TLS/SSL 认证，加密传输保证数据安全性，更安全。具体看 <code>问题 48</code></p>
+
+<h4 id="toc_28">29. 发起 http 请求之后，经历了什么</h4>
+
+<ol>
+<li>解析 dns</li>
+<li>三次握手建立 TCP/IP 连接</li>
+<li>如果有 tls/ssl，再建立 tls 连接</li>
+<li>如果有 websocket，再升级协议</li>
+<li>查看是否有缓存，返回 200 或 304</li>
+<li>请求 css，js，图片等静态资源</li>
+<li>渲染树</li>
+<li>合成层</li>
+</ol>
+
+<h4 id="toc_29">30. 防抖和节流有什么差别</h4>
+
+<p>防抖顾名思义防止抖动，也是说在一定时间内多次触发就会被认为是“抖动导致的误触”，防抖的解决方案是取消这个事件，不去执行，直到两个事件之间间隔大于约定的时间间隔，才认为这不是“抖动”误触</p>
+
+<p>节流是指频繁触发的时候也不会取消掉你的动作，只是减缓触发的频率，比如规定两个事件之间最小执行间隔是多少 ms</p>
+
+<p>以频繁点击一个按钮为例，时间单位都是 100ms，用户疯狂点击 1s。防抖的策略就是，如果两次点击的时间间隔小于 100ms，那就取消掉事件，用户疯狂点击 1s 其实只会触发一次事件（都被取消了）。截流的策略是每间 100ms 才执行一次事件，不管用户点的多疯狂</p>
+
+<h4 id="toc_30">31. 手写防抖</h4>
+
+<pre><code class="language-javascript">const debounce = (func, wait, immediate, ...args) =&gt; {
+  let timeout = null
+  return function() {
+    const ctx = this
+    if (timeout) clearTimeout(timeout)
+    if (immediate) {
+      const callNow = !timeout
+      timeout = setTimeout(() =&gt; {timeout = null}, wait)if (callNow) func.apply(ctx, args)
+    } else {timeout = setTimeout(() =&gt; {func.apply(ctx, args)
+      }, wait)}}
+}
+</code></pre>
+
+<h4 id="toc_31">32. 手写节流</h4>
+
+<pre><code class="language-javascript">const throttle = (func, wait, immediate, ...args) =&gt; {
+  if (immediate) {
+    let pre = 0
+    return function () {
+      const now = +new Date()
+      if (now - pre &gt; wait) {
+        func.apply(this, args)
+        pre = now
+      }
+    }
+  } else {
+    let timeout = null
+    return function () {
+      const ctx = this
+      if (!timeout) {
+        timeout = setTimeout(() =&gt; {
+          func.apply(ctx, args)
+          timeout = null
+        }, wait)
+      }
+    }
+  }
+}
+</code></pre>
+
+<h4 id="toc_32">33. 解释一下 CDN 原理</h4>
+
+<p>现在的传输模型大多都是 TCP/IP 四层模型，这个模型在实际应用中会有一些限制，导致客户端和服务端之间的数据传输会有延迟。</p>
+
+<p>比如物理层上，光速是有限的，传输再快也会受到实际距离位置的影响，而且信道是有限，也不可能无限超大带宽传输。协议上也会有握手过程，网络波动，甚至 http 的丢包、拥塞等。</p>
+
+<p>所以就有了 CDN 的概念，在多个不同地区分布多个节点，客户端访问的是距离自己最近的 CDN 节点，而不是访问实际服务器，因为服务器可能里客户端很远。</p>
+
+<p>然后 CDN 和客户端之间建立一套回源机制，CDN 缓存客户端的资源，如果命中缓存就从 CDN 返回，没有命中缓存（实际服务端资源更新）就回源刷新最新资源。此外 CDN 内部还会有 TCP 的优化，静态资源优化等。</p>
+
+<p>CDN 的原理就是接管 DNS 的解析，CDN 负载均衡的服务器判断用户距离哪里近，DNS 就解析到哪个 CDN 服务上。</p>
+
+<h4 id="toc_33">34. 常见的浏览器缓存及其优先级</h4>
+
+<ol>
+<li>Memory Cache / Dist Cache</li>
+<li>Service Worker Cache</li>
+<li>HTTP Cache</li>
+<li>Push Cache<br/>
+&gt; Push Cache 是 http2 中 Server Push 的能力。服务器在接到客户端请求时，http2 中允许主动推送下一个需要的资源给客户端，即 Serbver Push。但是有的时候可能 Push 过一次了，没必要浪费流量继续 Push 一样的东西给客户端，这时候 Push Cache 就生效了，如果存在 Push Cache，那就不会重复 Server Push</li>
+</ol>
+
+<h4 id="toc_34">35. 什么是中间人攻击，https 可以完全抵御中间人攻击吗</h4>
+
+<p>中间人攻击就是中间服务器在客户端和服务端之间与双方各自建立连接，以达到劫持数据包甚至篡改数据包的目的。<a href="https://www.cnblogs.com/lulianqi/p/10558719.html">https 并不能完全抵御中间人攻击，</a>这取决于客户端和服务端有没有严格遵循 TLS 证书校验规范。</p>
+
+<p>假设我们有：</p>
+
+<ol>
+<li>一台 ng 服务器</li>
+<li>一个域名 a</li>
+<li>和域名 a 匹配的 TLS 证书</li>
+</ol>
+
+<p>这时候我们就可以发起攻击了：</p>
+
+<ol>
+<li>首先搭好 ng 服务器，配置好域名和相关 TLS 证书</li>
+<li>利用 Fiddler 做代理，公开一个 wifi，并且将所有的 TLS 握手申请转发到我们的 ng 服务器</li>
+<li>这时候客户端连接公开的 wifi，并且访问域名 b，尝试与域名 b 建立 TLS/SSL 通道</li>
+<li>Fiddler 将申请转发到我们的 ng，如果客户端没有遵循证书校验，那么将和我们的服务器握手成功</li>
+<li>这时候我们的 ng 就已经是一个中间人了，他可以监听所有的数据包，监听所有的流量。如果什么都不做直接将请求转发到服务器 b，那就仅仅监控数据包。也可以篡改数据，达到主动攻击的目的</li>
+</ol>
+
+<blockquote>
+<p>像 Chrome 这样的客户端一般都是严格遵循证书校验的，首先检查颁发证书的机构是否合法，然后检查证书吊销凭证列表，检查证书是否过期，检查证书的域名和目标域名是否一致。如果严格遵循证书校验，会发现证书域名 a 和目标域名 b 不匹配，中间人攻击是不会生效的</p>
+</blockquote>
+
+<h4 id="toc_35">36. 什么是 http2，为什么要用 http2</h4>
+
+<p>http2 有几个改动:</p>
+
+<ol>
+<li>传输数据由明文传输改成二进制流传输</li>
+<li>数据传输采用多路复用，请求合并在同一 TCP 连接内，解决队头阻塞的问题</li>
+<li>支持服务端推送</li>
+<li>使用 HPACK 算法来压缩首部内容</li>
+</ol>
+
+<p>优势：</p>
+
+<ol>
+<li><p>因为改成二进制用流来传输，那就可以只需要开启一个 tcp 连接，然后把 http1.1 的每个 tcp / ip 连接当成一个流，在一个 tcp 连接中就能传输多路数据，而不需要开启额外的 tcp 连接</p>
+<blockquote>
+<p>开启 tcp 连接需要 dns 解析，握手等，每开启一个连接都很耗时。再加上大多数浏览器限制并行的 tcp 连接数为 6 个，导致过多的 tcp 会被阻塞掉。http2 就不用担心，大胆分散资源，也不用什么雪碧图，合并 js 了</p>
+</blockquote></li>
+<li><p>对于 http1.1 来说，每个请求都是一个 tcp 连接，如果要断开连接，就要在传输层断开 tcp / ip 连接，再连接回来就又要握手，也是比较耗时。http2 每个请求都是一个流，只在一个 tcp 连接中，要断开某个连接只要把这个请求流干掉就行了</p></li>
+<li><p>服务端推送也能让服务端不再被动，能主动 push 一些必要资源。首部压缩也能节省流量提高请求速度</p></li>
+</ol>
+
+<h4 id="toc_36">37. 从输入 url 到渲染完成发生了什么</h4>
+
+<ol>
+<li>首先查询 dns，找到目标主机<br/>
+&gt; 先查询本地的 dns，再找路由的 dns，如果还是没有，则去 dns 解析服务商一个个递归找</li>
+<li>找到服务端 ip 之后，开始尝试与目标机建立 TCP 连接，这时候发起 3 次握手</li>
+<li>如果是 https，这时候会尝试 TLS 握手</li>
+<li>握手成功之后建立连接，客户端发送请求。如果命中强缓存，返回缓存；如果命中 service worker，返回缓存，否则发送 http request。服务端接收请求后判断是否命中协商缓存，如果命中就返回缓存，没命中就返回最新资源</li>
+<li>接着客户端拿到 html，开始解析 html 并且请求 link 和 script。在解析 html 的过程中，如果遇到不带 defer 或 async 的 script 时，会停止解析 dom，等待 js 请求（如果没请求完）和执行，然后渲染一次 dom</li>
+<li>读完 html 生成 dom，读完 css 和 link 生成 cssom，结合生成渲染树，然后绘制。如果有动画或者视频等频繁刷新帧率的元素，就会把他们分别独立到一个合成层中</li>
+<li>html 解析并且渲染完毕，触发 DOMContentLoad 事件，也就是 performance 中的 domContentLoadedEventEnd 时间点</li>
+<li>然后继续执行脚本中的 ajax，图片请求等，全部加载完后触发 onload 事件，也就是 performance 中的 domComplete 时间点</li>
+</ol>
+
+<h4 id="toc_37">38. load 和 DOMContentLoaded 的区别</h4>
+
+<p>load 是浏览器所有资源请求完成（包括 ajax 和异步图片）并且 js 执行完成的时候的时间节点，即准备触发 onload 事件的事件节点。对应的是 performance api 中的 domComplete 时间点。</p>
+
+<blockquote>
+<p>load 之后紧接着是开始执行 onload 事件的回调，onload 回调执行完之后对应的是 performance loadEventEnd 时间点</p>
+</blockquote>
+
+<p>DOMContentLoaded 是浏览器解析完 html 文档，并且 html 文档中嵌入的 link 和 script 标签都加载并执行完毕之后的时间点。对应的是 performance api 中的 domContentLoadedEventEnd 时间点，这也是 domReady 的时间点</p>
+
+<blockquote>
+<p>这时候不包括 js 发起的 ajax 请求，也不包括 js 中请求的静态资源如图片等</p>
+</blockquote>
+
+<h4 id="toc_38">39. CSS 会阻塞 DOM 解析吗</h4>
+
+<p>CSS 不会阻塞 DOM 解析。但是如果 CSS 后紧跟着 script 标签，那么会产生“阻塞”的效果。因为 js 会阻塞 DOM 的解析，而 CSS 后跟着 JS，JS 会等待 CSSOM 构建完成再执行（如果 CSSOM 构建 js 又同时执行会出现问题，js 拥有修改 DOM 的能力）</p>
+
+<h4 id="toc_39">40. udp 和 tcp 有什么区别，他们位于网络模型中的哪一层</h4>
+
+<p>tcp 和 udp 都是传输层的协议，区别是 tcp 是有连接的，udp 是无连接的。</p>
+
+<ol>
+<li>tcp 是可靠连接，连接时要握手相互确认，保证数据正确性和传输顺序。</li>
+<li>udp 是无连接的协议，它只管一股脑把数据包扔出去，丢没丢包他不管。</li>
+</ol>
+
+<blockquote>
+<p>ping 一个主机的时候其实就是往这个主机发 udp 包，像一些直播，游戏等实时性要求高的应用场景，基本都是 udp，tcp 如果丢包会等待重新发包，实时性应用等不起</p>
+</blockquote>
+
+<h4 id="toc_40">41. dns 是 udp 还是 tcp，为什么</h4>
+
+<p>dns 是 udp，因为确定 dns 不需要有序也不需要可靠，这和 ping 的原理类似，反正一股脑把数据包甩出去，谁响应了谁就是 dns 的 ip</p>
+
+<h4 id="toc_41">42. udp 的优劣势和常用的情形</h4>
+
+<p>直播，游戏，dns 解析等，都是 udp</p>
+
+<h4 id="toc_42">43. 描述一下三次握手和四次挥手</h4>
+
+<p><strong>三次握手:</strong></p>
+
+<ol>
+<li>客户端发送 SYN（建立联机）包，SYN 位码为 1，并且携带随机数 i 发送至目标服务器，目标服务器通过 SYN 位码 1 知道客户端请求建立联机。这时客户端进入 SYN-SENT 状态</li>
+<li>服务器发送 SYN + ACK（确认）包，SYN 携带生成的随机数 j，ACK 位码为 1，且携带由客户端来的随机数 i+1 的数据。客户端收到 SYN + ACK 包，检查 ack 包数据是否正确（也就是和自己发出的 i，再加一的值是否匹配）然后检查 ACK 位码是否为 1，1 表示服务器请求建立链接。服务器进入 SYN_RECV 状态。</li>
+<li>客户端发送 ACK 包，携带由服务器来的随机数 j+1 的数据，然后服务器收到 ACK 包后确认携带的数据是不是 j+1 确认无误客户端和服务器进入 ESTABLISHED 状态，完成三次握手。</li>
+</ol>
+
+<p><strong>四次挥手:</strong></p>
+
+<ol>
+<li>客户端认为数据发送已完成，就发一个 FIN 包给服务端，携带随机数 i，进入 FIN_WAIT 第一阶段</li>
+<li>服务端接收到 FIN 包，就发送一个 ACK 包确认收到，携带随机数 i+1。此时客户端 -&gt; 服务端的连接释放，但是 TCP 是双向的，此时服务端还是可以发送数据给客户端的（服务端可能还有响应没处理完，暂时不能断开服务端到客户端的连接）客户端收到 ACK 后进入 FIN_WAIT 第二阶段</li>
+<li>服务端确认响应已经发送完毕，发送 FIN 包，携带随机数 j，关闭服务端 -&gt; 客户端的数据通道</li>
+<li>客户端收到 FIN 包且认证后，发送 ACK 包，确认关闭，自身进入 CLOSE 阶段，服务端收到 ACK 后也进入 CLOSE 阶段</li>
+</ol>
+
+<h4 id="toc_43">44. 什么是 SYN 攻击</h4>
+
+<p>SYN 攻击也叫做洪水攻击</p>
+
+<p>在 TCP 连接的过程中，服务端是需要等待客户端的 ACK 确认包的。如果客户端收到服务端的 SYN 包但是又不回 ACK 包，服务端就会等待这个连接。SYN 攻击就是利用这一点，不断向服务端请求连接却又不发送 ACK 包确认，导致服务端等待多个 ACK 包的确认，从而服务器压力增大，导致崩溃</p>
+
+<p>要防止 SYN 可以减少每个 TCP 连接的等待时常，在达到多个 TCP 连接上限后，又有新的请求连接进来，就主动放弃掉那些超时的连接</p>
+
+<h4 id="toc_44">45. get 和 post 的区别</h4>
+
+<ol>
+<li>post 相对 get 来说稍微安全一点点，参数不会暴露在 url 中，但是对于抓包来说都是一样的</li>
+<li>get 最重要是能够被缓存，如 sw 能缓存整个 get 响应，而 post 请求就不可以缓存</li>
+</ol>
+
+<h4 id="toc_45">46. 什么是 TLS，SSL 和 TLS 的差别</h4>
+
+<p>TLS 和 SSL 一样都是一种数据加密协议。SSL 因为有一些安全漏洞，所以被 TLS 给代替了。需要注意的是我们常说的 TLS 和 SSL 认证证书其实和协议本身没关系，证书只是证明使用协议的两端的安全性，并没有说必须对应什么加密协议</p>
+
+<h4 id="toc_46">47. 什么是非对称加密</h4>
+
+<p>非对称加密有公钥和密钥之分。公钥可以分发给所有用户，私钥只有分发者手上才有。大家都可以用公钥加密数据，但是要解密只能用私钥</p>
+
+<h4 id="toc_47">48. SSL/TLS 握手过程</h4>
+
+<ol>
+<li>客户端向服务端发送 Client Hello 消息，这个消息里包含了一个客户端生成的随机数 Random1、客户端支持的加密套件（Support Ciphers）和 SSL Version 等信息（也就是告诉服务端，客户端支持的加密方式和加密协议）</li>
+<li>服务端确认客户端所需的加密方式，自己生成一个随机数 Random2 回给客户端，并且下发证书告诉客户端，证书中带有公钥</li>
+<li>客户端收到证书后，先从 CA 验证证书的安全性，然后生成一个随机数 Random3，然后从证书中取出公钥，加密这个随机数并发送给服务端（如果服务端要求客户端也要证书，那这里还会带上客户端的证书）</li>
+<li>服务端收到加密过的随机值并使用私钥解密获得第三个随机值，这时候两端都拥有了三个随机值（Random1，2，3），可以通过这三个随机值按照之前约定的加密方式生成密钥，接下来的通信就可以通过该密钥来加密解密</li>
+</ol>
+
+<p><strong>因为非对称加密解密的消耗比较大，所以只在 TLS 握手的时候用非对称加密密钥传输，之后的正文传输都用密钥来对称加密传输</strong></p>
+
+<h4 id="toc_48">49. 开启 CSS 硬件加速和独立复合层</h4>
+
+<p>可以利用一些动画效果来开启 CSS 硬件加速，也就是 GPU 加速，利用浏览器的 GPU 进程启用硬件层面的加速。加速之后的元素会被扔进独立的复合层（合成层）进行渲染，这是一个独立的层级，不受文档流重绘回流的影响，进而提升性能。</p>
+
+<p>CSS3 中的 will-change 就是来开启硬件加速的</p>
+
+<blockquote>
+<p>但是要注意不要随便开 GPU 加速，因为如果大量的元素都硬件加速，各自开启各自的合成层，最终会导致页面上有大量的独立合成层，反而会降低性能</p>
+</blockquote>
+
+<h4 id="toc_49">50. 什么是预渲染，什么是 ssr</h4>
+
+<p>ssr 即服务端渲染，预渲染和服务端渲染最本质的区别就是：前者是浏览器访问前，服务端就渲染好静态的 html。后者是浏览器访问时，服务器动态输出 html（一般是由 js 虚拟 dom 完成的）</p>
+
+<ol>
+<li>预渲染是在构建阶段都确定了输出的 html，其实就是打包完之后开一个无界面浏览器（比如 phantomjs）然后用爬虫爬一遍，生成静态的 html。客户端访问的时候其实已经有 html 结构了，直接返回</li>
+<li>ssr 是在用户访问的时候利用虚拟 dom 之类的方案动态生成 html，然后把带有内容节点的 html 返回给前端，不用前端再去请求一大堆框架和渲染相关的 js</li>
+<li>如果是有频繁交互的（比如电商）就需要 ssr，如果仅仅是为了 SEO 或者做个静态首页，预渲染更合适</li>
+</ol>
+
+<blockquote>
+<p>预渲染插件: prerender-spa-plugin</p>
+</blockquote>
+
+<h4 id="toc_50">51. 如何实现一个骨架屏</h4>
+
+<p>生成骨架屏有很多种方案，可以为每个页面手写一份骨架屏样式，也可以用 ssr 在请求的时候注入骨架屏，或者在构建的时候利用预渲染等能力塞一份骨架屏</p>
+
+<p>比较好的方式是最后一种，思路大致是:</p>
+
+<ol>
+<li>build 之前，先打开自己的开发页面，爬虫抓下页面结构，生成对应的骨架屏，然后生成对应的 dom 结构存起来</li>
+<li>开始 build，webpack 打包，在打包结束的时候，把存起来的 dom 塞到 html 里面</li>
+</ol>
+
+<blockquote>
+<p>相关插件: vue-skeleton-webpack-plugin</p>
+</blockquote>
+
+<h4 id="toc_51">52. 既然 TCP 有长连接，为什么还要在应用层的 http 上做心跳保活？</h4>
+
+<p>在 http1.1 中，TCP 的确有 keep-alive 的机制，也就是长连接。</p>
+
+<p>但是 TCP 是传输层的有连接的协议，一旦建立起连接之后，如果某一断不主动断开连接（四次挥手）那么 TCP 将是一直连着的（即使网络挂了，双方在发送包也是不知道彼此挂了的）</p>
+
+<blockquote>
+<p>TCP 长连接会每 7200s 发起一次探针来检测对方是否还有响应。如果响应超时，会再发探针，累计 10 次超时则终端连接。假设一个场景，网络非常不好，早就断连了，但是 TCP 还没到 7200s 的间隔，还没去发探针，那么通信双方其实都不知道对方挂了</p>
+</blockquote>
+
+<p>此外一些高负载的情况下，如果服务器无响应或者挂起假死了，本应该告诉客户断连接中断了，但是 TCP 还没达到发探针的时机，那也会造成客户端的误判。所以需要在应用层主动发心跳测试保活</p>
+
+<h4 id="toc_52">53. 如何定位内存泄漏</h4>
+
+<p>JS 引用类型会在内存开辟堆空间，这个空间在没有引用的时候（指针为空或者离开作用域导致函数执行栈弹出，被销毁）会被垃圾回收机制给回收销毁</p>
+
+<p>内存泄漏就是指某个内存堆空间的引用类型已经没有用了，但是因为各种原因垃圾回收机制没有去销毁它</p>
+
+<p>比如：</p>
+
+<ol>
+<li>闭包导致的保存了封闭环境内的变量，导致内存泄漏</li>
+<li>没有用声明关键字，变量被直接挂载到 window 或者 global 上</li>
+<li>定时器没有消除</li>
+<li>事件绑定没有消除</li>
+</ol>
+
+<p><a href="https://juejin.im/post/5b2fd09ee51d45588576f429">Vue 内存泄漏排查</a></p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/25736931">Node 内存泄漏排查</a></p>
+
+<p><a href="https://cnodejs.org/topic/58eb5d378cda07442731569f">Node 内存泄漏排查</a></p>
+
+<h4 id="toc_53">54. <a href="https://zhuanlan.zhihu.com/p/32553477">什么是 http3</a></h4>
+
+<p>http2 虽然采用了流多路复用的方式传输，但说到底还是 tcp，tcp 本质上还是有序的。而且在网络不好的时候 http2 甚至不如 http1.1，因为全部依赖一个 tcp，这个 tcp 挂了就全挂了。</p>
+
+<p>http3 前身是 quic，采用了 udp 的传输而不是 tcp 的传输，从根本上解决了多路复用的问题。而且 http3 有缓存会话，丢包容错的功能</p>
+
+<ol>
+<li>减少了 TCP 三次握手及 TLS 握手时间。</li>
+<li>改进的拥塞控制。</li>
+<li>避免队头阻塞的多路复用。</li>
+<li>连接迁移。</li>
+<li>前向冗余纠错。</li>
+</ol>
+
+<blockquote>
+<p>http3 每个数据包都包含其他包的一部分，当某个包丢包了，能从其他包中找到丢失的部分拼凑起来</p>
+</blockquote>
+
+<h4 id="toc_54">55. webpack 的预加载，懒加载，prefetch，preload</h4>
+
+<p>prefetch 指的是当浏览器空闲时预先加载</p>
+
+<p>preload 指的是关键资源提前加载</p>
+
+<p>webpack 可以通过 prefetch 魔法注释声明预加载，通过 import 动态引入的方式实现懒加载。</p>
+
+<h4 id="toc_55">56. dns 递归查询和迭代查询有什么区别</h4>
+
+<p>主机向本地 dns 服务器查询是递归查询。当向本地 dns 服务器查询时，如果查不到 IP，本地 dns 服务器就会以客户端的身份代替主机向根服务器查询，这种方式叫做递归查询</p>
+
+<p>本地 dns 服务器向根服务器的查询是迭代查询。当本地 dns 服务器向根服务器查询查不到结果时，根服务器会告知本地 dns 服务器继续去某个根服务器查询，这种查询方式叫做迭代查询</p>
+
+<h4 id="toc_56">57. 127.0.0.1 和 0.0.0.0 和 localhost 的差别</h4>
+
+<p>127.0.0.1 是回环地址，指的是本地的虚拟端口，不属于任何一个有类别地址类，指的是本地电脑本身</p>
+
+<p>0.0.0.0 指的是本机上的所有 IPV4 地址，如果一个主机有两个 IP 地址，192.168.1.1 和 10.1.2.1，那这两个地址都能访问 0.0.0.0 端口的服务</p>
+
+<p>loaclhost 是域名，指向 127.0.0.1</p>
+
+<h4 id="toc_57">58. 301，302，303，307 有什么区别</h4>
+
+<p>301 永久重定向，302 临时重定向。对于 post 等非幂等的方法来说，是不能重定向的。所以 301 和 302 会把 post 转成 get 请求</p>
+
+<p>后来规范了 303，就是默认允许重定向将 post 转成 get</p>
+
+<p>然后更新了 307，就是不会默认转化，会经过客户端的同意</p>
+
+<h4 id="toc_58">59. 什么是简单请求，什么是复杂请求，什么是 options 请求</h4>
+
+<p>简单请求和复杂请求都是对于跨域而言的。如果一个请求是 <code>get/post/head</code> 请求之一并且头信息不复杂（只包含 accept，accept-language，content-language，content-type 也是表单，formdata 或者文本）就是简单请求。其他的情况就是复杂请求</p>
+
+<p>对于简单请求，浏览器会在请求头加一个 origin 字段，用来告诉服务端是否可以跨域。对于复杂请求，浏览器会发起一个 options 的预检信息，预检通过之后才会发正式请求，也是用 origin 判断</p>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="16023384045807.html" 
+          title="Previous Post: http 协议">&laquo; http 协议</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="16023383038322.html" 
+          title="Next Post: 数据结构之图">数据结构之图 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" /></div>
+            
+                <h1>Evan的博客</h1>
+                <div class="site-des">Evan 的博客 - 代码，摄影，音乐</div>
+                <div class="social">
+
+
+
+
+
+
+<a target="_blank" class="instagram" href="https://www.instagram.com/a953328679/" title="Instagram">Instagram</a>
+<a target="_blank" class="weibo" href="https://weibo.com/wbxiaocong/" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/EvanOyam/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:o953328679@gmail.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="Interface.html"><strong>面试</strong></a>
+        
+            <a href="%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html"><strong>开发笔记</strong></a>
+        
+            <a href="%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html"><strong>工程实践</strong></a>
+         
+        
+            <a href="tag_JS.html"><strong>JS</strong></a>
+            
+            <a href="tag_Vue.html"><strong>Vue</strong></a>
+            
+            <a href="tag_%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.html"><strong>性能优化</strong></a>
+            
+            <a href="tag_%E7%AE%97%E6%B3%95.html"><strong>算法</strong></a>
+            
+            <a href="tag_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.html"><strong>计算机网络</strong></a>
+            
+        </p>
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="16023497016429.html">前端面经复盘</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023387735398.html">大前端相关面试题</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023387379097.html">常见 HTML 面试题</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023386965383.html">手撕 Promise</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023385653734.html">常用设计模式</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+
+<style type="text/css">
+figure{margin: 0;padding: 0;}
+figcaption{text-align:center;}
+
+/* PrismJS 1.14.0
+ http://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript */
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+    color: black;
+    background: none;
+    text-shadow: 0 1px white;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+    
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+    text-shadow: none;
+    background:#b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+    text-shadow: none;
+    background: #b3d4fc;
+}
+
+@media print {
+    code[class*="language-"],
+    pre[class*="language-"] {
+        text-shadow: none;
+    }
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+    padding: 1em;
+    margin: .5em 0;
+    overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+    background: #F7F7F7;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+    padding: .1em;
+    border-radius: .3em;
+    white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: slategray;
+}
+
+.token.punctuation {
+    color: #999;
+}
+
+.namespace {
+    opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    color: #9a6e3a;
+    background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: #07a;
+}
+
+.token.function,
+.token.class-name {
+    color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+    color: #e90;
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+.token.italic {
+    font-style: italic;
+}
+
+.token.entity {
+    cursor: help;
+}
+
+
+pre[class*="language-"].line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+}
+
+pre[class*="language-"].line-numbers > code {
+    position: relative;
+    white-space: inherit;
+}
+
+.line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    font-size: 100%;
+    left: -3.8em;
+    width: 3em; /* works for line-numbers below 1000 lines */
+    letter-spacing: -1px;
+    border-right: 1px solid #999;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+    .line-numbers-rows > span {
+        pointer-events: none;
+        display: block;
+        counter-increment: linenumber;
+    }
+
+        .line-numbers-rows > span:before {
+            content: counter(linenumber);
+            color: #999;
+            display: block;
+            padding-right: 0.8em;
+            text-align: right;
+        }
+
+</style>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+
+
+  </body>
+</html>
