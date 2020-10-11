@@ -517,6 +517,10 @@
   text-decoration: none;
 }
 
+.markdown-body a .a-content-text {
+  color: #7988a8;
+}
+
 .markdown-body a:hover,
 .markdown-body a:focus,
 .markdown-body a:active {
@@ -950,10 +954,6 @@
 #main-content .home-categories .a-content-text h5,
 #main-content .home-categories .a-content-text h6 {
   margin-top: 1rem;
-}
-
-#main-content .home-categories .a-content-text {
-  color: #7988a8;
 }
 
 #main-content .markdown-body h1 {
