@@ -4,7 +4,7 @@
   <title><![CDATA[Evan的博客]]></title>
   <link href="https://evanoyam.github.io/atom.xml" rel="self"/>
   <link href="https://evanoyam.github.io/"/>
-  <updated>2020-10-11T19:06:54+08:00</updated>
+  <updated>2020-10-11T21:34:43+08:00</updated>
   <id>https://evanoyam.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -1882,85 +1882,6 @@ subject1.notify(&#39;evan&#39;)
 </code></li>
 </ul>
 </blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[http 协议]]></title>
-    <link href="https://evanoyam.github.io/16023384045807.html"/>
-    <updated>2020-10-10T22:00:04+08:00</updated>
-    <id>https://evanoyam.github.io/16023384045807.html</id>
-    <content type="html"><![CDATA[
-<h2 id="toc_0">网络模型</h2>
-
-<table>
-<thead>
-<tr>
-<th>层数</th>
-<th>OSI 参考模型</th>
-<th>TCP/IP 五层模型</th>
-<th>TCP/IP 四层模型</th>
-<th>包含的协议</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>第七层</td>
-<td>应用层</td>
-<td>应用层</td>
-<td>应用层</td>
-<td>HTTP、FTP、DNS、TFTP、SMTP 等</td>
-</tr>
-<tr>
-<td>第六层</td>
-<td>表示层</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>第五层</td>
-<td>会话层</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>第四层</td>
-<td>传输层</td>
-<td>传输层</td>
-<td>传输层</td>
-<td>TCP、UDP 等</td>
-</tr>
-<tr>
-<td>第三层</td>
-<td>网络层</td>
-<td>网络层</td>
-<td>网络层</td>
-<td>IP 等</td>
-</tr>
-<tr>
-<td>第二层</td>
-<td>数据链路层</td>
-<td>数据链路层</td>
-<td>数据链路层</td>
-<td>底层网络协议</td>
-</tr>
-<tr>
-<td>第一层</td>
-<td>物理层</td>
-<td>物理层</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-
-<h2 id="toc_1">http请求报文</h2>
-
-<p><img src="https://img.bluepay.asia/upload/manual/20200426/16100736.png" alt="image"/></p>
 
 ]]></content>
   </entry>
@@ -5695,6 +5616,185 @@ class SubClass extends SuperClass {constructor(name, age) {super(name)
 let subClass = new SubClass(&#39;Evan&#39;, 21)
 subClass.showName()subClass.showAge()
 </code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[性能优化]]></title>
+    <link href="https://evanoyam.github.io/16023373532350.html"/>
+    <updated>2020-10-10T21:42:33+08:00</updated>
+    <id>https://evanoyam.github.io/16023373532350.html</id>
+    <content type="html"><![CDATA[
+<ol>
+<li>首屏优化（sw，骨架屏）</li>
+<li>渲染优化（无限滚动，Intersection Observer API，图片懒加载，路由按需加载）</li>
+</ol>
+
+<h2 id="toc_0">首屏优化</h2>
+
+<h4 id="toc_1">service-worker</h4>
+
+<ol>
+<li>以文件夹作为域，只能控制自身层级及以下层级的文件夹</li>
+<li>有installing，installed / waiting，activating，activated，redundant等生命周期</li>
+</ol>
+
+<blockquote>
+<p>installing失败会被放弃，一个域名下最多只能存在两个worker，一个是激活态的，另一个是等待态的。有新的worker来会替换掉旧的等待态worker。直到页面所有线程被释放，等待态的worker才会替换掉激活态的worker</p>
+</blockquote>
+
+<ol>
+<li>能拦截几乎所有请求，可以重新组装响应包</li>
+<li>配合CacheStorage能缓存大部分响应类型，不能缓存POST响应</li>
+<li>缓存最佳实践是区分缓存池，对不同类型的资源采用不同的缓存策略</li>
+</ol>
+
+<blockquote>
+<ul>
+<li>长期不变动的资源，缓存到静态缓存池中</li>
+<li>业务级的资源，缓存到动态缓存池中，每次打包利用webpack自动更新缓存池名字，当新的worker激活后会比对缓存池，清理过期缓存</li>
+<li>更新策略需要穿透http缓存，请求的worker注册文件应该带时间戳，如sw.js?v=xxxxxxx</li>
+<li>启用黑白名单，过滤不需要缓存的资源</li>
+</ul>
+</blockquote>
+
+<h4 id="toc_2">骨架屏</h4>
+
+<p>对于单页应用而言，首屏加载慢一直是个问题。因为单页应用拉回来的html是没有dom节点的，dom依赖js去动态渲染。于是有了骨架屏的方案，首屏出来之前，展示一个骨架，ui更友好。</p>
+
+<p>骨架屏的思想就是，build出来的index.html里面就有骨架的dom，等js加载完再把骨架屏的dom移除。对vue来说就是 <code>#app</code> 内的东西还没出来，就展示骨架屏；出来了就移除骨架屏。</p>
+
+<p>骨架屏要解决两个问题：<strong>一是如何生成骨架屏文件，二是如何注入骨架屏文件</strong></p>
+
+<p><strong>生成：</strong><br/>
+采用 <a href="https://github.com/kaola-fed/awesome-skeleton/blob/master/README-zh_CN.md">awesome-skeleton</a> 插件的方案。原理是开一个 Chromium，用 Puppeteer 抓页面，生成一个骨架的html或者png</p>
+
+<p><strong>注入：</strong><br/>
+采用 <a href="https://github.com/lavas-project/vue-skeleton-webpack-plugin">vue-skeleton-webpack-plugin</a> 插件的方案。原理是利用 <code>html-webpack-plugin</code> 插件的  <code>html-webpack-plugin-before-html-processing</code> 事件钩子，在处理 <code>index.html</code> 之前，把某个vue文件（骨架屏）预渲染注入到 html 中，使得构建完的 html 文件有骨架屏的dom，script和样式</p>
+
+<p><strong>实现：</strong><br/>
+对h5项目来说，生成骨架屏可以在项目内用 <code>awesome-skeleton</code> 抓取配置文件中指定的页面，输出到固定的目录中。也可以起一个node服务专门就来生成骨架屏，暴露一个API，接收一个url，输出骨架屏。</p>
+
+<p>注入骨架屏可以写一个node的脚本。执行脚本的时候，遍历骨架屏文件夹里的所有html文件，然后重组之后生成对应的vue文件和入口文件。有了vue和入口文件，按照 <code>vue-skeleton-webpack-plugin</code> 的用法就能轻松把骨架屏注入到html中。</p>
+
+<blockquote>
+<ul>
+<li>注入html时，cli3的 <code>mini-css-extract-plugin</code> 会把样式注入到bundle的js中，这样骨架屏的样式是不生效的。需要把样式分离，注入的时候改成style注入到html的head标签里。</li>
+<li>其实真正的预渲染，是根据不同的路由访问不同的index文件。但是这样每次都要变更ng的配置去配合预渲染的index，路由也只能是history模式。而这里选用的方案是把所用的骨架屏全部注入到index.html中，访问不同的路由，加载的都是同一份html，只是控制展示不同的骨架。</li>
+</ul>
+</blockquote>
+
+<h2 id="toc_3">渲染优化</h2>
+
+<h4 id="toc_4">无限滚动列表</h4>
+
+<p>对一个长列表来说，用户所能看见的仅仅是其中的一部分DOM，大部分的DOM节点是在屏幕外的。这部分节点是没有意义的，用户看不见，却又消耗性能去渲染，处理。尤其是滚动时还要不断触发无用的重绘。于是诞生<strong>无限滚动列表</strong>的概念</p>
+
+<p>无限滚动列表，也叫虚拟渲染列表。指的是<strong>对一个长列表，只渲染其中的一部分，对于那些用户看不见的DOM节点，采用回收处理</strong>。无论渲染多少数据，始终渲染一定个数的DOM节点。用户滚动列表时修改渲染的DOM节点内容，再通过某些手段强制让滚动视窗的内容一直停留在屏幕内。</p>
+
+<p><strong>需要解决的问题：</strong></p>
+
+<ol>
+<li>用户滚动时，动态从总数据数据中筛选出需要渲染的部分数据</li>
+</ol>
+
+<blockquote>
+<p>比如有1000条数据的list，需要渲染的仅仅是30条，用户滚动时从1000条中挑选出需要渲染的30条。可能是1-30，也可能是11-40，根据不同的滚动高度选出不同的区间</p>
+</blockquote>
+
+<ol>
+<li>即使修改了渲染的数据，但是由于用户滚动视窗，导致容器向上滑动，我们需要修正偏差</li>
+</ol>
+
+<blockquote>
+<p>用户向上（向下）滑动了多少，我们就要向下（向上）“拉”回多少，保证用户视觉内看到的容器没有偏移</p>
+</blockquote>
+
+<p><strong>解决方法：</strong></p>
+
+<ol>
+<li>关于上述第一个问题，我们需要知道需要渲染的数据区间是多少，初始化时和每次滚动时，都要计算出数据区间。假设容器内能展示 X 个元素，为了防止快速滚动时出现白屏，我们需要在容器可视区上方多渲染 2X 个元素，在容器可视区下方多渲染 X 个元素。那么整个渲染区间所需的元素个数的 4X 个。</li>
+</ol>
+
+<blockquote>
+<p>我们需要计算出list中一个item的高度，再根据当前容器的高度，计算出当前容器可视区域能展示多少个元素，这个数值*4即整个渲染区间所需的元素个数</p>
+</blockquote>
+
+<ol>
+<li>关于上述第二个问题，我们需要这么设计DOM结构</li>
+</ol>
+
+<pre><code class="language-markup">&lt;div class=&quot;content&quot;&gt;
+    &lt;ul class=&quot;list&quot;&gt;
+        &lt;li class=&quot;item&quot;&gt;&lt;/li&gt;
+        &lt;li class=&quot;item&quot;&gt;&lt;/li&gt;
+        &lt;li class=&quot;item&quot;&gt;&lt;/li&gt;
+        &lt;li class=&quot;item&quot;&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>ul就是整个渲染区间，ul在content里滚动。ul是list中所有数据渲染完后，item总和的高度。如1000条数据，ul的高度就是1000个item的高度。当用户向上滑动屏幕（越来越多的下方数据进入屏幕），ul向上移出content的高度就越来越大。当用户向下滑动屏幕则ul向下移除content的高度越来越大。如果我们什么都不做，渲染出来的内容就不能保证出现在视窗中（因为被滑动拖走了）</p>
+
+<p>因此我们需要把偏移的ul“拉”回正确的位置。当用户向上滑动屏幕，ul向上移出，那我们就添加ul的paddingTop（或者marginTop）把ul“顶下去”；向下滑动屏幕，ul向下移出，那我们就添加ul的paddingBottom（或者marginBottom）把ul“顶上来”。只要保证这个“顶”的偏移量和“滑”走的偏移量相等，就能让ul渲染的内容始终在用户视窗内</p>
+
+<blockquote>
+<ul>
+<li>content是明确高度的，因为我们需要根据content和item高度来计算容器可视区（content）能展示多少个item，进而计算出渲染区间展示多少个item</li>
+<li>“拉”回ul的方法有很多，比如ul定高后，根据相对定位修改第一个item相对ul出现的高度，也能达到滑动后保证item还在视窗内</li>
+</ul>
+</blockquote>
+
+<p><img src="http://upload.eiona.ink/GzAc9/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png" alt="image"/></p>
+
+<p>例子：<a href="https://files.eiona.ink/files/code/test.vue">父组件</a>，<a href="https://files.eiona.ink/files/code/virtualScroll.vue">无限滚动组件</a></p>
+
+<h4 id="toc_5"><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API">Intersection Observer API</a></h4>
+
+<p>用于观察一个元素是否与目标元素产生交集。默认目标元素是浏览器视窗。当观察的元素与目标元素产生的交集大于阀值时，将执行一个回调。</p>
+
+<p>利用这个特性，可以用来代替scroll事件完成一些事情，比如商品列表中某个商品出现在屏幕时加载更多，比如用来埋点等</p>
+
+<pre><code class="language-javascript">const observe = domList =&gt; {
+  let callback = (entries, observer) =&gt; {
+    entries.forEach(entry =&gt; {
+      if (entry.isIntersecting) {
+        console.log(entry.target.dataset.id)
+        observer.unobserve(entry.target) // 停止观察当前元素 避免不可见时候再次调用callback函数
+      }
+    })
+  }
+
+  let options = {
+    threshold: 0.5
+  }
+
+  let observer = new IntersectionObserver(callback, options)
+
+  domList.forEach(item =&gt; {
+    observer.observe(item)
+  })
+}
+
+</code></pre>
+
+<h4 id="toc_6">图片懒加载 / 预加载</h4>
+
+<p>vue-lazyload用来开启图片懒加载，原理是先用一个html属性暂存图片的真实地址，当图片出现在屏幕上或者距离屏幕一定距离时，才把地址设置成src的值，这时才去请求真实图片</p>
+
+<h4 id="toc_7">路由按需加载</h4>
+
+<p>通过 <code>component: () =&gt; import()</code> 的方式按需加载路由，用魔法注释来标记打包完的bundle名称。这种加载方式能将一个大的路由拆成多个子bundle，请求路由时只加载对应路由的依赖。</p>
+
+<pre><code class="language-text">component: () =&gt;
+    import(
+        /* webpackChunkName: &quot;signinSharePage&quot; */
+        &#39;@/views/group/components/signin/signinSharePage&#39;
+    ),
+</code></pre>
+
+<p>可以开启 <a href="http://note.youdao.com/s/BiLI75Vy">prefetch</a> 让浏览器空闲时预先加载其他路由bundle</p>
 
 ]]></content>
   </entry>

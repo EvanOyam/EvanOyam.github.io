@@ -3,8 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> better-scroll排坑指南 - Evan的博客 </title>
+    <title> better-scroll 排坑指南 - Evan的博客 </title>
+    
+    <meta name="keywords" content="vue" />
      
+    <meta name="description" content="vue" />
+    
     <link href="atom.xml" rel="alternate" title="Evan的博客" type="application/atom+xml" />
     
     <link rel="shortcut icon" href="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" type="image/png" />
@@ -101,7 +105,7 @@
       <div class="markdown-body article-wrap">
        <div class="article">
           
-          <h1>better-scroll排坑指南</h1>
+          <h1>better-scroll 排坑指南</h1>
      
         <div class="read-more clearfix">
           <span class="date">2020/10/09</span>
@@ -121,23 +125,11 @@
       </div><!-- article -->
 
       <div class="article-content">
-      <p><strong>这篇markdown记录了：</strong></p>
-
-<blockquote>
-<ol>
-<li>不可滚动</li>
-<li>监听不到scroll事件、无法点击</li>
-<li>滚动的时候click事件不能实时响应</li>
-<li>动态改变better-scroll中的数据，可滚动区域延迟或不响应</li>
-<li>上拉加载、下拉刷新后延迟响应</li>
-<li>横向better-scroll</li>
-<li><a href="https://ustbhuangyi.github.io/better-scroll/doc/zh-hans/options.html">better-scroll文档</a></li>
-</ol>
-</blockquote>
+      <p>better-scroll 是移动开发中常用的滚动组件。在移动端做滚动有许多细节需要注意，一不小心就会踩坑。而 bs 的作者封装了一个适用于移动端的滚动组件，提供了一系列滚动的方法，开发者们不用再造轮子，踩雷。而这篇文章就是整理总结 bs 的正确打开方式</p>
 
 <h2 id="toc_0">better-scroll 不可滚动</h2>
 
-<p>better-scroll 有两层关系，最外层是wrapper，滚动的是装载在第一个子元素content内的内容。better-scroll 只处理容器（wrapper）的第一个子元素（content）的滚动，其它的元素都会被忽略。此外，需要给wrapper一个高度</p>
+<p>better-scroll 有两层关系，最外层是 wrapper，滚动的是装载在第一个子元素 content 内的内容。better-scroll 只处理容器（wrapper）的第一个子元素（content）的滚动，其它的元素都会被忽略。此外，需要给 wrapper 一个高度</p>
 
 <pre><code class="language-markup">&lt;div class=&quot;wrapper&quot;&gt;
   &lt;ul class=&quot;content&quot;&gt;
@@ -158,19 +150,19 @@
 
 <p><img src="http://static.galileo.xiaojukeji.com/static/tms/shield/scroll-4.png" alt="better-scroll"/></p>
 
-<h2 id="toc_1">监听不到scroll事件、无法点击</h2>
+<h2 id="toc_1">监听不到 scroll 事件、无法点击</h2>
 
 <ol>
-<li>scroll事件需要派发，创建better-scroll时由probeType属性控制，不派发scroll事件则无法监听</li>
-<li>better-scroll默认禁用了click和tap事件，在创建时开启事件</li>
+<li>scroll 事件需要派发，创建 better-scroll 时由 probeType 属性控制，不派发 scroll 事件则无法监听</li>
+<li>better-scroll 默认禁用了 click 和 tap 事件，在创建时开启事件</li>
 </ol>
 
 <pre><code class="language-javascript">this.scroll = new BScroll(this.$refs.wrapper, {
-  // 开启click事件
+  // 开启 click 事件
   click: true,
-  // 开启tap事件
+  // 开启 tap 事件
   tap: true,
-  // 派发滚动事件，默认是0，不派发
+  // 派发滚动事件，默认是 0，不派发
   // 1 -&gt; 延时派发
   // 2 -&gt; 滚动时实时派发
   // 3 -&gt; 任何动画效果过程都实时派发
@@ -178,22 +170,18 @@
 })
 </code></pre>
 
-<h2 id="toc_2">滚动时click事件不能实时响应</h2>
+<h2 id="toc_2">滚动时 click 事件不能实时响应</h2>
 
-<p>better-scroll滚动过程中是不允许点击的，bounce动画的时候也是不允许点击的，可以取消bounce动画或者缩短bounce动画的时间</p>
+<p>better-scroll 滚动过程中是不允许点击的，bounce 动画的时候也是不允许点击的，可以取消 bounce 动画或者缩短 bounce 动画的时间</p>
 
-<h2 id="toc_3">动态改变better-scroll中的数据，可滚动区域延迟或不响应</h2>
+<h2 id="toc_3">动态改变 better-scroll 中的数据，可滚动区域延迟或不响应</h2>
 
-<p>每次修改完数据之后，需要refresh一次，建议watch中监听到数据改变就刷新</p>
+<p>每次修改完数据之后，需要 refresh 一次，建议 watch 中监听到数据改变就刷新</p>
 
 <pre><code class="language-javascript">watch: {
-  // 每次修改BScroll内容的高度，需要在nextTick中refresh
-  groupListData: {
-    handler() {
-      this.$nextTick(() =&gt; {
-        this.scroll.refresh()
-      })
-    },
+  // 每次修改 BScroll 内容的高度，需要在 nextTick 中 refresh
+  groupListData: {handler() {this.$nextTick(() =&gt; {this.scroll.refresh()
+      }) },
     deep: true
   }
 }
@@ -201,7 +189,7 @@
 
 <h2 id="toc_4">上拉加载、下拉刷新后延迟响应</h2>
 
-<p>better scroll提供下拉和上拉事件:</p>
+<p>better scroll 提供下拉和上拉事件:</p>
 
 <ol>
 <li>下拉刷新事件: pullingDown</li>
@@ -210,27 +198,23 @@
 
 <p>在执行完事件之后，必须执行对应的声明完成的方法: 下拉刷新用 finishPullDown 来声明执行完毕；上拉加载用 finishPullUp 来声明执行完毕。</p>
 
-<p>此外，如果修改了better scroll中content的长度，必须要refresh一次。也建议在watch中监听数据变化</p>
+<p>此外，如果修改了 better scroll 中 content 的长度，必须要 refresh 一次。也建议在 watch 中监听数据变化</p>
 
 <pre><code class="language-javascript">// 下拉刷新
-this.scroll.on(&#39;pullingDown&#39;, () =&gt; {
-  // do sth...
-})
+this.scroll.on(&#39;pullingDown&#39;, () =&gt; {// do sth...})
 
 // 上拉加载
-this.scroll.on(&#39;pullingUp&#39;, () =&gt; {
-  // do sth...
-})
+this.scroll.on(&#39;pullingUp&#39;, () =&gt; {// do sth...})
 </code></pre>
 
-<h2 id="toc_5">横向better-scroll</h2>
+<h2 id="toc_5">横向 better-scroll</h2>
 
-<p>better-scroll可以设置成横向滚动。通过设置 scrollX 的值以及禁用 scrollY 的值实现滚动效果。</p>
+<p>better-scroll 可以设置成横向滚动。通过设置 scrollX 的值以及禁用 scrollY 的值实现滚动效果。</p>
 
 <blockquote>
 <ul>
-<li>禁用scrollY可能导致页面无法下滑，需要声明eventPassthrough为vertical来确保页面纵向使用原生滚动</li>
-<li>横向滚动时默认不会派发scroll事件，需要声明probeType</li>
+<li>禁用 scrollY 可能导致页面无法下滑，需要声明 eventPassthrough 为 vertical 来确保页面纵向使用原生滚动</li>
+<li>横向滚动时默认不会派发 scroll 事件，需要声明 probeType</li>
 </ul>
 </blockquote>
 
@@ -336,8 +320,6 @@ this.scroll.on(&#39;pullingUp&#39;, () =&gt; {
             <a href="tag_%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.html"><strong>性能优化</strong></a>
             
             <a href="tag_%E7%AE%97%E6%B3%95.html"><strong>算法</strong></a>
-            
-            <a href="tag_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.html"><strong>计算机网络</strong></a>
             
         </p>
                 </div>
