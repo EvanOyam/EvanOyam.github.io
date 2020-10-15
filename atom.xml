@@ -4,13 +4,528 @@
   <title><![CDATA[Evan的博客]]></title>
   <link href="https://evanoyam.github.io/atom.xml" rel="self"/>
   <link href="https://evanoyam.github.io/"/>
-  <updated>2020-10-11T22:09:15+08:00</updated>
+  <updated>2020-10-15T21:52:28+08:00</updated>
   <id>https://evanoyam.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
     
   </author>
   <generator uri="http://www.mweb.im/">MWeb</generator>
+  
+  <entry>
+    <title type="html"><![CDATA[应届前端的逆袭（上）]]></title>
+    <link href="https://evanoyam.github.io/16026866633812.html"/>
+    <updated>2020-10-14T22:44:23+08:00</updated>
+    <id>https://evanoyam.github.io/16026866633812.html</id>
+    <content type="html"><![CDATA[
+<p>不知不觉毕业一年了，正式工作也满一年了。其实一直想写一篇文章总结一下一年来自己到底成长了多少，但因为各种原因一直拖到现在。今天总算难产出来了 😂</p>
+
+<blockquote>
+<ul>
+<li><strong>这篇文章主要是写给刚毕业，或者刚转行入坑前端的同学，</strong>总结了一些经 验和学习心得，也算是以自身经历为例子的职业入坑指引吧。</li>
+<li>由于想写的东西比较多，因此分为上下两篇。<strong>上篇主要介绍当前及未来前端发展的趋势，我的日常 <code>workflow</code> 以及高效团队协作的开发配置；下篇主要讲自我成长规划，选厂以及前端项目的搭建。</strong></li>
+<li>文章中涉及到的技术栈和框架不会太深入去讲，主要是介绍一个职业规划和个人成长规划。对文章中某个点感兴趣的同学可以私我。</li>
+</ul>
+</blockquote>
+
+<h2 id="toc_0">写给刚入行的你</h2>
+
+<p>2020 年可谓不太平的一年。因为一些众所周知的原因，读研的同学担心毕不了业；工作的同学纠结经济不景气；大三大四的同学正苦于就业...这一年来听到太多太多的抱怨了，无论是在校生还是已经毕业的同学。</p>
+
+<p>其实前段时间我刚刚跳槽完，也相当于重新找工作吧。<strong>我自己的感受并没有身边人或者网上说的那么怨声载道的样子。</strong>我自己面试的结果来看，百度腾讯字节都过了，也算是对自己一年来成长的一个交代。</p>
+
+<p>在正式开始写干货之前，我觉得我还是有必要给准备入坑，或者说想继续往更高处走的同学预先灌一些鸡汤，这些鸡汤都会在下一篇目中细说：</p>
+
+<ul>
+<li><p>摆平心态</p>
+<blockquote>
+<p>自我读大学开始，总会听到两种声音。一是 “前端就是比较容易”，二是 “我找不到工作是因为没有工作经验”。在计算机领域，就没有哪个比哪个简单这一说，这个后面说趋势的时候会细说。至于把找不到工作这口锅甩在没有工作经验上，只是逃避技术现实的一个自我台阶罢了，在下一篇目会细说。</p>
+</blockquote></li>
+<li><p>认清事实</p>
+<blockquote>
+<p>给自己系统全面的规划，定期自我反思，知道自己几斤几两，处于什么阶段做什么事。不要过高或过低评估自己的能力，在下一篇目会细说。</p>
+</blockquote></li>
+<li><p>持续学习</p>
+<blockquote>
+<p>经常会听到这两种说辞：“唉我的学历好低啊，普通本科根本找不到工作”，“读书有什么用，xxx专科还不是月薪x万”。其实在我看来，能给自己带来好工作好生活的，不是学历，而是学历背后的学习态度。在下一篇目会细说。</p>
+</blockquote></li>
+</ul>
+
+<h2 id="toc_1">前端的趋势</h2>
+
+<p>继上文所述，作为一个前端开发者，首当其冲的是要摆平心态。都 2020 年了，如果你入坑的理由还是 “因为前端更简单” 的话，我还是劝你尽早转行找到自己喜欢的岗位吧...</p>
+
+<p>放在 20 年前，的确前端就是一个做静态页面的活，连 ajax 都没有的年代那时候的前端和大字报差别并不大；放在 10 年前，说前端简单我也还能理解，毕竟那时候主流仍是模板引擎或者是面向 DOM 开发，也没有成熟的 node 生态。但是 2020 年的今天，说前端简单那就说明这几年你丝毫没有进步。</p>
+
+<p>如今的前端生态可谓是百家争鸣，各种技术，框架，乃至设计理念与架构层出不穷。在这里我先说说我眼里的前端生态是什么样子的：</p>
+
+<ul>
+<li>从狭义上看，前端指的还是基于浏览器运行时的可交互应用
+<ul>
+<li>现代浏览器内核大多是 <code>webkit</code> 或者其衍生产品，引擎大多是谷歌的 V8</li>
+<li>JS 框架基本被 <code>Angular</code>，<code>React</code>，<code>Vue</code> 三分天下，还有诸如 <code>Typescript</code> 等强类型补充</li>
+<li>预处理器基本被 <code>Sass</code>，<code>Less</code>，<code>Stylus</code> 三分天下</li>
+<li>前端工程化相对完善，能专注与业务开发，<code>Webpack</code> 是比较流行的打包工具</li>
+</ul></li>
+<li>从广义上看，前端指的是能与用户交互的终端生态，以及终端生态上下游的扩充
+<ul>
+<li>除了浏览器环境之外，混合开发 <code>Hybrid app</code>，跨平台开发如 <code>RN</code>，<code>Flutter</code>，<code>Electron</code> 等也充斥着前端生态</li>
+<li><code>node</code> 的诞生提供了服务器端的能力，<code>ssr</code> 的能力，进而涉及数据库操作与一些如 <code>ejs</code> 等模板引擎的渲染，或者虚拟节点的渲染</li>
+<li><code>node</code> 也可以提供强大的构建工具的能力，<code>BFF</code> 的能力，甚至操作系统和代理服务器的能力</li>
+<li>其他领域也开始有所涉及，如机器学习领域的 <code>tensorflow.js</code> 或一些 <code>IOT</code> 领域</li>
+</ul></li>
+</ul>
+
+<p>看到这里，是不是突然感觉要炸了：<em>“卧槽说好的前端简单呢？博主你不是撒币吧？讲这么复杂装什么逼？🤮🤮”</em></p>
+
+<p>其实这就是前端的现况。所以说不要觉得会用 <code>Vue</code> 写个页面，看两个 MDN 的 API，参与过一两个项目就很满足了。或许你会说：<em>“你说的很多都是后端的工作了，我只想做前端而已。”</em>但事实上这几乎的所有大团队的用人标准，<strong>如果你还坚持相信 10 年前的那个前端生态，那我打赌很快你会被淘汰掉。</strong>当然如果你甘于现状做一条咸鱼，在一个小作坊上班过个日子，那当我没说。</p>
+
+<p>我想还有一部分同学是这样的：他们知道前端要做的东西很多，但是也太高估前端的能力。我身边也有一些同学就觉得前端牛逼，万物皆前端，当然他自己也是牛逼的，看不起周遭的一切。在这里我想说的是五个字：<strong>术业有专攻。</strong>的确 JS 能做的东西很多，但很多情况下它并不是最佳实践。就拿服务器来说，你不得不接受的一个事实就是相同精力的投入，有时候 GO 写的无论从性能还是开发体验上，就是比 JS 要好。包括跨端渲染层的方案也是，<code>JavaScript Bridge</code> 做桥接，性能的损耗就是比 <code>Flutter</code> 原生绘制的消耗要大。</p>
+
+<p>归根结底就是，摆平心态，不骄不躁。既不要觉得前端容易才入坑，也不要觉得前端是万能的就是牛逼。</p>
+
+<h2 id="toc_2">配置工作流</h2>
+
+<p>讲了一堆废话，来聊点干货吧。这篇文章我并不打算写太多技术相关的东西，我并不想把它变成一篇 “面经贴”。现在网上有很多面试向的文章，但是却极少有人介绍前端的 <code>workflow</code>。而事实上对于一个刚入坑的萌新来说，我觉得工作流和团队协作的配置才是最关键的。<strong>因为这关乎你能不能快捷的接入项目研发，高效的和团队小伙伴们一起协作。</strong>所以我打算写一些关于前端工作流的配置。</p>
+
+<blockquote>
+<p>下面所说的都是基于 <code>Mac</code> 的生态，Linux 的同学理论上也适用。（除了 homebrew）Windows 的同学就抱歉了，可能要自己按着文章中的思路去搜一下具体的配置方法。因为我没有配置过 Windows 下的工作环境（讲道理我的 PC 只是用来打游戏而已，不会拿来工作😂）</p>
+</blockquote>
+
+<p><strong>首先 Mac 的同学清一色先把 <code>Xcode</code> 装了，Mac 上不装 <code>Xcode</code> 是没法玩下去的。</strong>然后咱开始正文。</p>
+
+<h4 id="toc_3">终端与 Vim</h4>
+
+<p>为啥这个最先写，因为配置好终端是后续所有操作的基础，能省很多事，不然会有很多坑。</p>
+
+<ul>
+<li>安装 <a href="https://www.iterm2.com/">iterm2</a>，然后配置 <code>zsh</code> 代替默认 <code>bash</code></li>
+</ul>
+
+<pre><code class="language-shell"># 装好 iterm2 后，在终端中执行，要是没有权限就加上 sudo
+chsh -s /bin/zsh
+
+# 安装 oh-my-zsh，感兴趣的同学自己搜一下
+sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&quot;
+</code></pre>
+
+<blockquote>
+<p><code>iterm2</code> 有一些很爽的特性，比如吸顶，一键唤出等。也有很多很爽的快捷键，比如 <code>command + d</code> 新建一个子窗口，<code>command + t</code> 新建一个标签等，这里不过多介绍，感兴趣的同学可以搜一下 <em>Mac iterm2 配置</em>，我贴一张图大家看看，如果大家想看配置的话下次专门写一篇。</p>
+</blockquote>
+
+<p><img src="https://qiniu.evanweb.cn/mweb/WechatIMG20.png" alt="WechatIMG20"/></p>
+
+<ul>
+<li>常见终端命令</li>
+</ul>
+
+<p>很多刚入坑的同学对终端是很不熟悉的，甚至有一部分同学觉得这是后端和运维的事情。其实只要是个码农，就离不开操作终端的宿命。所以基础的命令还是要掌握的。</p>
+
+<pre><code class="language-shell"># 查看目录下的文件，l 指的是详细信息，a 指的是隐藏文件也看，平时也可以直接 ls
+ls -la
+
+# 跳转去某个目录，没有输入完路径时，可以按 tab 自动补全路径，~ 指的是用户根目录
+cd ~
+
+# mv 移动文件，移动 a 到 mydir 文件夹下
+mv a.md ./mydir/
+
+# mv 重命名，a 重命名为 b
+mv a.md b.md
+
+# ps 查看进程，aux 和 -ef 功能类似，都是看目前内存中有哪些进程
+# | 这个符号是管道运算符，加上 grep myapp 表示过滤只看 myapp 相关的进程
+ps aux | grep myapp
+
+# tail 表示查看某个文件结尾，-f 表示实时查看，有新的内容就会滚动展示
+# | 加上 grep 表示过滤只看 127.0.0.1 相关的信息
+# 这个组合命令常用在查看日志中
+tail -f app.log | grep 127.0.0.1
+
+# 其他还有很多命令就不过多介绍了
+# 比如 cp，tail -n 1000，ln，还有压缩相关的命令，大家可以去了解
+</code></pre>
+
+<ul>
+<li>vim 相关操作</li>
+</ul>
+
+<p><code>vim</code> 是命令行编辑器的神器，有一些硬核的老铁甚至会拿 <code>vim</code> 来开发。也有很多很暴力的插件能把它整的和 <code>vscode</code> 这种 IDE 一样。但是我不推荐用 <code>vim</code> 开发，一是因为熟练运用它需要一定的学习成本，二是因为折腾它的过程中可能遇到各种奇奇怪怪的问题。但是为什么还要介绍它呢，<strong>因为看日志和命令行操作的时候，几乎是离不开它的。</strong></p>
+
+<blockquote>
+<p>Mac 是预装 <code>vim</code> 的，所以大家直接用就好了。对于 <code>vim</code> 0基础的同学，建议大家网上搜一下最基本的使用方法。我这里只做简单介绍。</p>
+</blockquote>
+
+<pre><code class="language-text">vim 有两种模式：命令模式与编辑模式
+命令行种 vim xxx 就直接进入这个文件的命令模式，这个时候是不能打字的
+进入命令模式后输入 i 将进入编辑模式，这时候可以打字
+
+命令模式常见指令
+1. “hjkl” 代表着 左下上右 四个箭头，“10j” 表示向下移动 10 行
+2. “^” 能直接去行首，“$” 能直接去行尾
+3. 上下翻页是 “control + f” 和 “control + b”
+4. 前后单词是 “b” 和 “w”
+5. “dd” 能删除一行
+6. “u” 是撤销操作，和平时的 “command + z” 是一样的
+
+编辑模式常见指令
+1. “: + q” 表示推出命令模式
+2. “: + q!” 表示强制退出，比如修改了内容又不想保存的时候
+3. “: + wq” 表示保存并退出
+</code></pre>
+
+<h4 id="toc_4">前端环境配置</h4>
+
+<ul>
+<li>Mac 首先要装一个叫 <code>homebrew</code> 的玩意，这东西是一个包管理工具，类似于 Ubuntu 的 <code>apt</code>，<a href="https://brew.sh/">👉戳这里去官网</a></li>
+</ul>
+
+<pre><code class="language-shell">/bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)&quot;
+</code></pre>
+
+<ul>
+<li><p>然后首当其冲是 <code>node</code> 配置。Mac 可以用 <code>homebrew</code> 去安装 node，但我建议用 <code>nvm</code> 来管理 node 的版本。<code>nvm</code> 是一个超好用的 node 版本管理工具，可以很方便的安装某个版本的 node，也可以很方便的在多个版本中切换。<a href="https://github.com/nvm-sh/nvm">👉戳这里去 github</a></p>
+<blockquote>
+<p>实际开发中可能不同项目依赖的 node 环境不一样，比如有的老一点的项目需要 8.x 的环境，而有的新项目可能需要 12.x 的环境，这时 nvm 就能派上大用场。</p>
+</blockquote></li>
+</ul>
+
+<pre><code class="language-shell"># 安装 nvm，安装完之后刷一下 .zshrc，或者直接重启 iterm2
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+
+# 重启之后就可以用 nvm 安装 node 了，找到你想安装的 node 版本直接装
+nvm install 12.18.4
+
+# 查看已经安装过的 node 版本
+nvm list
+
+# 切换 node 版本
+nvm use 12.18.4
+
+# 设置默认版本
+nvm alias default v12.18.4
+
+# 查看当前 node 版本
+node --version
+
+# 顺带把 yarn 也装了
+npm install -g yarn
+</code></pre>
+
+<ul>
+<li>安装 nrm，用来切换源</li>
+</ul>
+
+<pre><code class="language-shell"># nrm 是用来切换源的，主要用在两个方面
+# 一是国内墙的原因，有时候要切换到淘宝源。二是可能有些包是在自己公司私有源上的，可以添加私有源，方便切换
+
+# 安装 nrm
+yarn global add nrm
+
+# 查看当前源
+nrm current
+
+# 查看所有源
+nrm ls
+
+# 添加一个叫 mynpm 的源，地址是 http://mynpm.test.org/
+nrm add mynpm http://mynpm.test.org/
+
+# 切换源
+nrm use mynpm
+</code></pre>
+
+<ul>
+<li>全局装自己需要的框架</li>
+</ul>
+
+<pre><code class="language-shell"># 需要 react 的装 react，需要 vue 的装 vue
+# 以 vue 为例，我个人习惯用 yarn 安装，如果你习惯用 npm 就改成 npm
+yarn global add @vue/cli
+
+# 全局安装 typescript 和 ts-node
+# ts-node 是 node 端用来执行 ts 文件的
+yarn global add typescript
+yarn global add ts-node
+
+# 另外推荐一个好用的全局包 gtop
+# gtop 可以很方便的看系统资源的状态
+yarn global add gtop 
+</code></pre>
+
+<h4 id="toc_5">高效的 IDE 配置</h4>
+
+<p>前端的 IDE 有很多选择，早些年的 <code>sublime</code>，后来的 <code>webstorm</code>，再后来火遍大江南北的 <code>vscode</code>，甚至有些硬核选手会用 <code>vim</code> 作为开发工具。我个人最推荐的还是微软家的 <code>vscode</code>，轻便简洁，又不缺强力插件，调试也方便。我主要推荐几个提高效率的插件，至于语言支持和主题样式因人而异，根据自己需求和喜好来配就好了。</p>
+
+<table>
+<thead>
+<tr>
+<th>插件名</th>
+<th>功能</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Auto close tag</td>
+<td>自动闭合标签</td>
+</tr>
+<tr>
+<td>Auto rename tag</td>
+<td>一次性修改标签的名字</td>
+</tr>
+<tr>
+<td>Better comments</td>
+<td>给代码添加高亮注释</td>
+</tr>
+<tr>
+<td>Bracket pair colorizer 2</td>
+<td>高亮括号</td>
+</tr>
+<tr>
+<td>Code runner</td>
+<td>直接右键可执行代码</td>
+</tr>
+<tr>
+<td>Color highlight</td>
+<td>高亮颜色</td>
+</tr>
+<tr>
+<td>Comment translate</td>
+<td>选中自动翻译</td>
+</tr>
+<tr>
+<td>Debugger for chrome</td>
+<td>开一个 chrome 视窗 debug</td>
+</tr>
+<tr>
+<td>Docker</td>
+<td>docker 相关的插件</td>
+</tr>
+<tr>
+<td>ESLint</td>
+<td>eslint 相关插件</td>
+</tr>
+<tr>
+<td>Gitlens</td>
+<td>git 管理工具</td>
+</tr>
+<tr>
+<td>Import cost</td>
+<td>自动计算引入包的大小</td>
+</tr>
+<tr>
+<td>Markdown preview mermaid support</td>
+<td>markdown 预览支持 mermaid 风格的 uml 图</td>
+</tr>
+<tr>
+<td>Npm intellisense</td>
+<td>引入 npm 包自动补全路径</td>
+</tr>
+<tr>
+<td>Open in browser</td>
+<td>右键支持浏览器打开</td>
+</tr>
+<tr>
+<td>Prettier</td>
+<td>格式化插件</td>
+</tr>
+<tr>
+<td>Settings sync</td>
+<td>同步 vscode 配置</td>
+</tr>
+<tr>
+<td>TSLint</td>
+<td>tslint 相关插件</td>
+</tr>
+<tr>
+<td>Visul studio code commitizen support</td>
+<td>支持 commitizen 提交 git 校验</td>
+</tr>
+<tr>
+<td>Vscode-fileheader</td>
+<td>给文件添加个人信息的注释</td>
+</tr>
+</tbody>
+</table>
+
+<p>装完之后可以设置一下保存自动格式化，然后用刚安装好的 <code>Settings sync</code> 进行备份，下次换设备或者重装系统，直接从云端同步配置就好。</p>
+
+<pre><code class="language-text">1. command + shift + p 呼出面板，输入 open setting，选 json 打开
+2. 在打开的配置文件里面加一句 &quot;editor.formatOnSave&quot;: true, 然后保存
+3. command + shift + p 呼出面板，输入 sync 选择 update 配置，然后跟着提示备份数据
+4. 需要从云端恢复配置的时候，呼出面变输入 sync 选择 download 即可。
+5. 呼出面板，输入 shell，选择在 PATH 中安装 code 命令，在命令行中就可以 code xxx 用 vscode 打开文件或者目录
+</code></pre>
+
+<p>贴一张我的 vscode<br/>
+<img src="https://qiniu.evanweb.cn/mweb/WechatIMG19.png" alt="WechatIMG19"/></p>
+
+<h4 id="toc_6">Git 与团队协作</h4>
+
+<p>工作与学生时代（或者说个人项目）最大的区别就是：需要团队协作。这就涉及到如何高效进行团队协作，以及如何规范团队研发流程。<code>Mac</code> 预设就带 <code>git</code>，没有 <code>git</code> 的同学可以去官网下。</p>
+
+<p><code>git</code> 是每个程序员的必修课，不熟悉的同学一定要抽时间把 <code>git</code> 系统性的学习一遍，廖雪峰老师的 <code>git</code> 教程就够用了。这里主要讲讲 <code>git</code> 的配置和常见用法，熟悉的同学可以跳过。</p>
+
+<ul>
+<li>ssh 和 git 初始化</li>
+</ul>
+
+<pre><code class="language-shell"># 配置 ssh 关联 git 仓库
+# 邮箱换成自己的，另外生成前检查一下 ~/.ssh 目录，如果有这个目录，重新生成会覆盖
+# 输入完命令后会让你填一些东西，一路回车就好，不然容易有坑，除非你清楚你在干啥
+ssh-keygen -t rsa -C &quot;o953328679@gmail.com&quot;
+
+# 确保开启 ssh 代理
+eval &quot;$(ssh-agent -s)&quot;
+ssh-add ~/.ssh/id_rsa
+
+# 复制 ~/.ssh/id_rsa.pub 的内容
+# 然后去你的仓库，比如 github 里找到 setting 选项，然后选 ssh key 选项，新建 ssh key，然后粘贴进去
+# 然后你就可以潇洒的 git clone 你的仓库了
+pbcopy &lt; ~/.ssh/id_rsa.pub
+
+# 顺便设置一下 git 个人信息
+git config --global user.name &quot;Evan&quot;
+git config --global user.email &quot;o953328679@gmail.com&quot;
+</code></pre>
+
+<ul>
+<li>在现成项目上开发</li>
+</ul>
+
+<pre><code class="language-shell"># cd 到你的工作目录，假设你有个 workplace 的目录
+cd ~/workplace
+
+# 克隆仓库
+git clone git@your-address.git
+
+# 拉一个新分支
+# 然后在上面开发
+git checkout -b your-branch
+
+# 开发完毕后，暂存变更
+git add .
+
+# 提交并添加备注
+git commit -m &quot;init&quot;
+
+# 推送到远程仓库
+git push
+</code></pre>
+
+<ul>
+<li>新建远程仓库并且关联本地项目</li>
+</ul>
+
+<pre><code class="language-shell"># 进入工作目录
+cd your-workplace
+
+# 初始化并关联仓库
+git init
+git remote add origin git@your-address.git
+
+# 拉取代码
+git pull origin master
+
+# 查看关联的远程分支
+git branch -vv
+
+# 暂存变更
+git add .
+
+# 提交并添加备注
+git commit -m &quot;init&quot;
+
+# 推送到远程仓库并指定分支
+git push --set-upstream origin master
+</code></pre>
+
+<ul>
+<li>介绍一下主流的 git 工作流程
+<ul>
+<li><code>master</code> 分支是最稳定的分支，随时能打一个 <code>release</code> 上线。<code>master</code> 一般不允许直接修改，只允许合并其他测试完毕的分支。</li>
+<li><code>develop</code> 分支是用于测试一些功能分支的，他是最新的版本，但是不稳定。比如开发了一个新的还未经测试的功能，就合并到 <code>develop</code> 分支上。同样一般他也是不能直接修改的，只允许合并其他分支。</li>
+<li><code>feature</code> 功能分支，用来开发新功能。开发一个新功能就拉一个分支，开发完就合并到 <code>develop</code> 测试。</li>
+<li><code>release</code> 发布分支，当 <code>develop</code> 分支测试通过，将从 <code>develop</code> 拉一个 <code>release</code> 分支出来。<code>release</code> 分支只允许修复 bug，不再接入新功能。确定无误后即可发版合并到 <code>master</code> 中。同时也要合并会 <code>develop</code> 分支保证 <code>develop</code> 代码是最新的。</li>
+<li><code>hotfix</code> 分支是紧急修复线上 bug 的分支。修复完之后合并回 <code>master</code> 和 <code>develop</code> 分支。</li>
+</ul></li>
+</ul>
+
+<p>至于团队研发流程的规范，一般来说是开发时 <code>eslint / tslint</code> 校验，提交时 <code>pre-commit</code> 配合 <code>husky</code> 的检查，开发完后提交 <code>code review</code> 让同事审查，审查通过后提交 <code>merge request</code> 再合并分支。整个流程详细说要花费大量篇目，这里引用一篇阿里的文章，写的比较详细了。<a href="https://juejin.im/post/6844903606815064077">👉文章看这里</a></p>
+
+<h4 id="toc_7">其他</h4>
+
+<p>除了上述的这些常见的配置之外，还有一些其他常见的研发配置以及一些提高效率的工具。我这里列一下，不展开细说了，大部分都是官网有详细的教程。</p>
+
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Mongodb</td>
+<td><a href="https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/">https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/</a></td>
+</tr>
+<tr>
+<td>Mysql</td>
+<td><a href="https://dev.mysql.com/downloads/mysql/">https://dev.mysql.com/downloads/mysql/</a></td>
+</tr>
+<tr>
+<td>Redis</td>
+<td><a href="https://redis.io/download">https://redis.io/download</a></td>
+</tr>
+<tr>
+<td>Docker</td>
+<td><a href="https://www.docker.com/get-started">https://www.docker.com/get-started</a></td>
+</tr>
+<tr>
+<td>Markdown</td>
+<td>我用的是mweb，要收费但是很好用，配合脚本可以直接发布博客</td>
+</tr>
+<tr>
+<td>Postman</td>
+<td><a href="https://www.postman.com/downloads/">https://www.postman.com/downloads/</a></td>
+</tr>
+<tr>
+<td>Alfred</td>
+<td>很方便的搜索工具，我用来代替mac自带的spotlight，因为它可以在某个站点内搜索，比如我可以直接在npm搜索，直接在github搜索等</td>
+</tr>
+</tbody>
+</table>
+
+<p>贴一张 Alfred 的图吧</p>
+
+<p><img src="https://qiniu.evanweb.cn/mweb/16027680192435.jpg" alt="" style="width:1440px;"/></p>
+
+<h4 id="toc_8">workflow</h4>
+
+<p>最后介绍一下我自己的工作流。我有写一些自动同步日历日程的脚本，一些写了一些机器人提醒我干活。一般来说开完会之后，我会直接同步我的待办事项和进程。然后到要干活的时候就直接开整：</p>
+
+<ul>
+<li><code>option + 空格</code> 呼出终端，直接去工作目录，然后 <code>code .</code> 打开当前目录</li>
+<li>回到终端，<code>command + t</code> 新增终端窗口，跑 <code>dev</code></li>
+<li><code>git</code> 一套操作开发，然后提一个 <code>code review</code> 需求给同事，完事了提 <code>merge request</code> 然后合并代码</li>
+<li>过程中有需要查阅资料的，就 <code>command + 空格</code> 呼出 <code>alfred</code> 搜</li>
+<li>遇到有需要记录的就打开 <code>mweb</code> 记录下来，后续再整理</li>
+<li>部分需求需要查日志，呼出终端上到跳板机去开发机，查测试环境的日志</li>
+<li>部分需求需要做后端或者 <code>bff</code> 的，就用 <code>postman</code> 调试</li>
+</ul>
+
+<p>以后有时间，再分享一片平时学习的 workflow，以及一些高效的日常配置，同步博客记录，机器人消息推送等。</p>
+
+<h2 id="toc_9">下篇预告</h2>
+
+<p>写了万把字，总算把上篇写完了。在下篇中，我会介绍自我成长规划，选厂以及前端项目的搭建。感兴趣的同学可以关注一下，没人看我就当作日常记录😂😂</p>
+
+<p>2020.10.15</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[前端面经复盘]]></title>
@@ -5610,185 +6125,6 @@ class SubClass extends SuperClass {constructor(name, age) {super(name)
 let subClass = new SubClass(&#39;Evan&#39;, 21)
 subClass.showName()subClass.showAge()
 </code></pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[性能优化]]></title>
-    <link href="https://evanoyam.github.io/16023373532350.html"/>
-    <updated>2020-10-10T21:42:33+08:00</updated>
-    <id>https://evanoyam.github.io/16023373532350.html</id>
-    <content type="html"><![CDATA[
-<ol>
-<li>首屏优化（sw，骨架屏）</li>
-<li>渲染优化（无限滚动，Intersection Observer API，图片懒加载，路由按需加载）</li>
-</ol>
-
-<h2 id="toc_0">首屏优化</h2>
-
-<h4 id="toc_1">service-worker</h4>
-
-<ol>
-<li>以文件夹作为域，只能控制自身层级及以下层级的文件夹</li>
-<li>有installing，installed / waiting，activating，activated，redundant等生命周期</li>
-</ol>
-
-<blockquote>
-<p>installing失败会被放弃，一个域名下最多只能存在两个worker，一个是激活态的，另一个是等待态的。有新的worker来会替换掉旧的等待态worker。直到页面所有线程被释放，等待态的worker才会替换掉激活态的worker</p>
-</blockquote>
-
-<ol>
-<li>能拦截几乎所有请求，可以重新组装响应包</li>
-<li>配合CacheStorage能缓存大部分响应类型，不能缓存POST响应</li>
-<li>缓存最佳实践是区分缓存池，对不同类型的资源采用不同的缓存策略</li>
-</ol>
-
-<blockquote>
-<ul>
-<li>长期不变动的资源，缓存到静态缓存池中</li>
-<li>业务级的资源，缓存到动态缓存池中，每次打包利用webpack自动更新缓存池名字，当新的worker激活后会比对缓存池，清理过期缓存</li>
-<li>更新策略需要穿透http缓存，请求的worker注册文件应该带时间戳，如sw.js?v=xxxxxxx</li>
-<li>启用黑白名单，过滤不需要缓存的资源</li>
-</ul>
-</blockquote>
-
-<h4 id="toc_2">骨架屏</h4>
-
-<p>对于单页应用而言，首屏加载慢一直是个问题。因为单页应用拉回来的html是没有dom节点的，dom依赖js去动态渲染。于是有了骨架屏的方案，首屏出来之前，展示一个骨架，ui更友好。</p>
-
-<p>骨架屏的思想就是，build出来的index.html里面就有骨架的dom，等js加载完再把骨架屏的dom移除。对vue来说就是 <code>#app</code> 内的东西还没出来，就展示骨架屏；出来了就移除骨架屏。</p>
-
-<p>骨架屏要解决两个问题：<strong>一是如何生成骨架屏文件，二是如何注入骨架屏文件</strong></p>
-
-<p><strong>生成：</strong><br/>
-采用 <a href="https://github.com/kaola-fed/awesome-skeleton/blob/master/README-zh_CN.md">awesome-skeleton</a> 插件的方案。原理是开一个 Chromium，用 Puppeteer 抓页面，生成一个骨架的html或者png</p>
-
-<p><strong>注入：</strong><br/>
-采用 <a href="https://github.com/lavas-project/vue-skeleton-webpack-plugin">vue-skeleton-webpack-plugin</a> 插件的方案。原理是利用 <code>html-webpack-plugin</code> 插件的  <code>html-webpack-plugin-before-html-processing</code> 事件钩子，在处理 <code>index.html</code> 之前，把某个vue文件（骨架屏）预渲染注入到 html 中，使得构建完的 html 文件有骨架屏的dom，script和样式</p>
-
-<p><strong>实现：</strong><br/>
-对h5项目来说，生成骨架屏可以在项目内用 <code>awesome-skeleton</code> 抓取配置文件中指定的页面，输出到固定的目录中。也可以起一个node服务专门就来生成骨架屏，暴露一个API，接收一个url，输出骨架屏。</p>
-
-<p>注入骨架屏可以写一个node的脚本。执行脚本的时候，遍历骨架屏文件夹里的所有html文件，然后重组之后生成对应的vue文件和入口文件。有了vue和入口文件，按照 <code>vue-skeleton-webpack-plugin</code> 的用法就能轻松把骨架屏注入到html中。</p>
-
-<blockquote>
-<ul>
-<li>注入html时，cli3的 <code>mini-css-extract-plugin</code> 会把样式注入到bundle的js中，这样骨架屏的样式是不生效的。需要把样式分离，注入的时候改成style注入到html的head标签里。</li>
-<li>其实真正的预渲染，是根据不同的路由访问不同的index文件。但是这样每次都要变更ng的配置去配合预渲染的index，路由也只能是history模式。而这里选用的方案是把所用的骨架屏全部注入到index.html中，访问不同的路由，加载的都是同一份html，只是控制展示不同的骨架。</li>
-</ul>
-</blockquote>
-
-<h2 id="toc_3">渲染优化</h2>
-
-<h4 id="toc_4">无限滚动列表</h4>
-
-<p>对一个长列表来说，用户所能看见的仅仅是其中的一部分DOM，大部分的DOM节点是在屏幕外的。这部分节点是没有意义的，用户看不见，却又消耗性能去渲染，处理。尤其是滚动时还要不断触发无用的重绘。于是诞生<strong>无限滚动列表</strong>的概念</p>
-
-<p>无限滚动列表，也叫虚拟渲染列表。指的是<strong>对一个长列表，只渲染其中的一部分，对于那些用户看不见的DOM节点，采用回收处理</strong>。无论渲染多少数据，始终渲染一定个数的DOM节点。用户滚动列表时修改渲染的DOM节点内容，再通过某些手段强制让滚动视窗的内容一直停留在屏幕内。</p>
-
-<p><strong>需要解决的问题：</strong></p>
-
-<ol>
-<li>用户滚动时，动态从总数据数据中筛选出需要渲染的部分数据</li>
-</ol>
-
-<blockquote>
-<p>比如有1000条数据的list，需要渲染的仅仅是30条，用户滚动时从1000条中挑选出需要渲染的30条。可能是1-30，也可能是11-40，根据不同的滚动高度选出不同的区间</p>
-</blockquote>
-
-<ol>
-<li>即使修改了渲染的数据，但是由于用户滚动视窗，导致容器向上滑动，我们需要修正偏差</li>
-</ol>
-
-<blockquote>
-<p>用户向上（向下）滑动了多少，我们就要向下（向上）“拉”回多少，保证用户视觉内看到的容器没有偏移</p>
-</blockquote>
-
-<p><strong>解决方法：</strong></p>
-
-<ol>
-<li>关于上述第一个问题，我们需要知道需要渲染的数据区间是多少，初始化时和每次滚动时，都要计算出数据区间。假设容器内能展示 X 个元素，为了防止快速滚动时出现白屏，我们需要在容器可视区上方多渲染 2X 个元素，在容器可视区下方多渲染 X 个元素。那么整个渲染区间所需的元素个数的 4X 个。</li>
-</ol>
-
-<blockquote>
-<p>我们需要计算出list中一个item的高度，再根据当前容器的高度，计算出当前容器可视区域能展示多少个元素，这个数值*4即整个渲染区间所需的元素个数</p>
-</blockquote>
-
-<ol>
-<li>关于上述第二个问题，我们需要这么设计DOM结构</li>
-</ol>
-
-<pre><code class="language-markup">&lt;div class=&quot;content&quot;&gt;
-    &lt;ul class=&quot;list&quot;&gt;
-        &lt;li class=&quot;item&quot;&gt;&lt;/li&gt;
-        &lt;li class=&quot;item&quot;&gt;&lt;/li&gt;
-        &lt;li class=&quot;item&quot;&gt;&lt;/li&gt;
-        &lt;li class=&quot;item&quot;&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-&lt;/div&gt;
-</code></pre>
-
-<p>ul就是整个渲染区间，ul在content里滚动。ul是list中所有数据渲染完后，item总和的高度。如1000条数据，ul的高度就是1000个item的高度。当用户向上滑动屏幕（越来越多的下方数据进入屏幕），ul向上移出content的高度就越来越大。当用户向下滑动屏幕则ul向下移除content的高度越来越大。如果我们什么都不做，渲染出来的内容就不能保证出现在视窗中（因为被滑动拖走了）</p>
-
-<p>因此我们需要把偏移的ul“拉”回正确的位置。当用户向上滑动屏幕，ul向上移出，那我们就添加ul的paddingTop（或者marginTop）把ul“顶下去”；向下滑动屏幕，ul向下移出，那我们就添加ul的paddingBottom（或者marginBottom）把ul“顶上来”。只要保证这个“顶”的偏移量和“滑”走的偏移量相等，就能让ul渲染的内容始终在用户视窗内</p>
-
-<blockquote>
-<ul>
-<li>content是明确高度的，因为我们需要根据content和item高度来计算容器可视区（content）能展示多少个item，进而计算出渲染区间展示多少个item</li>
-<li>“拉”回ul的方法有很多，比如ul定高后，根据相对定位修改第一个item相对ul出现的高度，也能达到滑动后保证item还在视窗内</li>
-</ul>
-</blockquote>
-
-<p><img src="http://upload.eiona.ink/GzAc9/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6.png" alt="image"/></p>
-
-<p>例子：<a href="https://files.eiona.ink/files/code/test.vue">父组件</a>，<a href="https://files.eiona.ink/files/code/virtualScroll.vue">无限滚动组件</a></p>
-
-<h4 id="toc_5"><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API">Intersection Observer API</a></h4>
-
-<p>用于观察一个元素是否与目标元素产生交集。默认目标元素是浏览器视窗。当观察的元素与目标元素产生的交集大于阀值时，将执行一个回调。</p>
-
-<p>利用这个特性，可以用来代替scroll事件完成一些事情，比如商品列表中某个商品出现在屏幕时加载更多，比如用来埋点等</p>
-
-<pre><code class="language-javascript">const observe = domList =&gt; {
-  let callback = (entries, observer) =&gt; {
-    entries.forEach(entry =&gt; {
-      if (entry.isIntersecting) {
-        console.log(entry.target.dataset.id)
-        observer.unobserve(entry.target) // 停止观察当前元素 避免不可见时候再次调用callback函数
-      }
-    })
-  }
-
-  let options = {
-    threshold: 0.5
-  }
-
-  let observer = new IntersectionObserver(callback, options)
-
-  domList.forEach(item =&gt; {
-    observer.observe(item)
-  })
-}
-
-</code></pre>
-
-<h4 id="toc_6">图片懒加载 / 预加载</h4>
-
-<p>vue-lazyload用来开启图片懒加载，原理是先用一个html属性暂存图片的真实地址，当图片出现在屏幕上或者距离屏幕一定距离时，才把地址设置成src的值，这时才去请求真实图片</p>
-
-<h4 id="toc_7">路由按需加载</h4>
-
-<p>通过 <code>component: () =&gt; import()</code> 的方式按需加载路由，用魔法注释来标记打包完的bundle名称。这种加载方式能将一个大的路由拆成多个子bundle，请求路由时只加载对应路由的依赖。</p>
-
-<pre><code class="language-text">component: () =&gt;
-    import(
-        /* webpackChunkName: &quot;signinSharePage&quot; */
-        &#39;@/views/group/components/signin/signinSharePage&#39;
-    ),
-</code></pre>
-
-<p>可以开启 <a href="http://note.youdao.com/s/BiLI75Vy">prefetch</a> 让浏览器空闲时预先加载其他路由bundle</p>
 
 ]]></content>
   </entry>
