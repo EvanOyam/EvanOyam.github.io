@@ -2,7 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
   <loc>https://evanoyam.github.io/</loc>
-  <lastmod>2020-10-17T17:53:49+08:00</lastmod>
+  <lastmod>2020-10-18T01:25:38+08:00</lastmod>
+</url>
+
+<url>
+  <loc>https://evanoyam.github.io/16029536532564.html</loc>
+  <lastmod>2020-10-18T00:54:13+08:00</lastmod>
 </url>
 
 <url>
@@ -126,11 +131,6 @@
 </url>
 
 <url>
-  <loc>https://evanoyam.github.io/16023309543669.html</loc>
-  <lastmod>2020-10-10T19:55:54+08:00</lastmod>
-</url>
-
-<url>
   <loc>https://evanoyam.github.io/16022505778243.html</loc>
   <lastmod>2020-10-09T21:36:17+08:00</lastmod>
 </url>
@@ -177,11 +177,15 @@
 </url>
 
 <url>
-  <loc>https://evanoyam.github.io/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0.html</loc>
+  <loc>https://evanoyam.github.io/%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0.html</loc>
 </url>
 
 <url>
-  <loc>https://evanoyam.github.io/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5.html</loc>
+  <loc>https://evanoyam.github.io/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5.html</loc>
+</url>
+
+<url>
+  <loc>https://evanoyam.github.io/%E5%85%B6%E4%BB%96.html</loc>
 </url>
 
 
