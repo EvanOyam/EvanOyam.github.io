@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> 应届前端的逆袭（下） - Evan的博客 </title>
+     
+    <link href="atom.xml" rel="alternate" title="Evan的博客" type="application/atom+xml" />
+    
+    <link rel="shortcut icon" href="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" type="image/png" />
+    
+
+    <link rel="stylesheet" href="asset/css/foundation.min.css" />
+    <link rel="stylesheet" href="asset/css/docs.css" />
+    <script src="asset/js/vendor/modernizr.js"></script>
+    <script src="asset/js/vendor/jquery.js"></script>
+
+    <script type="text/javascript">
+      function before_search() {
+        var searchVal = 'site:evanoyam.github.io ' + document.getElementById('search_input').value
+        document.getElementById('search_q').value = searchVal
+        return true
+      }
+    </script>
+  </head>
+  <body class="antialiased hide-extras">
+    <div class="marketing off-canvas-wrap" data-offcanvas>
+      <div class="inner-wrap">
+        <nav class="top-bar docs-bar hide-for-small" data-topbar>
+          <section class="top-bar-section">
+            <div class="row">
+              <div style="position: relative; width: 100%">
+                <div style="position: absolute; width: 100%">
+                  <ul id="main-menu" class="left">
+                    
+                    <li id=""><a target="self" href="index.html">Home</a></li>
+                    
+                    <li id=""><a target="_self" href="archives.html">Archives</a></li>
+                    
+                  </ul>
+
+                  <ul class="right" id="search-wrap">
+                    <li>
+                      <form
+                        target="_blank"
+                        onsubmit="return before_search();"
+                        action="https://google.com/search"
+                        method="get"
+                      >
+                        <input type="hidden" id="search_q" name="q" value="" />
+                        <input tabindex="1" type="search" id="search_input" placeholder="Search" />
+                      </form>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </nav>
+
+        <nav class="tab-bar show-for-small">
+          <a href="javascript:void(0)" class="left-off-canvas-toggle menu-icon">
+            <span> &nbsp; Evan的博客</span>
+          </a>
+        </nav>
+
+        <aside class="left-off-canvas-menu">
+          <ul class="off-canvas-list">
+            
+            <li><a target="self" href="index.html">Home</a></li>
+            
+            <li><a target="_self" href="archives.html">Archives</a></li>
+            
+
+            <li><label>Categories</label></li>
+
+            
+            <li><a href="Interface.html">面试</a></li>
+            
+            <li><a href="%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0.html">原理笔记</a></li>
+            
+            <li><a href="%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5.html">项目实践</a></li>
+            
+            <li><a href="%E5%85%B6%E4%BB%96.html">其他</a></li>
+            
+          </ul>
+        </aside>
+
+        <a class="exit-off-canvas" href="#"></a>
+
+        <section id="main-content" role="main" class="scroll-container"></section>
+      </div>
+    </div>
+  </body>
+</html>
+ <script type="text/javascript">
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
+</script>
+<div class="row">
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>应届前端的逆袭（下）</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2020/10/14</span>
+
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='Interface.html'>面试</a></span>
+           
+         
+          <span class="comments">
+            
+
+            
+          </span>
+
+        </div>
+      </div><!-- article -->
+
+      <div class="article-content">
+      <p>作为这个系列的最后一篇文章，我决定写一下有实践意义的东西。这篇文章主要讲的是<strong>如何从零开始搭建一个前端项目。</strong> 包含项目应用上的架构，以及工程管理上的一些小建议两个部分。系列其他文章👇👇</p>
+
+<ul>
+<li><strong><a href="https://juejin.im/post/6884042237412376583">应届前端的逆袭（上）</a></strong></li>
+<li><strong><a href="https://juejin.im/post/6885128978928140296">应届前端的逆袭（中）</a></strong></li>
+</ul>
+
+<blockquote>
+<ul>
+<li>原本打算上下两篇就写完这个系列的，但是实际写的过程中发现如果揉在一块，篇幅会十分长😅，所以还是决定拆成 3 篇。 <strong>上篇主要介绍当前及未来前端发展的趋势，高效团队协作的开发配置；中篇主要是职业规划和选厂建议；下篇专门讲讲怎么从零开始搭一个前端项目。</strong></li>
+<li><strong>这篇文章主要是写给刚毕业，或者刚转行入坑前端的同学，</strong> 总结了一些经验和学习心得，也算是以自身经历为例子的职业入坑指引吧。</li>
+<li>文章中涉及到的技术栈和框架不会太深入去讲，主要是介绍职业规划和个人成长规划。对文章中某个点感兴趣的同学可以私我。</li>
+</ul>
+</blockquote>
+
+<h2 id="toc_0">前言</h2>
+
+<p>我先问大家一个问题： <strong>“假设你的团队 Leader 让你做一个全新的业务，你会怎么做？”</strong></p>
+
+<p>前端老兵可能不觉得是什么大挑战，但是对大部分新人来说，可能就懵了。每位同学既然能应聘上 “前端” 这一岗位，就肯定有一定的开发能力。没错，你会 <code>clone</code> 仓库，你会写业务代码，你会提交你会上线。但问题是，如果没有仓库呢？需要从零开始起项目的时候，又该怎么去折腾呢？只是装完脚手架然后往仓库一推就完事了么？ <strong>如果你懒得看文章，可以直接翻到最后面的结论。</strong></p>
+
+<p>在开始之前，我先强烈建议大家创建项目的时候，在根目录写上 <code>README.md</code> 或者其他描述文件。在文档中写清楚项目的安装、运行、调试、部署步骤，这是对自己也是对项目的负责。如果没有文档，别说交接给其他小伙伴，就算是你自己，过个一年半载你也未必记得你对这个项目做过什么。</p>
+
+<h2 id="toc_1">应用架构</h2>
+
+<p>应用的架构是每个项目初始化时必须面对的问题。如果架构不合理是会造成极大的开发阻碍的，甚至无法进行开发。好在基本上所有的框架都有自己的配套脚手架，这能让开发者省心不少，不需要关注框架内部的组织架构，只需要关注自身的应用架构就行了。</p>
+
+<blockquote>
+<p>由于不同的技术栈之间的架构存在一些差异，在这里我将会把重点放在项目的工程管理理念上，把这些通用概念抽象出来，而不是陈述技术实现细节。</p>
+</blockquote>
+
+<h4 id="toc_2">目录与文件规范</h4>
+
+<p>一个项目的目录结构是非常重要的。可能有的开发者觉得： <em>这又不影响功能和性能，没必要花时间去规范他，还不如多学点技术。</em> 这是一个非常片面的观念。技术固然重要，但也不能小瞧规范。规范了标准能事半功倍，而一个无约束的项目分分钟能让你崩溃。</p>
+
+<p>合理的目录规范能让你更高效开发，更快速的定位问题，还能对项目结构有一个抽象的认知。比如对请求数据流的抽象理解：请求进来，到中间件，到路由，到某个控制器，到服务层，到数据层…</p>
+
+<p>如果你对某个工程体系或者某个框架有非常深的理解，那么你可以尝试自己搭建脚手架，自己搭建最理想的目录配置。不过我相信大部分项目其实还不到要硬核的定制脚手架的程度。为了更快捷接入开发，也为了拥抱社区容易躲坑，我的建议是<strong>有成熟的官方或社区脚手架，就用脚手架。</strong></p>
+
+<p>现在大部分前端框架都有自己的官方脚手架，比如 <code>@vue/cli</code>，比如 <code>create-react-app</code>，建议直接用，别折腾。如果项目有一些定制需求，也完全可以在脚手架的基础上二次开发。而对于一些 <code>node</code> 层的应用，可以去 github 上找一些高星的社区脚手架。比如狼叔的 <code>koa-generator</code></p>
+
+<blockquote>
+<p>安利一个输出目录结构的工具，<code>homebrew install tree</code> 可以直接安装。忽略 <code>node_modules</code> 查看三层目录的例子：<code>tree -L 3 -I &quot;node_modules&quot;</code></p>
+</blockquote>
+
+<h4 id="toc_3">代码规范</h4>
+
+<p>相信很多新入坑刚开始用 <code>git</code> 的同学都经历过一个绝望时刻： <strong>一个格式化操作引发的雪崩式 merge conflict。</strong> 就保存了一下，完蛋了成百上千行的冲突。这些冲突往往不是什么功能变更，而是删掉了一个分号，或者补上了一个空格之类的。这就是没有 <code>eslint</code> 做代码风格统一的结果。</p>
+
+<p><code>eslint</code> 是用来规范 <code>js</code> 或者类 <code>js</code> 语言的。主要有两个功能：</p>
+
+<ul>
+<li>规范项目代码风格，保证无论开发者在什么系统上，用什么编辑器，格式化的风格都是统一的。</li>
+<li>简单的静态提示，比如提示某个变量声明了但是并没用到。</li>
+</ul>
+
+<p><code>eslint</code> 的配置因技术栈的不同而不同。一般的脚手架都集成了 <code>eslint</code>，这也是为什么我推荐脚手架的原因。此外 <code>eslint</code> 有很多配置规则，可以参考<a href="https://eslint.org/docs/rules/">官方文档</a></p>
+
+<p><code>eslint</code> 一般和 <code>prettier</code> 配套使用。前者是做规范检查，后者是做格式化处理。在这里我写一个简单的基于 ts 的例子，如果你是手撸项目的，也可以参考参考。</p>
+
+<pre><code class="language-shell">## 安装 eslint 的依赖，包括核心，解析器和一个扩充插件
+yarn add eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --dev
+
+## 安装 prettier 依赖
+yarn add prettier eslint-config-prettier eslint-plugin-prettier --dev
+</code></pre>
+
+<pre><code class="language-javascript">// 然后在项目根目录新建 eslint 配置文件
+// 可以用官方后缀，也可以用 js 或者 json。这里以 js 演示
+// 根目录新建 .eslintrc.js
+module.exports =  {
+  parser:  &#39;@typescript-eslint/parser&#39;,
+  extends:  [
+    &#39;plugin:@typescript-eslint/recommended&#39;,
+    &#39;prettier/@typescript-eslint&#39;,
+    &#39;plugin:prettier/recommended&#39;,
+  ],
+  parserOptions:  {
+    ecmaVersion:  2018,
+    sourceType:  &#39;module&#39;,
+  },
+};
+</code></pre>
+
+<pre><code class="language-javascript">// 在项目根目录新建 prettier 配置文件
+// 可以用官方后缀，也可以用 js 或者 json。这里以 js 演示
+// 根目录新建 .prettierrc.js
+module.exports = {
+  semi: true,
+  trailingComma: &quot;all&quot;,
+  singleQuote: true,
+  printWidth: 120,
+  tabWidth: 4
+};
+</code></pre>
+
+<p>最后修改 <code>vscode</code> 的配置，实现保存时自动格式化，<code>command + p</code> 调出面板，然后搜 <code>setting.json</code> 直接改就行。</p>
+
+<pre><code class="language-javascript">{
+    &quot;editor.formatOnSave&quot;: true, // 保存自动格式化
+    // eslint 相关配置
+    &quot;editor.codeActionsOnSave&quot;: {
+        &quot;source.fixAll&quot;: true,
+        &quot;source.fixAll.eslint&quot;: true
+    },
+}
+</code></pre>
+
+<blockquote>
+<p>除了 <code>eslint</code> 之外，还可以用 <code>stylelint</code> 和 <code>htmllint</code> 来规范 <code>css</code> 和 <code>html</code>。这里就不展开说了。</p>
+</blockquote>
+
+<h4 id="toc_4">线上监控与报警</h4>
+
+<p>一般来说，你的应用 DAU 越高，用户体量越大，那么线上的告警就显得越重要。代码上线之后，唯二能知道运行是否正常的途径有两个：一是你自己亲自去把所有功能体验一遍，二是线上错误监控。</p>
+
+<p>就算你自己把所有功能回归一遍，但总会有异常状态是漏网之鱼，亦或者是受到什么攻击导致某个服务崩溃。所以无论出于什么理由， <strong>线上的监控与错误告警都显得十分重要。</strong></p>
+
+<ul>
+<li>用户行为埋点</li>
+</ul>
+
+<p>先从最基础的说起。用户的行为埋点与否，其实并不会影响 web 应用的功能。做这些指标监控最直接的原因就是 <strong>知道用户的操作流程与习惯，给开发者一个反馈，</strong> 以便后期需求的分析与迭代。所谓埋点其实就是当用户触发某个事件的时候，发起一个请求，告知服务器用户进行了什么操作。你可以选择用 <code>axios</code> 发起一个 <code>post</code>，也可以选择用 <code>img</code> 标签携带一些参数发起一个 <code>get</code> 请求。可以硬编码在业务逻辑中，也可以选择无侵入式的监听。</p>
+
+<blockquote>
+<p>举个例子，比如一个轮播图，每次用户点击的时候，除了跳转之外，再发起一个埋点请求，告诉服务器当前的时间，用户机型，用户id等。利用这些数据可以做用户画像分析，亦或者结合曝光的埋点，来计算出某个 banner 的点击率是多少</p>
+</blockquote>
+
+<ul>
+<li>性能上报</li>
+</ul>
+
+<p>性能上报说简单也不简单，说复杂也不复杂。这完全取决于项目规模和需要统计的数据维度。常见的 web 应用性能收集，主要包括<strong>网络性能和脚本执行性能</strong>两个部分，一些注重视图渲染的应用可能还需要收集帧率作为指标。一般来说，网络的传输速度和脚本的执行速度，就决定了这个应用的体验流畅性。</p>
+
+<p>关于性能的监控，业界主流有两种方式。一种是通过 <code>performance</code> API 来统计网络关键节点的耗时，以及脚本解析的耗时。包括 <code>DNS</code> 的解析，<code>TCP</code> 握手的耗时，<code>TLS</code> 的耗时，资源下载的耗时，首屏，白屏时间等。</p>
+
+<p>另一种方式一般针对大型应用或者需要精确统计的应用，比如电商。这种性能收集是通过 <code>Mutation Observer</code> 的 API 去监控整个 <code>DOM</code> 树的构建和渲染过程，并且给不同的节点赋上一个权重，比如主要图片权重100，标题权重1000，一些细节权重10。最终通过一个加权平均，计算出一个能表示 “主要元素已经渲染完” 的值，用作性能监控。</p>
+
+<blockquote>
+<p>👉<a href="https://evanoyam.github.io/16022501324283.html">这篇文章</a>有写关于白屏与性能监控的知识，感兴趣可以看看。托管在 github page 的，可能需要科学上网。</p>
+</blockquote>
+
+<ul>
+<li>错误告警</li>
+</ul>
+
+<p>错误告警是非常重要的一环，但也是很多开发者不太重视的一环，觉得运维监控就好了，自己不用管。其实每个开发者都需要为自己的项目负责，那么第一步就是知道代码在线上是否运行正常。对大型项目而言， <strong>强烈建议采用 sentry 或者类似的监控平台。</strong></p>
+
+<p>从自己造轮子的角度上说，捕获异常的方式有很多种，比如 <code>window.onerror</code>，<code>addEventListener(&quot;error&quot;, cb)</code>，<code>try catch</code>，<code>unhandledrejection</code> 等。</p>
+
+<p>其中 <code>onerror</code> 不能捕获资源加载的错误，比如图片挂了等。而 <code>try catch</code> 不能捕获 promise 的错误</p>
+
+<p>比较好的处理方式是，用，<code>addEventListener(&quot;unhandledrejection&quot;, cb)</code> 来捕获异步错误。并且统一抛出 <code>new Error</code>，然后统一监听 <code>error</code> 事件</p>
+
+<p>对于 vue，react 之类的框架错误，需要用框架内的错误捕获方法抛出异常</p>
+
+<pre><code class="language-javascript">window.addEventListener(&quot;unhandledrejection&quot;, e =&gt; {throw e.reason})
+    
+window.addEventListener(&quot;error&quot;, args =&gt; {console.log(&quot;handler your error&quot;, args)
+    return true
+}, true)
+    
+// 针对 vue 框架级的错误
+Vue.config.errorHandler = function(err, vm, info) =&gt; {console.log(&quot;vue error&quot;, err)
+}
+</code></pre>
+
+<p>捕获到异常错误之后，可以利用 <code>img</code> 标签的 <code>src</code> 进行错误上报。不过需要注意的是，构建完的代码都是压缩后的代码，需要同时上报 <code>sourceMap</code> 文件。上报 <code>sourceMap</code> 的操作可以交给 <code>webpack</code> 的插件去完成。构建结束后自动上报即可 <code>sourceMap</code> 即可</p>
+
+<p>后端拿到上报的数据后，还要根据 <code>sourceMap</code> 解析 <code>errorStack</code>。可以利用 <code>error-stack-parser</code> 这个库来做反解析。然后可以通过 <code>email</code> 或者 <code>webhook</code> 的方式来给自己发告警。</p>
+
+<blockquote>
+<p>比如 node 的 <code>nodemailer</code> 就能给自己发邮件。如果觉得没有看邮件的习惯，也可以接入钉钉，飞书的机器人 <code>webhook</code>，给自己发消息，甚至接一些网络电话库直接给自己打电话。</p>
+</blockquote>
+
+<ul>
+<li>配置与环境控制</li>
+</ul>
+
+<p>我刚开始写代码的时候，实习的公司也不重视规范，团队经验也不足。每次修改配置都要发版上线一次，很麻烦不说，还容易出错。后来逐渐意识到这个问题，大部分的配置都改成接口下发。到现在的公司更是有一套完善的配置管理系统。</p>
+
+<p>可以根据开发环境的维度，将配置文件大致分成三种： <strong>开发环境，测试环境，生产环境。</strong> 如果是一些重要的项目还可以加多一个线上预览环境，数据库也是和线上同步的。可以针对不同环境定制不一样的配置，比如最基础的连接不同的数据库，不同的样式主题，线上环境剔除 <code>console.log</code> 等</p>
+
+<p>最常见的区分环境的方法就是用 <code>cross-env</code> 这个包。直接在 <code>package.json</code> 的脚本中加上 <code>cross-env NODE_ENV=xxx</code> 就能在应用中读到配置。</p>
+
+<pre><code class="language-javascript">{
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;cross-env NODE_ENV=production webpack --config build/webpack.config.js&quot;
+  }
+}
+
+// 在应用中可以读到环境变量，根据这个变量就能加载不同的配置
+process.env.NODE_ENV === &#39;production&#39;
+</code></pre>
+
+<p>而对于一些大型团队来说，这个环境配置的过程就可以交给<strong>服务发现</strong>来完成。根据当前的服务标示，判断处于什么环境，然后结合配置平台读取相应的配置。这是一个很繁琐也很庞大的工程，一般是运维工程师去管理。感兴趣的同学可以关注一下 <a href="https://www.consul.io/docs/intro">consul</a></p>
+
+<h2 id="toc_5">工程管理</h2>
+
+<p>如果说前面的应用架构是必选项，那么工程管理就是一个强有力的辅助项。有没有它其实对项目的功能都没有什么额外的影响。但它是质量与高效并存的保障。</p>
+
+<h4 id="toc_6">git 规范</h4>
+
+<ul>
+<li>Merge Requests</li>
+</ul>
+
+<p><code>Merge Requests</code> 简称 <code>MR</code>，是合并分支的时候发起一个申请，有同事审核（后面质量管理会说到）过后才允许合并。我非常建议启用 <code>MR</code> 的规范。一方面它可以减少个人误操作发生的概率，另一方面为代码审核提供了基础。开启 <code>MR</code> 可以参考 <code>Gitlab</code> 的 👉 <a href="https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html">文档</a></p>
+
+<ul>
+<li>workflow</li>
+</ul>
+
+<p>在 <a href="https://juejin.im/post/6884042237412376583">应届前端的逆袭（上）</a> 中有讲到 <code>git</code> 的工作流，这里不再赘述。</p>
+
+<ul>
+<li>commitizen</li>
+</ul>
+
+<p><code>commitizen</code> 是用来规范 <code>git</code> 提交信息的。</p>
+
+<blockquote>
+<p>常见的规范有几种：<code>feat</code> 表示新开发的功能，<code>fix</code> 表示修复 bug，<code>WIP</code> 表示功能正在开发中，还有其他描述可以参考这位大佬的风格 👉 <a href="https://gist.github.com/leohxj/7bc928f60bfa46a3856ddf7c0f91ab98">.cz-config.js</a></p>
+</blockquote>
+
+<p>配置 <code>commitizen</code> 有两种方式，一种是项目级别的配置，另一种是全局配置，无论哪种都可以。</p>
+
+<pre><code class="language-shell">## 项目级别的配置
+yarn add cz-customizable --dev
+
+## 然后在根目录新建并配置 .cz-config.js 文件，可以参考上面的文档
+## 然后在 package.json 中添加
+
+{
+    &quot;config&quot;: {
+        &quot;commitizen&quot;: {
+            &quot;path&quot;: &quot;node_modules/cz-customizable&quot;
+        }
+    },
+}
+</code></pre>
+
+<pre><code class="language-shell">## 全局级别配置
+yarn global add commitizen cz-customizable
+echo &#39;{ &quot;path&quot;: &quot;cz-customizable&quot; }&#39; &gt; ~/.czrc
+
+## 然后在 ~/ 路径下创建并配置 .cz-config.js 文件，可以参考上面文档
+</code></pre>
+
+<p>配置好后，就可以用 <code>git cz</code> 命令来代替 <code>git commit</code> 命令了。它会让你选择当前提交属于哪种类型，比如 <code>feat</code> 类型。然后根据这个类型自动生成规范的注释文本。</p>
+
+<blockquote>
+<p>为了方便使用，建议大家装一个叫做 <code>Visual Studio Code Commitizen Support</code> 的 vscode 插件，然后 <code>command + p</code> 呼出面板后，选择 <code>commitizen</code> 就能快速选用模板。截图如下</p>
+</blockquote>
+
+<p><img src="//p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/67428e4da40c4592addc374447a9212b%7Etplv-k3u1fbpfcp-zoom-1.image" alt=""/></p>
+
+<h4 id="toc_7">项目质量</h4>
+
+<ul>
+<li>Code Review</li>
+</ul>
+
+<p><code>Code Review</code>（简称CR）指的是每次合并代码前，指定一个审查者检查代码。<code>CR</code> 能减少开发失误，提高提测质量，减轻 QA 同学的负担。<code>gitlab</code> 开启 <code>CR</code> 的 👉 <a href="https://docs.gitlab.com/ee/development/code_review.html">文档</a></p>
+
+<ul>
+<li>husky</li>
+</ul>
+
+<p>如果你对代码规范有更进一步的要求，可以选择用 <code>husky</code> 来校验 <code>commit message</code>。这个名为二哈的库就是在 commit 之前做校验的。</p>
+
+<pre><code class="language-shell">## 安装哈士奇
+yarn add husky@next --dev
+
+## 然后在 package.json 中进行配置
+{
+    &quot;husky&quot;: {
+        &quot;hooks&quot;: {
+          &quot;commit-msg&quot;: &quot;commitlint -e $GIT_PARAMS&quot;
+        }
+    },
+}
+</code></pre>
+
+<ul>
+<li>单元测试</li>
+</ul>
+
+<p>单元测试也是一个很重要的环节，也不是一两篇文章就能说清楚的事情。这里不展开介绍，可以参考 <code>jest</code> 的 👉 <a href="https://jestjs.io/">官网</a></p>
+
+<ul>
+<li>typescript</li>
+</ul>
+
+<p><code>typescript</code> 是 JS 的一种超集，它主要是用来规范 JS 的类型的，这极大弥补了 JS 作为弱类型语言的缺点。我建议无论项目中还是平时写 demo，能用 TS 就尽量用 TS，养成良好的编程习惯。👉 <a href="https://www.typescriptlang.org/">官网</a></p>
+
+<h4 id="toc_8">其他</h4>
+
+<p>其实一个企业级应用的开发、构建、部署，远不止文中提到的这些概念，还有诸如 <code>npm script</code>，<code>CI / CD</code>，<code>AB test</code> 等许多方面需要我们去完善。但是往往这些工作都不是一个人或者一个小团队能完成的。除去应用之外，更多的我们要了解这些常见的概念，在脑子里埋下一个种子，等到必要的时候再去挖出来实现。</p>
+
+<h2 id="toc_9">总结</h2>
+
+<p>这篇文章主要还是给大家一个思路，而不是手摸手教学系列。这里随便抽一个板块出来，都能单独说上一两天，也不是一两篇文章能讲完的事情。</p>
+
+<blockquote>
+<p>事实上并没有什么完美的架构，完美的工程。不同发展时期，不同的受众群体，不同的资源背景，都有其合适的开发框架。比如面对几百 UV 的站点，除了必要的研发规范之外，其他配套也没必要做的太繁琐复杂。而百万 DAU 的产品可能又是另一套架构思路。</p>
+</blockquote>
+
+<p><strong>那么最后总结一下思路。如果你要从零开始新建一个项目，可以从以下方面考虑：</strong></p>
+
+<ul>
+<li>必选项
+<ul>
+<li>选择官方或社区高赞脚手架，直接用成熟的目录组织</li>
+<li>开启 <code>eslint</code> 和 <code>prettier</code></li>
+<li>线上错误日志捕获与上报，<code>webhook</code> 或者 <code>email</code> 告警</li>
+<li><code>cross-env</code> 或其他工具区分多环境</li>
+</ul></li>
+<li>可选项
+<ul>
+<li>MR + CR</li>
+<li>commitizen 规范 git commit，husky 校验提交</li>
+<li>使用 typescript</li>
+<li>性能监控</li>
+<li>用户行为埋点</li>
+<li>动态下发配置</li>
+<li>单元测试</li>
+<li>CI / CD</li>
+<li>......</li>
+</ul></li>
+</ul>
+
+<p>至此，<strong>应届前端的逆袭</strong>这个系列就正式完结了~以后有时间再分享一些有意思的东西</p>
+
+<p>2020.10.29</p>
+
+
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="16026866633812.html" 
+          title="Previous Post: 应届前端的逆袭（上）">&laquo; 应届前端的逆袭（上）</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+          <a  href="16023497016429.html" 
+          title="Next Post: 前端面经复盘">前端面经复盘 &raquo;</a>
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
+
+ <div class="large-4 medium-4 columns">
+  <div class="hide-for-small">
+    <div id="sidebar" class="sidebar">
+          <div id="site-info" class="site-info">
+            
+                <div class="site-a-logo"><img src="https://user-images.githubusercontent.com/499550/93624428-53932780-f9ae-11ea-8d16-af949e16a09f.png" /></div>
+            
+                <h1>Evan的博客</h1>
+                <div class="site-des">Evan 的博客 - 非典型码农，bug永动机</div>
+                <div class="social">
+
+
+
+
+
+
+<a target="_blank" class="instagram" href="https://www.instagram.com/a953328679/" title="Instagram">Instagram</a>
+<a target="_blank" class="weibo" href="https://weibo.com/wbxiaocong/" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/EvanOyam/" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:o953328679@gmail.com" title="Email">Email</a>
+  <a target="_blank" class="rss" href="atom.xml" title="RSS">RSS</a>
+                
+              	 </div>
+          	</div>
+
+             
+
+              <div id="site-categories" class="side-item ">
+                <div class="side-header">
+                  <h2>Categories</h2>
+                </div>
+                <div class="side-content">
+
+      	<p class="cat-list">
+        
+            <a href="Interface.html"><strong>面试</strong></a>
+        
+            <a href="%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0.html"><strong>原理笔记</strong></a>
+        
+            <a href="%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5.html"><strong>项目实践</strong></a>
+        
+            <a href="%E5%85%B6%E4%BB%96.html"><strong>其他</strong></a>
+         
+        
+            <a href="tag_JS.html"><strong>JS</strong></a>
+            
+            <a href="tag_Vue.html"><strong>Vue</strong></a>
+            
+            <a href="tag_%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.html"><strong>性能优化</strong></a>
+            
+            <a href="tag_%E7%AE%97%E6%B3%95.html"><strong>算法</strong></a>
+            
+            <a href="tag_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.html"><strong>计算机网络</strong></a>
+            
+        </p>
+                </div>
+              </div>
+
+              <div id="site-categories" class="side-item">
+                <div class="side-header">
+                  <h2>Recent Posts</h2>
+                </div>
+                <div class="side-content">
+                <ul class="posts-list">
+	      
+		      
+			      <li class="post">
+			        <a href="16029563211847.html">从 HTTP 发展历程重学计算机网络</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16029536532564.html">应届前端的逆袭（中）</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16026866633812.html">应届前端的逆袭（上）</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16026772220432.html">应届前端的逆袭（下）</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
+			        <a href="16023497016429.html">前端面经复盘</a>
+			      </li>
+		     
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		  
+		      
+		   
+		  		</ul>
+                </div>
+              </div>
+        </div><!-- sidebar -->
+      </div><!-- hide for small -->
+</div><!-- large 4 -->
+
+</div><!-- row -->
+
+ <div class="page-bottom clearfix">
+  <div class="row">
+   <p class="copyright">Copyright &copy; 2015
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a>,&nbsp; 
+Theme used <a target="_blank" href="http://github.com">GitHub CSS</a>.</p>
+  </div>
+</div>
+
+        </section>
+      </div>
+    </div>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+
+<style type="text/css">
+figure{margin: 0;padding: 0;}
+figcaption{text-align:center;}
+
+/* PrismJS 1.14.0
+ http://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript */
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+    color: black;
+    background: none;
+    text-shadow: 0 1px white;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+    
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+    text-shadow: none;
+    background:#b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+    text-shadow: none;
+    background: #b3d4fc;
+}
+
+@media print {
+    code[class*="language-"],
+    pre[class*="language-"] {
+        text-shadow: none;
+    }
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+    padding: 1em;
+    margin: .5em 0;
+    overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+    background: #F7F7F7;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+    padding: .1em;
+    border-radius: .3em;
+    white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: slategray;
+}
+
+.token.punctuation {
+    color: #999;
+}
+
+.namespace {
+    opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    color: #9a6e3a;
+    background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: #07a;
+}
+
+.token.function,
+.token.class-name {
+    color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+    color: #e90;
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+.token.italic {
+    font-style: italic;
+}
+
+.token.entity {
+    cursor: help;
+}
+
+
+pre[class*="language-"].line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+}
+
+pre[class*="language-"].line-numbers > code {
+    position: relative;
+    white-space: inherit;
+}
+
+.line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    font-size: 100%;
+    left: -3.8em;
+    width: 3em; /* works for line-numbers below 1000 lines */
+    letter-spacing: -1px;
+    border-right: 1px solid #999;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+    .line-numbers-rows > span {
+        pointer-events: none;
+        display: block;
+        counter-increment: linenumber;
+    }
+
+        .line-numbers-rows > span:before {
+            content: counter(linenumber);
+            color: #999;
+            display: block;
+            padding-right: 0.8em;
+            text-align: right;
+        }
+
+</style>
+
+  
+    
+
+    <script src="asset/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+      function fixSidebarHeight(){
+        var w1 = $('.markdown-body').height();
+          var w2 = $('#sidebar').height();
+          if (w1 > w2) { $('#sidebar').height(w1); };
+      }
+      $(function(){
+        fixSidebarHeight();
+      })
+      $(window).load(function(){
+          fixSidebarHeight();
+      });
+     
+    </script>
+
+
+
+  </body>
+</html>

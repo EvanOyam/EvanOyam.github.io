@@ -103,6 +103,283 @@
 		<div class="markdown-body home-categories">
 		
 			<div class="article">
+                <a class="clearlink" href="16029563211847.html">
+                
+                  <h1>从 HTTP 发展历程重学计算机网络</h1>
+                  <div class="a-content">
+                      
+                      <div class="a-content-text">
+                        
+                        	<h2 id="toc_0">基础概念</h2>
+
+<p>在讲 <code>HTTP</code> 之前，先来简单介绍一下什么是网络协议模型，什么是 <code>OSI 七层网络协议</code>，什么是 <code>TCP/IP 四层协议</code></p>
+
+<h4 id="toc_1">OSI 七层网络协议</h4>
+
+<p>OSI 全称 <code>Open Systems Interconnection model</code>，是一种互联模型。它的目的是通过一种规范的标准通信协议，实现不同系统之间的通信互连，实现不同操作系统的互操作性。他的组成由下表所示</p>
+
+<table>
+<thead>
+<tr>
+<th>模型层</th>
+<th>常见协议</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>应用层</td>
+<td>HTTP，TFTP，FTP，NFS，SMTP，DNS</td>
+</tr>
+<tr>
+<td>表示层</td>
+<td>Telnet</td>
+</tr>
+<tr>
+<td>会话层</td>
+<td>RPC，SDP，SOCKS，PPTP</td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>TCP，UDP</td>
+</tr>
+<tr>
+<td>网络层</td>
+<td>IP，ICMP，RARP</td>
+</tr>
+<tr>
+<td>数据链路层</td>
+<td>FDDI，Ethernet，Arpanet，PDN，SLIP，PPP</td>
+</tr>
+<tr>
+<td>物理层</td>
+<td>IEEE 802.1A，IEEE 802.2，IEEE 802.11</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="toc_2">TCP/IP 四层协议</h4>
+
+<p>OSI 是一种学术上的理论模型，而实际应用中一般是以 <code>TCP/IP</code> 四层协议模型居多。它将应用层，表示层，会话层统一在同一个层级内；将数据链路层和物理层统一在同一层级内（也有一些模型不统一物理层，变成五层模型）</p>
+
+<table>
+<thead>
+<tr>
+<th>模型层</th>
+<th>常见协议</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>应用层</td>
+<td>HTTP，TFTP，FTP，NFS，SMTP，DNS，RPC，SDP，SOCKS</td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>TCP，UDP</td>
+</tr>
+<tr>
+<td>网络层</td>
+<td>IP，ICMP，RARP</td>
+</tr>
+<tr>
+<td>物理层</td>
+<td>IEEE 802.1A，IEEE 802.2，IEEE 802.11</td>
+</tr>
+</tbody>
+</table>
+
+<p><img src="https://qiniu.evanweb.cn/mweb/2018041112053246.png" alt="2018041112053246"/></p>
+
+<h4 id="toc_3">什么是 HTTP</h4>
+
+<p>从上面的协议模型中，可以看出 <code>HTTP</code> 是一种应用层的协议。它基于 <code>TCP/IP</code> 的通信协议，制定了客户端与服务端之间的通讯规则</p>
+
+<h2 id="toc_4">发展历程</h2>
+
+<h4 id="toc_5">HTTP 0.9</h4>
+
+<p>1991年 <code>HTTP</code> 问世，在这个阶段的 <code>HTTP</code> 是极为简陋的，只支持 <code>GET</code> 请求。返回也同样简单，只支持 <code>HTML</code> 文本。</p>
+
+<p>这个阶段 <code>HTTP</code> 就已经是无状态的设计理念了，一个请求响应结束后，连接就会被释放。这也是后来的 <code>cookies</code> 和 <code>session</code> 的诞生的理由，同样的后来也成为了 <code>HTTP</code> 性能上的一个瓶颈，后面讲队头阻塞的时候会细说。</p>
+
+<h4 id="toc_6">HTTP 1.0</h4>
+
+<p>1996年 <code>HTTP 1.0</code> 正式被推出。这个版本的 <code>HTTP</code> 协议增加了 <code>头域</code> 的概念，也就是我们熟知的 <code>Request Header</code> 和 <code>Respond Header</code>。此外 <code>HTTP 1.0</code> 新增了一些特性：</p>
+
+<ul>
+<li>新增了 <code>POST</code> 和 <code>HEAD</code> 方法</li>
+<li>引入 <code>Content-Type</code> 的概念，响应内容不再局限于文本</li>
+<li>支持长连接 <code>Connection: Keep-Alive</code> ，但默认不开启</li>
+<li>支持不同编码格式的文件传输如 <code>Content-Encoding: gzip</code></li>
+</ul>
+
+<p><code>HTTP 1.0</code> 的升级主要是围绕 <code>丰富功能</code> 和 <code>性能优化</code> 两个方面的。比如支持更多的请求和响应类型，比如支持长连接复用同一个 <code>TCP</code>，比如支持压缩格式提高传输速度等</p>
+
+<h4 id="toc_7">HTTP 1.1</h4>
+
+<p>在 <code>HTTP 1.0</code> 推出后没几个月，<code>HTTP 1.1</code> 就紧跟着问世了。这是一个相对稳定的版本，直到今天也有许多的应用采用 <code>HTTP 1.1</code> 协议进行前后端信息交互。主要做了以下更新：</p>
+
+<ul>
+<li>新增 <code>OPTIONS</code>、<code>PUT</code>、<code>DELETE</code>、<code>TRACE</code>、<code>CONNECT</code> 等多种方法</li>
+<li>默认使用长连接</li>
+<li>引入了 <code>Pipeline</code> 的概念，但因为某些原因并未得到广泛使用，后面细说</li>
+<li>增加了 <code>Range</code> 头，支持范围请求，也是断点续传的基础</li>
+<li>补充了更为完善的 <code>Cache-control</code> 做缓存管理</li>
+</ul>
+
+<h4 id="toc_8">HTTP 2</h4>
+
+<p>2015 年 IETF(互联网工程任务组)正式宣布 <code>HTTP 2</code> 发布。<code>HTTP 1.1</code> 在坚挺了近十年之后，迎来了一次重大变革。</p>
+
+<ul>
+<li>二进制传输
+<ul>
+<li><strong>帧</strong>是最小的通信单位，每个帧有一个头部，用来标识它所属的流</li>
+<li>一个或多个帧构成一条<strong>消息</strong>，一条消息对应的是 <code>HTTP 1.1</code> 中的一个请求或者响应</li>
+<li>一个或多个消息构成<strong>流</strong>，流是双向通信的，它既可以是客户端发往服务器的，也可以是服务器发往客户端。一个请求与其对应的响应（即请求和响应消息）在同一个流上传输</li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p><code>HTTP 1.1</code> 中，客户端与服务端之间的每条通信，都是一个新的 <code>TCP</code> 连接，而 <code>HTTP 2</code> 中客户端与服务端之间只有一条 <code>TCP</code> 连接，所有的通信都在这个长连接上完成，即在这条连接上承载双向数据流。</p>
+
+<p>之所以这么做是因为每次开 <code>TCP</code> 连接都需要耗费一定的性能，复用一条连接就能让性能大大提高。此外浏览器对 <code>TCP</code> 的连接数是有上限限制的，比如 chrome 的最大连接数是 6 个，如果超过了将会等待前面的 <code>TCP</code> 连接释放后才能继续开启更多的 <code>TCP</code> 连接。</p>
+
+<p>每个数据流都有一个唯一的标识和一个可选的优先级，流是消息的载体，可以理解为是 <code>HTTP 1.1</code> 中请求和响应的载体。来自不同数据流的帧可以交错发送，然后送达之后再根据帧头部的标识位找到其对应的流，重组。</p>
+
+<p>总结就是，每个 <code>TCP</code> 连接有若干个流，每个流中有多组消息对（即请求与响应对），每个消息又是由若干个帧组成的。</p>
+</blockquote>
+
+<p><img src="https://qiniu.evanweb.cn/mweb/1579689227454_3b7ec6e12345ad4f20ed308d8d23e991.png" alt="1579689227454_3b7ec6e12345ad4f20ed308d8d23e991"/></p>
+
+<ul>
+<li>服务端推送</li>
+</ul>
+
+<blockquote>
+<p>服务端除了响应客户端的某个请求之外，还能向客户端额外推送更多的内容</p>
+</blockquote>
+
+<ul>
+<li>头部压缩</li>
+</ul>
+
+<blockquote>
+<p>引入 <code>HPACK</code> 技术对 <code>HTTP</code> 头进行压缩，减小体积</p>
+</blockquote>
+
+<h4 id="toc_9">HTTP 3</h4>
+
+<p><code>HTTP 3</code> 的前身是 <code>QUIC</code> 协议。2018年底的时候，IETF 正式将 <code>HTTP Over QUIC</code> 命名为 <code>HTTP 3</code>。<code>QUIC</code> 全称是 <code>Quick UDP Internet Connection</code>，是谷歌提出的一个基于 <code>UDP</code> 的低延迟多并发的传输协议。这也意味着 <code>HTTP 3</code> 将弃用 <code>TCP</code>，转向 <code>UDP</code> 阵营。</p>
+
+<p><img src="https://qiniu.evanweb.cn/mweb/1580000162089_3c14d73667b9fbc1d6836d211c8ede4f.png" alt="1580000162089_3c14d73667b9fbc1d6836d211c8ede4f"/></p>
+
+<ul>
+<li>采用基于 <code>UDP</code> 的方案</li>
+</ul>
+
+<blockquote>
+<p>可能很多人会有疑惑，采用无序的 <code>UDP</code>，那怎么保证数据的可靠性呢？答案在于<strong>从应用层重新控制排序</strong>。<code>HTTP 2</code> 是在传输层利用 <code>TCP</code> 有序的特性来提供可靠的数据传输。而 <code>HTTP 3</code> 则是将传输与可靠性解耦，传输层的 <code>UDP</code> 只负责传输，传输之外的拥塞控制、重传机制等放在应用层处理。到达应用层后，用额外的内存资源来处理乱序，其实这是一个<strong>以空间换时间</strong>的过程。</p>
+</blockquote>
+
+<ul>
+<li>0RTT</li>
+</ul>
+
+<blockquote>
+<p><code>RTT</code> 是 <code>Round-Trip Time</code> 往返延迟的缩写。<strong>0RTT 是只发起方第一个数据包里面便可以携带有效的业务数据</strong>。一般情况下基于 <code>TCP</code> 的 <code>HTTPS</code> 至少需要 2 个 <code>RTT</code>。第一个 <code>RTT</code> 是 <code>TCP</code> 的三次握手。然后 <code>HTTPS</code> 的 <code>TLS</code> 握手也需要 1-2 个 <code>RTT</code>。每次 <code>RTT</code> 大概100ms，也就是说整个建立连接的过程需要大概需要消耗掉 200-300 毫秒。</p>
+</blockquote>
+
+<ul>
+<li>连接迁移</li>
+</ul>
+
+<blockquote>
+<p><code>IP</code> 是 <code>TCP</code> 连接四元组（srcIP，srcPort，deskIP，deskPort）之一。这意味着 <code>IP</code> 切换的时候肯定要重连 <code>TCP</code>。比如 4g 切到 wifi 网络的时候。<code>QUIC</code> 通过一个 64 位的 <code>Connection ID</code> 来标识一个连接，无论 <code>IP</code>，<code>Port</code> 如何变化，只要这 64 位 ID 不变，则连接一直有效，无需进行重连，对上层业务也不会有感知。</p>
+</blockquote>
+
+<h2 id="toc_10">各路神仙大战性能优化</h2>
+
+<p>从 <code>HTTP</code> 的发展史不难看出，其实大多数变革都是围绕着 <strong>快</strong> 这个字展开的。性能瓶颈是网络传输中最常遇到的问题，也是用户感知最明显的问题。这也可以说是 <code>HTTP</code> 进化的最大动力。来看一下发展史中关于性能的优化，有哪些重要的转折点：</p>
+
+<h4 id="toc_11">长连接</h4>
+
+<p>长连接分两种，一种是应用层的长连接（HTTP），一种是协议层的长连接（TCP），两者是不一样的，要注意区分。</p>
+
+<ul>
+<li>应用层长连接</li>
+</ul>
+
+<p><code>HTTP 1</code> 和 <code>HTTP 1.1</code> 里的长连接，都是应用层的长连接。未开启长连接时，<code>HTTP</code> 是一个请求与一个响应一一对应，并且一个请求收到其对应响应的时候，将会关闭此次连接。开启长连接后，将允许在一条 <code>HTTP</code> 链路上处理多个请求响应对。</p>
+
+<blockquote>
+<p>如果每次请求都需要从头开始，那会是这样的：初始化 <code>DNS</code> 查询，查到目标 IP 后开始 <code>TCP</code> 握手，握手成功之后还要进行 <code>SSL/TLS</code> 握手。这些过程都是很耗费时间的。</p>
+</blockquote>
+
+<ul>
+<li>协议层长连接</li>
+</ul>
+
+<p>协议层长连接指的是 <code>TCP</code> 的长连接。应用层的 <code>Keep-Alive</code> 更多是体现在应用层面上，而协议层的长连接则更像是一种保活机制。在没有请求的时候，<code>TCP</code> 会定时发送心跳包，确保通信双方的连接仍旧正常。</p>
+
+<blockquote>
+<p>事实上应用层的长连接也离不开协议层的长连接。<code>HTTP</code> 是建立在 <code>TCP</code> 的基础之上的。而且某些时候，在应用层也是可以做心跳检测保活的。虽然协议层有保活的能力，但是开发者对他的控制并不透明。我们不好去监控和判断 <code>TCP</code> 的心跳是否正常。对一些需要高时效性的应用，还是需要开发者自己做应用层的保活的。</p>
+</blockquote>
+
+<h4 id="toc_12">Pipeline</h4>
+
+<p><code>Pipeline</code> 是 <code>HTTP 1.1</code> 提出的概念，它允许在同一个连接上一次性发送多个请求。在 <code>Pipeline</code> 提出之前，一个请求只能等待对应的响应返回后才能开始下一个请求。会做这种阻塞式的设计主要是因为 <code>HTTP</code> 是无状态的。一个响应并不能知道自己对应的是哪个请求，所以最初的时候只能通过阻塞，来实现请求/响应的一一对应。</p>
+
+<p>不过从结果上看，<code>Pipeline</code> 并没有被推广开来。因为它虽然允许一次性发送多个请求，但是接收响应的时候必须依照发送的顺序进行接收，即如果前一个请求在某处遇到了阻塞，即使后面的请求已经处理完毕，仍然需要等待前面请求处理后才能发送。</p>
+
+<p>所以从本质上说，<code>Pipeline</code> 并不能解决队头阻塞的问题，只是从一个地方塞换到了另一个地方塞罢了。这就好比原本在高速入口设立的保证顺序的检查站，现在撤销了，搬到高速出口去检查了😂</p>
+
+<h4 id="toc_13">转战 UDP</h4>
+
+<p>虽说 <code>HTTP 2</code> 通过二进制分帧的方式实现了多路复用，解决了 <code>HTTP 1.1</code> 的队头阻塞的问题，但这也仅仅只解决了应用层的队头阻塞。位于传输层的 <code>TCP</code> 仍然存在队头阻塞的问题。</p>
+
+<p>实际建立连接的过程中，<code>TCP</code> 是通过发送 <code>Segment</code> 的形式去建立连接的。如果有 <code>Segment</code> 阻塞了，<code>TCP</code> 是不会上报到应用层的，也就无法下一步开启 <code>HTTP</code> 连接。</p>
+
+<blockquote>
+<p>在某些极端情况下，<code>HTTP 2</code> 甚至还不如 <code>HTTP 1.1</code>。因为 <code>HTTP 2</code> 都是复用同一条 <code>TCP</code> 连接的，如果这条链路出现了什么问题，意味着唯一的通路断了。</p>
+</blockquote>
+
+<p>既然 <code>TCP</code> 是罪魁祸首，那谷歌也是艺高人胆大：“我有个大胆的想法” 。谷歌提出了基于 <code>UDP</code> 的 <code>QUIC</code> 协议，也就是后来的 <code>HTTP 3</code>。众所周知，<code>UDP</code> 是一个非有序的连接，它不管数据的准确性。为了保证 <code>UDP</code> 传输的可靠性，<code>QUIC</code> 引入了一个 <code>Stream Offset</code> 的概念，用来在应用层处理乱序。</p>
+
+<h2 id="toc_14">结语</h2>
+
+<p>计算机网络是个非常广的研究领域，甚至可以作为一个专门的研究方向。要想对网络有个深层次的认识，也不是三天两头一年半载可以做到的。</p>
+
+<p>作为开发者，我们更多是从应用的层面去理解和剖析性能优化点，来提供用户更好的体验。从整个 <code>HTTP</code> 发展史作为入口，能让我们逐步认识网络背后更深一层的原理。有多深谈不上，但是至少知道一个大致的发展方向。比如理清队头阻塞的概念，应用层和协议层的阻塞和长连接又有什么不同等等。</p>
+
+                        
+                      </div>
+                  </div>
+                </a>
+                <div class="read-more clearfix">
+                  <div class="more-left left">
+                  
+                    <span class="date">2020/10/18</span>
+                    <span>posted in&nbsp;</span> 
+          				  
+          					    <span class="posted-in"><a href='%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0.html'>原理笔记</a></span>
+          				   
+                    
+
+                  </div>
+                  <div class="more-right right">
+                  <span class="comments">
+                      
+
+                       
+                  </span>
+                  </div>
+                </div>
+              </div><!-- article -->
+        
+			<div class="article">
                 <a class="clearlink" href="16023377632943.html">
                 
                   <h1>Web Component</h1>
@@ -310,6 +587,8 @@
             
             <a href="tag_%E7%AE%97%E6%B3%95.html"><strong>算法</strong></a>
             
+            <a href="tag_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.html"><strong>计算机网络</strong></a>
+            
         </p>
                 </div>
               </div>
@@ -321,6 +600,12 @@
                 <div class="side-content">
                 <ul class="posts-list">
 	      
+		      
+			      <li class="post">
+			        <a href="16029563211847.html">从 HTTP 发展历程重学计算机网络</a>
+			      </li>
+		     
+		  
 		      
 			      <li class="post">
 			        <a href="16029536532564.html">应届前端的逆袭（中）</a>
@@ -335,19 +620,13 @@
 		  
 		      
 			      <li class="post">
+			        <a href="16026772220432.html">应届前端的逆袭（下）</a>
+			      </li>
+		     
+		  
+		      
+			      <li class="post">
 			        <a href="16023497016429.html">前端面经复盘</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="16023387735398.html">大前端相关面试题</a>
-			      </li>
-		     
-		  
-		      
-			      <li class="post">
-			        <a href="16023387379097.html">常见 HTML 面试题</a>
 			      </li>
 		     
 		  
